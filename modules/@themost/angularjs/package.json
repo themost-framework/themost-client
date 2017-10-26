@@ -1,0 +1,22 @@
+{
+  "name": "@themost/angularjs",
+  "version": "2.0.0-alpha.1",
+  "description": "MOST Web Framework 2.0 - AngularJS 1.5 Client",
+  "module": "client.js",
+  "peerDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kbarbounakis/themost-client.git"
+  },
+  "author": "Kyriakos Barbounakis <k.barbounakis@gmail.com>",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/kbarbounakis/themost-client/issues"
+  },
+  "homepage": "https://github.com/kbarbounakis/themost-client#readme",
+  "dependencies": {
+    "@themost/client": "2.0.0-alpha.1",
+    "@types/angular": "^1.5.7",
+    "angular": "^1.5.7"
+  }
+}

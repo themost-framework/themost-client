@@ -1,0 +1,33 @@
+{
+  "name": "@themost/angular",
+  "version": "2.0.0-alpha.1",
+  "description": "MOST Web Framework 2.0 - AngularJS 2 Client",
+  "module": "client.js",
+  "scripts": {
+    "test": "karma start"
+  },
+  "peerDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kbarbounakis/themost-client.git"
+  },
+  "author": "Kyriakos Barbounakis <k.barbounakis@gmail.com>",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/kbarbounakis/themost-client/issues"
+  },
+  "homepage": "https://github.com/kbarbounakis/themost-client#readme",
+  "dependencies": {
+    "@angular/common": "^4.4.6",
+    "@angular/core": "^4.4.6",
+    "@angular/http": "^4.4.6",
+    "@angular/platform-browser": "^4.4.6",
+    "@themost/client": "2.0.0-alpha.1",
+    "rxjs": "^5.5.1",
+    "zone.js": "^0.8.18"
+  },
+  "devDependencies": {
+    "@angular/compiler": "^4.4.6",
+    "@angular/platform-browser-dynamic": "^4.4.6"
+  }
+}
