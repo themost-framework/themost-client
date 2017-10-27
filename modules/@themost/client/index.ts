@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://themost.io/license
  */
 
-import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions,Args, UrlBuilder} from './common';
+import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions,Args} from './common';
 
 class ClientQueryExpression {
     public left:any;
@@ -29,7 +29,7 @@ export class ClientDataQueryable {
         this.model_ = model;
         Args.notNull(service, "Data Service");
         this.service_ = service;
-        this.url_ = TextUtils.format("/%s/index.json", this.model_);
+        this.url_ = TextUtils.format("%s/index.json", this.model_);
         //init params
         this.params_ = { };
         //init privates
@@ -85,7 +85,7 @@ export class ClientDataQueryable {
      */
     setUrl(value:string) {
         Args.notEmpty(value,"URL");
-        Args.check(/^\//.test(value), "URL must be a relative URI");
+        Args.check(!TextUtils.isAbsoluteURI(value), "URL must be a relative URI");
         this.url_ = value;
     }
 
@@ -521,7 +521,6 @@ export class ClientDataModel {
 
     private name_:string;
     private service_:ClientDataServiceBase;
-
     constructor(name:string, service:ClientDataServiceBase) {
         this.name_ = name;
         this.service_ = service;
@@ -562,7 +561,7 @@ export class ClientDataModel {
     save(obj:any):Promise<any> {
         return this.getService().execute({
             method:"POST",
-            url:TextUtils.format("/%s/index.json", this.getName()),
+            url:TextUtils.format("%s/index.json", this.getName()),
             data:obj,
             headers:{}
         });
@@ -570,7 +569,7 @@ export class ClientDataModel {
 
     schema():Promise<any> {
         return this.getService().execute({ method:"GET",
-            url:TextUtils.format("/%s/schema.json", this.getName()),
+            url:TextUtils.format("%s/schema.json", this.getName()),
             data:null,
             headers:{}
         });
@@ -578,7 +577,7 @@ export class ClientDataModel {
 
     remove(obj:any):Promise<any> {
         return this.getService().execute({ method:"DELETE",
-            url:TextUtils.format("/%s/index.json", this.getName()),
+            url:TextUtils.format("%s/index.json", this.getName()),
             data:obj,
             headers:{}
         });
@@ -696,12 +695,3 @@ export class ClientDataService implements ClientDataServiceBase {
     }
 
 }
-
-export class DefaultUrlBuilder implements UrlBuilder {
-    getUrl(model: string): string {
-        Args.notEmpty(model,"Model");
-        return TextUtils.format("/%s/index.json", model);
-    }
-
-}
-

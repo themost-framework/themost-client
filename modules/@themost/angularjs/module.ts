@@ -6,7 +6,7 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import {IDirective} from 'angular';
+import {IDirective,IScope} from 'angular';
 import angular = require("angular");
 import servicesModule from './services';
 
@@ -60,10 +60,14 @@ function MostLocalizedFilter() {
     };
 }
 
+interface MostEventDirectiveScope extends IScope {
+    $args:any
+}
+
 function MostEventDirective($timeout):IDirective {
     return {
         restrict: 'E',
-        link: function(scope, element, attrs) {
+        link: function(scope:MostEventDirectiveScope, element, attrs) {
             //get event name
             const name = element.attr('name') || attrs['event'], action = attrs['eventAction'];
             if (name) {
@@ -187,11 +191,24 @@ function MostParamDirective($window):IDirective {
     };
 }
 
+interface MostDataInstanceScope extends IScope {
+    model:string;
+    select:string;
+    group:string;
+    order:string;
+    top:number;
+    count:boolean;
+    skip:number;
+    expand:string;
+    prepared:boolean;
+    url:string;
+}
+
 function MostDataInstanceDirective($context, $parse, $window):IDirective {
     return {
         restrict: 'E',
-        scope: { model:'@', filter:'@',  select:'@', group:'@', order:'@', top:'@', inlinecount:'@', paged:'@', skip:'@', expand:'@', prepared:'@', url:'@' },
-        link: function(scope, element, attrs) {
+        scope: { model:'@', filter:'@',  select:'@', group:'@', order:'@', top:'=', count:'=', skip:'=', expand:'@', prepared:'=', url:'@' },
+        link: function(scope:MostDataInstanceScope, element, attrs) {
             if (typeof scope.model === 'undefined')
                 return;
             scope.route = $window.route;
@@ -217,9 +234,7 @@ function MostDataInstanceDirective($context, $parse, $window):IDirective {
             }
             if (scope.order) {
                 arr = [];
-                if (angular.isArray(scope.order))
-                    arr = scope.order;
-                else if (typeof scope.order === 'string' && scope.order.length > 0)
+                if (typeof scope.order === 'string' && scope.order.length > 0)
                     arr = scope.order.split(',');
                 for (let i = 0; i < arr.length; i++) {
                     let str = arr[i];
@@ -238,22 +253,20 @@ function MostDataInstanceDirective($context, $parse, $window):IDirective {
                     }
                 }
             }
-            if (parseInt(scope.skip)>0) {
-                q.skip(parseInt(scope.skip));
+            if (scope.skip>0) {
+                q.skip(scope.skip);
             }
-            if (parseInt(scope.top)>0) {
-                q.take(parseInt(scope.top));
+            if (scope.top>0) {
+                q.take(scope.top);
             }
-            if (/^true$/i.test(scope.inlinecount)) {
-                q.paged(true);
-            }
-            if (/^true$/i.test(scope.paged)) {
+            if (scope.count) {
                 q.paged(true);
             }
             if (typeof scope.filter === 'string' && scope.filter.length > 0) {
                 q.filter(scope.filter);
-                if (scope.prepared=='true')
+                if (scope.prepared) {
                     q.prepare();
+                }
             }
 
             if (typeof scope.expand === 'string' && scope.expand.length > 0) {
@@ -261,7 +274,6 @@ function MostDataInstanceDirective($context, $parse, $window):IDirective {
             }
             //set queryable
             q.getItems().then(function(result) {
-
                 const getter = $parse(attrs.name);
                 let setter;
                 if (getter)
@@ -269,7 +281,6 @@ function MostDataInstanceDirective($context, $parse, $window):IDirective {
                 if (typeof setter === 'function') {
                     setter(scope.$parent, (q.$top === 1) ? result[0] : result);
                 }
-                //scope.$parent[attrs.name] = (q.$top === 1) ? result[0] : result;
             });
 
             //register for order change
@@ -337,7 +348,7 @@ function MostDataInstanceDirective($context, $parse, $window):IDirective {
                 if (typeof args === 'object') {
                     if (args.name===attrs.name) {
                         if (typeof args.page !== 'undefined') {
-                            const page = parseInt(args.page), size = parseInt(scope.top);
+                            const page = parseInt(args.page), size = scope.top;
                             if (size<=0) { return; }
                             q.reset().skip((page-1)*size).getItems().then((result) => {
                                 scope.$parent[attrs.name] = (q.$top === 1) ? result[0] : result;

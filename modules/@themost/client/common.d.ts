@@ -16,6 +16,14 @@ export declare class TextUtils {
     static zeroPad(num: number, length: number): string;
     private static REG_DATETIME_ISO;
     static isDate(s: string): boolean;
+    private static REG_GUID_STRING;
+    static isGuid(s: any): boolean;
+    private static REG_ABSOLUTE_URI;
+    static isAbsoluteURI(s: any): boolean;
+    private static REG_RELATIVE_URI;
+    static isRelativeURI(s: any): boolean;
+    private static REG_NUMBER_STRING;
+    static isNumber(s: any): boolean;
     static parseDate(s: string): Date;
     /**
      * Encodes the given string to Base-64 format
@@ -55,9 +63,6 @@ export interface DataServiceExecuteOptions {
     url: string;
     data: any;
     headers: any;
-}
-export interface UrlBuilder {
-    getUrl(model: string): string;
 }
 export interface ClientDataServiceBase {
     setHeader(name: string, value: string): any;

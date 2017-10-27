@@ -17,9 +17,11 @@ class ContextProvider implements IServiceProvider {
     public defaults: any;
 
     constructor() {
-        this.defaults = { base:"/" };
+        this.defaults = {
+            "base":"/"
+        };
     }
-    $get($http, $q): any {
+    $get($http, $q): AngularDataContext {
         return new AngularDataContext(this.defaults.base, $http, $q);
     };
 }

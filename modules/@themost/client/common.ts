@@ -119,6 +119,45 @@ export class TextUtils {
         return false;
     }
 
+    private static REG_GUID_STRING = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
+
+    static isGuid(s:any):boolean {
+        if (typeof s === "string") {
+            return TextUtils.REG_GUID_STRING.test(s);
+        }
+        return false;
+    }
+
+    private static REG_ABSOLUTE_URI = /^((https?|ftps?):\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+
+    static isAbsoluteURI(s:any):boolean {
+        if (typeof s === "string") {
+            return TextUtils.REG_ABSOLUTE_URI.test(s);
+        }
+        return false;
+    }
+
+    private static REG_RELATIVE_URI = /^([\/\w .-]*)*\/?$/;
+
+    static isRelativeURI(s:any):boolean {
+        if (typeof s === "string") {
+            return TextUtils.REG_RELATIVE_URI.test(s);
+        }
+        return false;
+    }
+
+    private static REG_NUMBER_STRING = /^\d+$/;
+
+    static isNumber(s:any):boolean {
+        if (typeof s === "string") {
+            return TextUtils.REG_NUMBER_STRING.test(s);
+        }
+        else if (typeof  s === 'number') {
+            return true;
+        }
+        return false;
+    }
+
     static parseDate(s:string):Date {
         if (TextUtils.isDate(s)) {
             return new Date(s);
@@ -218,12 +257,6 @@ export interface DataServiceExecuteOptions {
     data:any;
     headers:any;
 }
-
-
-export interface  UrlBuilder {
-    getUrl(model:string): string
-}
-
 
 export interface ClientDataServiceBase {
 

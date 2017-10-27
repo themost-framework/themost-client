@@ -20,7 +20,7 @@ var ClientDataQueryable = /** @class */ (function () {
         this.model_ = model;
         common_1.Args.notNull(service, "Data Service");
         this.service_ = service;
-        this.url_ = common_1.TextUtils.format("/%s/index.json", this.model_);
+        this.url_ = common_1.TextUtils.format("%s/index.json", this.model_);
         //init params
         this.params_ = {};
         //init privates
@@ -70,7 +70,7 @@ var ClientDataQueryable = /** @class */ (function () {
      */
     ClientDataQueryable.prototype.setUrl = function (value) {
         common_1.Args.notEmpty(value, "URL");
-        common_1.Args.check(/^\//.test(value), "URL must be a relative URI");
+        common_1.Args.check(!common_1.TextUtils.isAbsoluteURI(value), "URL must be a relative URI");
         this.url_ = value;
     };
     ClientDataQueryable.create = function (model, service) {
@@ -496,21 +496,21 @@ var ClientDataModel = /** @class */ (function () {
     ClientDataModel.prototype.save = function (obj) {
         return this.getService().execute({
             method: "POST",
-            url: common_1.TextUtils.format("/%s/index.json", this.getName()),
+            url: common_1.TextUtils.format("%s/index.json", this.getName()),
             data: obj,
             headers: {}
         });
     };
     ClientDataModel.prototype.schema = function () {
         return this.getService().execute({ method: "GET",
-            url: common_1.TextUtils.format("/%s/schema.json", this.getName()),
+            url: common_1.TextUtils.format("%s/schema.json", this.getName()),
             data: null,
             headers: {}
         });
     };
     ClientDataModel.prototype.remove = function (obj) {
         return this.getService().execute({ method: "DELETE",
-            url: common_1.TextUtils.format("/%s/index.json", this.getName()),
+            url: common_1.TextUtils.format("%s/index.json", this.getName()),
             data: obj,
             headers: {}
         });
@@ -605,14 +605,4 @@ var ClientDataService = /** @class */ (function () {
     return ClientDataService;
 }());
 exports.ClientDataService = ClientDataService;
-var DefaultUrlBuilder = /** @class */ (function () {
-    function DefaultUrlBuilder() {
-    }
-    DefaultUrlBuilder.prototype.getUrl = function (model) {
-        common_1.Args.notEmpty(model, "Model");
-        return common_1.TextUtils.format("/%s/index.json", model);
-    };
-    return DefaultUrlBuilder;
-}());
-exports.DefaultUrlBuilder = DefaultUrlBuilder;
 //# sourceMappingURL=index.js.map

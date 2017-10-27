@@ -171,7 +171,7 @@ function MostParamDirective($window) {
 function MostDataInstanceDirective($context, $parse, $window) {
     return {
         restrict: 'E',
-        scope: { model: '@', filter: '@', select: '@', group: '@', order: '@', top: '@', inlinecount: '@', paged: '@', skip: '@', expand: '@', prepared: '@', url: '@' },
+        scope: { model: '@', filter: '@', select: '@', group: '@', order: '@', top: '=', count: '=', skip: '=', expand: '@', prepared: '=', url: '@' },
         link: function (scope, element, attrs) {
             if (typeof scope.model === 'undefined')
                 return;
@@ -197,9 +197,7 @@ function MostDataInstanceDirective($context, $parse, $window) {
             }
             if (scope.order) {
                 arr = [];
-                if (angular.isArray(scope.order))
-                    arr = scope.order;
-                else if (typeof scope.order === 'string' && scope.order.length > 0)
+                if (typeof scope.order === 'string' && scope.order.length > 0)
                     arr = scope.order.split(',');
                 for (var i = 0; i < arr.length; i++) {
                     var str = arr[i];
@@ -218,22 +216,20 @@ function MostDataInstanceDirective($context, $parse, $window) {
                     }
                 }
             }
-            if (parseInt(scope.skip) > 0) {
-                q.skip(parseInt(scope.skip));
+            if (scope.skip > 0) {
+                q.skip(scope.skip);
             }
-            if (parseInt(scope.top) > 0) {
-                q.take(parseInt(scope.top));
+            if (scope.top > 0) {
+                q.take(scope.top);
             }
-            if (/^true$/i.test(scope.inlinecount)) {
-                q.paged(true);
-            }
-            if (/^true$/i.test(scope.paged)) {
+            if (scope.count) {
                 q.paged(true);
             }
             if (typeof scope.filter === 'string' && scope.filter.length > 0) {
                 q.filter(scope.filter);
-                if (scope.prepared == 'true')
+                if (scope.prepared) {
                     q.prepare();
+                }
             }
             if (typeof scope.expand === 'string' && scope.expand.length > 0) {
                 q.expand(scope.expand.split(','));
@@ -247,7 +243,6 @@ function MostDataInstanceDirective($context, $parse, $window) {
                 if (typeof setter === 'function') {
                     setter(scope.$parent, (q.$top === 1) ? result[0] : result);
                 }
-                //scope.$parent[attrs.name] = (q.$top === 1) ? result[0] : result;
             });
             //register for order change
             scope.$on('order.change', function (event, args) {
@@ -308,7 +303,7 @@ function MostDataInstanceDirective($context, $parse, $window) {
                 if (typeof args === 'object') {
                     if (args.name === attrs.name) {
                         if (typeof args.page !== 'undefined') {
-                            var page = parseInt(args.page), size = parseInt(scope.top);
+                            var page = parseInt(args.page), size = scope.top;
                             if (size <= 0) {
                                 return;
                             }

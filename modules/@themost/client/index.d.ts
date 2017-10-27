@@ -6,7 +6,7 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import { ClientDataServiceBase, ClientDataContextBase, DataServiceQueryParams, DataServiceExecuteOptions, UrlBuilder } from './common';
+import { ClientDataServiceBase, ClientDataContextBase, DataServiceQueryParams, DataServiceExecuteOptions } from './common';
 export declare class ClientDataQueryable {
     private model_;
     private url_;
@@ -160,7 +160,4 @@ export declare class ClientDataService implements ClientDataServiceBase {
     getBase(): string;
     resolve(relative: string): string;
     execute(options: DataServiceExecuteOptions): Promise<any>;
-}
-export declare class DefaultUrlBuilder implements UrlBuilder {
-    getUrl(model: string): string;
 }
