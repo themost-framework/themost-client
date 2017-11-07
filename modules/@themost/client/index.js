@@ -476,6 +476,18 @@ var ClientDataModel = /** @class */ (function () {
     ClientDataModel.prototype.asQueryable = function () {
         return ClientDataQueryable.create(this.getName(), this.service_);
     };
+    /**
+     * @returns {Promise}
+     */
+    ClientDataModel.prototype.getItems = function () {
+        return this.asQueryable().getItems();
+    };
+    /**
+     * @returns {Promise}
+     */
+    ClientDataModel.prototype.getList = function () {
+        return this.asQueryable().getList();
+    };
     ClientDataModel.prototype.where = function (attr) {
         return this.asQueryable().where(attr);
     };

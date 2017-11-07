@@ -541,6 +541,20 @@ export class ClientDataModel {
         return ClientDataQueryable.create(this.getName(), this.service_);
     }
 
+    /**
+     * @returns {Promise}
+     */
+    getItems():Promise<any> {
+        return this.asQueryable().getItems();
+    }
+
+    /**
+     * @returns {Promise}
+     */
+    getList():Promise<any> {
+        return this.asQueryable().getList();
+    }
+
     where(attr:string):ClientDataQueryable {
         return this.asQueryable().where(attr);
     }

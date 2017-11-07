@@ -115,6 +115,14 @@ export declare class ClientDataModel {
     getService(): ClientDataServiceBase;
     getName(): string;
     asQueryable(): ClientDataQueryable;
+    /**
+     * @returns {Promise}
+     */
+    getItems(): Promise<any>;
+    /**
+     * @returns {Promise}
+     */
+    getList(): Promise<any>;
     where(attr: string): ClientDataQueryable;
     select(...attr: string[]): ClientDataQueryable;
     skip(num: number): ClientDataQueryable;
