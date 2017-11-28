@@ -82,11 +82,13 @@ export class ClientDataQueryable {
     /**
      * Sets the relative URL associated with this object.
      * @param value - A string which represents a relative URI.
+     * @returns ClientDataQueryable
      */
     setUrl(value:string) {
         Args.notEmpty(value,"URL");
         Args.check(!TextUtils.isAbsoluteURI(value), "URL must be a relative URI");
         this.url_ = value;
+        return this;
     }
 
     static create(model:string, service?: ClientDataServiceBase):ClientDataQueryable {
@@ -537,8 +539,18 @@ export class ClientDataModel {
         return this.name_;
     }
 
-    asQueryable():ClientDataQueryable {
-        return ClientDataQueryable.create(this.getName(), this.service_);
+    /**
+     * @param {DataServiceQueryParams} params
+     * @returns {ClientDataQueryable}
+     */
+    asQueryable(params?:DataServiceQueryParams):ClientDataQueryable {
+        const q =  ClientDataQueryable.create(this.getName(), this.service_);
+        if (params) {
+            for(let key in params) {
+                q.setParam(key, params[key]);
+            }
+        }
+        return q;
     }
 
     /**

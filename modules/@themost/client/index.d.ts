@@ -39,8 +39,9 @@ export declare class ClientDataQueryable {
     /**
      * Sets the relative URL associated with this object.
      * @param value - A string which represents a relative URI.
+     * @returns ClientDataQueryable
      */
-    setUrl(value: string): void;
+    setUrl(value: string): this;
     static create(model: string, service?: ClientDataServiceBase): ClientDataQueryable;
     private append_();
     private escape_(val);
@@ -114,7 +115,11 @@ export declare class ClientDataModel {
      */
     getService(): ClientDataServiceBase;
     getName(): string;
-    asQueryable(): ClientDataQueryable;
+    /**
+     * @param {DataServiceQueryParams} params
+     * @returns {ClientDataQueryable}
+     */
+    asQueryable(params?: DataServiceQueryParams): ClientDataQueryable;
     /**
      * @returns {Promise}
      */

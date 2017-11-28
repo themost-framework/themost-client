@@ -67,11 +67,13 @@ var ClientDataQueryable = /** @class */ (function () {
     /**
      * Sets the relative URL associated with this object.
      * @param value - A string which represents a relative URI.
+     * @returns ClientDataQueryable
      */
     ClientDataQueryable.prototype.setUrl = function (value) {
         common_1.Args.notEmpty(value, "URL");
         common_1.Args.check(!common_1.TextUtils.isAbsoluteURI(value), "URL must be a relative URI");
         this.url_ = value;
+        return this;
     };
     ClientDataQueryable.create = function (model, service) {
         return new ClientDataQueryable(model, service);
@@ -473,8 +475,18 @@ var ClientDataModel = /** @class */ (function () {
     ClientDataModel.prototype.getName = function () {
         return this.name_;
     };
-    ClientDataModel.prototype.asQueryable = function () {
-        return ClientDataQueryable.create(this.getName(), this.service_);
+    /**
+     * @param {DataServiceQueryParams} params
+     * @returns {ClientDataQueryable}
+     */
+    ClientDataModel.prototype.asQueryable = function (params) {
+        var q = ClientDataQueryable.create(this.getName(), this.service_);
+        if (params) {
+            for (var key in params) {
+                q.setParam(key, params[key]);
+            }
+        }
+        return q;
     };
     /**
      * @returns {Promise}
