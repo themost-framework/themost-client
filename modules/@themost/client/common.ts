@@ -2,6 +2,16 @@
 export class CodedError extends Error {
     constructor(message:string, public code:string) {
         super(message);
+        //set prototype for a class that extends Error in typescript
+        this["__proto__"] = new.target.prototype;
+    }
+}
+
+export class ResponseError extends Error {
+    constructor(message:string, public statusCode:number) {
+        super(message);
+        //set prototype for a class that extends Error in typescript
+        this["__proto__"] = new.target.prototype;
     }
 }
 

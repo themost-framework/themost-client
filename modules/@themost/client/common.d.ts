@@ -2,6 +2,10 @@ export declare class CodedError extends Error {
     code: string;
     constructor(message: string, code: string);
 }
+export declare class ResponseError extends Error {
+    statusCode: number;
+    constructor(message: string, statusCode: number);
+}
 export declare class Base64 {
     private PADCHAR;
     private ALPHA;

@@ -13,13 +13,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var CodedError = /** @class */ (function (_super) {
     __extends(CodedError, _super);
     function CodedError(message, code) {
+        var _newTarget = this.constructor;
         var _this = _super.call(this, message) || this;
         _this.code = code;
+        //set prototype for a class that extends Error in typescript
+        _this["__proto__"] = _newTarget.prototype;
         return _this;
     }
     return CodedError;
 }(Error));
 exports.CodedError = CodedError;
+var ResponseError = /** @class */ (function (_super) {
+    __extends(ResponseError, _super);
+    function ResponseError(message, statusCode) {
+        var _newTarget = this.constructor;
+        var _this = _super.call(this, message) || this;
+        _this.statusCode = statusCode;
+        //set prototype for a class that extends Error in typescript
+        _this["__proto__"] = _newTarget.prototype;
+        return _this;
+    }
+    return ResponseError;
+}(Error));
+exports.ResponseError = ResponseError;
 var Base64 = /** @class */ (function () {
     function Base64() {
         this.PADCHAR = '=';

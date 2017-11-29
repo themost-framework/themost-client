@@ -91,7 +91,16 @@ var NodeDataService = /** @class */ (function (_super) {
                         }
                     }
                     else {
-                        reject(new common_1.CodedError(response.statusMessage, response.status));
+                        var res = response.toJSON();
+                        if (typeof res.body === 'object') {
+                            var err = Object.assign(new common_1.ResponseError(res.body.message || response.statusMessage, response.status), res.body);
+                            if (err.hasOwnProperty("status")) {
+                                //delete status because of ResponseError.statusCode property
+                                delete err.status;
+                            }
+                            return reject(err);
+                        }
+                        return reject(new common_1.ResponseError(response.statusMessage, response.status));
                     }
                 });
             }

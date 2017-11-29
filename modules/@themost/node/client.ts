@@ -9,7 +9,7 @@
 import unirest = require('unirest');
 import {Promise} from 'q';
 import {ClientDataContext, ClientDataService} from "@themost/client"
-import {Args,CodedError} from "@themost/client/common";
+import {Args,ResponseError} from "@themost/client/common";
 
 const REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
 function dateParser(key, value) {
@@ -72,7 +72,16 @@ export class NodeDataService extends ClientDataService {
                         }
                     }
                     else {
-                        reject(new CodedError(response.statusMessage, response.status));
+                        var res = response.toJSON();
+                        if (typeof res.body === 'object') {
+                            const err = (<any>Object).assign(new ResponseError(res.body.message || response.statusMessage, response.status),res.body);
+                            if (err.hasOwnProperty("status")) {
+                                //delete status because of ResponseError.statusCode property
+                                delete err.status;
+                            }
+                            return reject(err);
+                        }
+                        return reject(new ResponseError(response.statusMessage, response.status));
                     }
                 });
             }
