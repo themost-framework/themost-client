@@ -1,6 +1,6 @@
 import {Injectable, EventEmitter, Component, Inject} from '@angular/core';
 import {Args,DataServiceExecuteOptions,TextUtils} from '@themost/client/common';
-import {Http, Response} from '@angular/http';
+import {HttpClient} from '@angular/common/http';
 import {ClientDataService,ClientDataContext} from "@themost/client";
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -18,7 +18,7 @@ export const DATA_CONTEXT_CONFIG:ClientDataContextConfig = {
 @Injectable()
 export class AngularDataContext extends ClientDataContext {
 
-    constructor(private http:Http, @Inject(DATA_CONTEXT_CONFIG) config:ClientDataContextConfig) {
+    constructor(private http:HttpClient, @Inject(DATA_CONTEXT_CONFIG) config:ClientDataContextConfig) {
         super(new AngularDataService(config.base, http));
     }
 }
@@ -33,14 +33,14 @@ export class AngularDataService extends ClientDataService {
         throw new Error("Method not implemented.");
     }
 
-    private http_:Http;
+    private http_:HttpClient;
 
     /**
      * Initializes a new instance of ClientDataService class
      * @param {string} base - The base URI of the MOST Web Framework Application Server. The default value is '/' for accessing local services.
      * @param {Http}  http
      */
-    constructor(base:string, http:Http) {
+    constructor(base:string, http:HttpClient) {
         super(base || "/");
         this.http_ = http;
     }
@@ -61,30 +61,32 @@ export class AngularDataService extends ClientDataService {
         //set URL parameter
         const url_ = self.getBase() + options.url.replace(/^\//i,"");
         let requestOptions = {
-            method: options.method,
             headers:options.headers,
             search:null,
             body:null
         };
         //if request is a GET HTTP Request
-        if (/^GET$/i.test(requestOptions.method)) {
+        if (/^GET$/i.test(options.method)) {
             requestOptions.search = options.data;
         }
         else {
             requestOptions.body = options.data;
         }
-        return this.http_.request(url_, requestOptions).map(
+        return this.http_.request(options.method ,url_, requestOptions).map(
             (res:Response) => {
                 if (res.status===204) {
                     return;
                 }
                 else {
-                    return JSON.parse(res.text(), function(key,value) {
-                        if (TextUtils.isDate(value)) {
-                            return new Date(value);
-                        }
-                        return value;
+                    return res.text().then(function(text) {
+                        return JSON.parse(text, function(key,value) {
+                            if (TextUtils.isDate(value)) {
+                                return new Date(value);
+                            }
+                            return value;
+                        });
                     });
+
                 }
             }
         ).toPromise();
