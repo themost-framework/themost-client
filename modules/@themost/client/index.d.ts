@@ -13,7 +13,11 @@ export declare class ClientDataQueryable {
     private service_;
     private params_;
     private privates_;
+    static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable;
     constructor(model: string, service: ClientDataServiceBase);
+    toString(): any;
+    takeNext(n: number): ClientDataQueryable;
+    takePrevious(n: number): ClientDataQueryable;
     /**
      * @returns {ClientDataServiceBase}
      */

@@ -34,6 +34,11 @@
   "homepage": "https://github.com/kbarbounakis/themost-client#readme",
   "dependencies": {},
   "devDependencies": {
+    "@types/assert": "0.0.31",
+    "@types/mocha": "^2.2.44",
+    "@types/url-parse": "^1.1.0",
+    "assert": "^1.4.1",
+    "mocha": "^4.0.1",
     "rxjs": "^5.5.2",
     "ts-loader": "^3.0.5",
     "typescript": "^2.5.3",

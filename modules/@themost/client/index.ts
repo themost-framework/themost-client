@@ -8,13 +8,14 @@
  */
 
 import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions,Args} from './common';
-
+import parse = require("url-parse");
 class ClientQueryExpression {
     public left:any;
     public op:string;
     public lop:string;
     public right:any;
 }
+
 
 export class ClientDataQueryable {
 
@@ -23,6 +24,23 @@ export class ClientDataQueryable {
     private service_:ClientDataServiceBase;
     private params_:any;
     private privates_:ClientQueryExpression;
+
+    static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable {
+        const uri = parse(u, true);
+        const result = new ClientDataQueryable("Model",service || new ParserDataService(uri.protocol ? uri.origin : "/"));
+        for(const key in uri.query) {
+            if (/^\$/.test(key)) {
+                if (/[+-]?\d+/.test(uri.query[key])) {
+                    result.setParam(key, parseInt(uri.query[key]));
+                }
+                else {
+                    result.setParam(key, uri.query[key]);
+                }
+            }
+        }
+        result.setUrl(uri.pathname);
+        return result;
+    }
 
     constructor(model:string, service: ClientDataServiceBase) {
         Args.notEmpty(model, "Model");
@@ -34,6 +52,35 @@ export class ClientDataQueryable {
         this.params_ = { };
         //init privates
         this.privates_ = new ClientQueryExpression();
+    }
+
+    toString() {
+        let uri = this.getService().resolve(this.url_);
+        const params = this.getParams();
+        let search = "";
+        for(const key in params) {
+            search = search.concat(key, '=', params[key], "&");
+        }
+        if (search.length) {
+            return uri.concat("?",search.replace(/&$/,""));
+        }
+        return uri;
+    }
+
+    takeNext(n:number) {
+        const p = this.getParams();
+        return this.take(n).skip((p.$skip ? p.$skip : 0) + n);
+    }
+
+    takePrevious(n:number) {
+        const p = this.getParams();
+        if (p.$skip>0) {
+            if (n<=p.$skip) {
+                this.skip(p.$skip-n);
+                return this.take(n);
+            }
+        }
+        return this;
     }
 
     /**
@@ -718,6 +765,19 @@ export class ClientDataService implements ClientDataServiceBase {
 
     execute(options: DataServiceExecuteOptions): Promise<any> {
         throw new Error("Method not implemented.");
+    }
+
+}
+
+
+class ParserDataService extends ClientDataService {
+
+    constructor(base:string) {
+        super(base);
+    }
+
+    execute(options: DataServiceExecuteOptions): Promise<any> {
+        throw new Error("Method not allowed.");
     }
 
 }

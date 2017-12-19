@@ -7,8 +7,19 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = require("./common");
+var parse = require("url-parse");
 var ClientQueryExpression = /** @class */ (function () {
     function ClientQueryExpression() {
     }
@@ -26,6 +37,48 @@ var ClientDataQueryable = /** @class */ (function () {
         //init privates
         this.privates_ = new ClientQueryExpression();
     }
+    ClientDataQueryable.parse = function (u, service) {
+        var uri = parse(u, true);
+        var result = new ClientDataQueryable("Model", service || new ParserDataService(uri.protocol ? uri.origin : "/"));
+        for (var key in uri.query) {
+            if (/^\$/.test(key)) {
+                if (/[+-]?\d+/.test(uri.query[key])) {
+                    result.setParam(key, parseInt(uri.query[key]));
+                }
+                else {
+                    result.setParam(key, uri.query[key]);
+                }
+            }
+        }
+        result.setUrl(uri.pathname);
+        return result;
+    };
+    ClientDataQueryable.prototype.toString = function () {
+        var uri = this.getService().resolve(this.url_);
+        var params = this.getParams();
+        var search = "";
+        for (var key in params) {
+            search = search.concat(key, '=', params[key], "&");
+        }
+        if (search.length) {
+            return uri.concat("?", search.replace(/&$/, ""));
+        }
+        return uri;
+    };
+    ClientDataQueryable.prototype.takeNext = function (n) {
+        var p = this.getParams();
+        return this.take(n).skip((p.$skip ? p.$skip : 0) + n);
+    };
+    ClientDataQueryable.prototype.takePrevious = function (n) {
+        var p = this.getParams();
+        if (p.$skip > 0) {
+            if (n <= p.$skip) {
+                this.skip(p.$skip - n);
+                return this.take(n);
+            }
+        }
+        return this;
+    };
     /**
      * @returns {ClientDataServiceBase}
      */
@@ -629,4 +682,14 @@ var ClientDataService = /** @class */ (function () {
     return ClientDataService;
 }());
 exports.ClientDataService = ClientDataService;
+var ParserDataService = /** @class */ (function (_super) {
+    __extends(ParserDataService, _super);
+    function ParserDataService(base) {
+        return _super.call(this, base) || this;
+    }
+    ParserDataService.prototype.execute = function (options) {
+        throw new Error("Method not allowed.");
+    };
+    return ParserDataService;
+}(ClientDataService));
 //# sourceMappingURL=index.js.map

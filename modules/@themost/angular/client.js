@@ -24,7 +24,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var common_1 = require("@themost/client/common");
-var http_1 = require("@angular/http");
+var http_1 = require("@angular/common/http");
 var client_1 = require("@themost/client");
 require("rxjs/add/operator/toPromise");
 require("rxjs/add/operator/map");
@@ -41,7 +41,7 @@ var AngularDataContext = /** @class */ (function (_super) {
     AngularDataContext = __decorate([
         core_1.Injectable(),
         __param(1, core_1.Inject(exports.DATA_CONTEXT_CONFIG)),
-        __metadata("design:paramtypes", [http_1.Http, Object])
+        __metadata("design:paramtypes", [http_1.HttpClient, Object])
     ], AngularDataContext);
     return AngularDataContext;
 }(client_1.ClientDataContext));
@@ -80,28 +80,29 @@ var AngularDataService = /** @class */ (function (_super) {
         //set URL parameter
         var url_ = self.getBase() + options.url.replace(/^\//i, "");
         var requestOptions = {
-            method: options.method,
             headers: options.headers,
             search: null,
             body: null
         };
         //if request is a GET HTTP Request
-        if (/^GET$/i.test(requestOptions.method)) {
+        if (/^GET$/i.test(options.method)) {
             requestOptions.search = options.data;
         }
         else {
             requestOptions.body = options.data;
         }
-        return this.http_.request(url_, requestOptions).map(function (res) {
+        return this.http_.request(options.method, url_, requestOptions).map(function (res) {
             if (res.status === 204) {
                 return;
             }
             else {
-                return JSON.parse(res.text(), function (key, value) {
-                    if (common_1.TextUtils.isDate(value)) {
-                        return new Date(value);
-                    }
-                    return value;
+                return res.text().then(function (text) {
+                    return JSON.parse(text, function (key, value) {
+                        if (common_1.TextUtils.isDate(value)) {
+                            return new Date(value);
+                        }
+                        return value;
+                    });
                 });
             }
         }).toPromise();
