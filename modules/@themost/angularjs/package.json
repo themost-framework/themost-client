@@ -6,16 +6,16 @@
   "peerDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kbarbounakis/themost-client.git"
+    "url": "git+https://github.com/themost-framework/themost-client.git"
   },
   "author": "Kyriakos Barbounakis <k.barbounakis@gmail.com>",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/kbarbounakis/themost-client/issues"
+    "url": "https://github.com/themost-framework/themost-client/issues"
   },
-  "homepage": "https://github.com/kbarbounakis/themost-client#readme",
+  "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
-    "@themost/client": "2.0.0-alpha.1",
+    "@themost/client": "^2.0.5",
     "@types/angular": "^1.5.7",
     "angular": "^1.5.7"
   }
