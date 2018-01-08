@@ -1,6 +1,6 @@
 {
   "name": "@themost/angularjs",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "MOST Web Framework 2.0 - AngularJS 1.5 Client",
   "module": "client.js",
   "peerDependencies": {},
