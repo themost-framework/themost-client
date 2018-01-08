@@ -81,14 +81,14 @@ function MostWatchDirective() {
             //get event name
             var name = element.attr('name') || attrs['event'], args = attrs['eventArgs'];
             if (name) {
-                if (typeof scope.broadcast === 'function') {
+                if (typeof scope.$broadcast === 'function') {
                     scope.$watch(args, function (value) {
-                        scope.broadcast(name, value);
+                        scope.$broadcast(name, value);
                     });
                 }
                 else {
                     scope.$watch(args, function (value) {
-                        scope.emit(name, value);
+                        scope.$emit(name, value);
                     });
                 }
             }

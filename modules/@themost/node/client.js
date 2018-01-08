@@ -49,9 +49,10 @@ var NodeDataService = /** @class */ (function (_super) {
     __extends(NodeDataService, _super);
     /**
      * @param {string} base
+     * @param {ClientDataContextOptions} options
      */
-    function NodeDataService(base) {
-        return _super.call(this, base) || this;
+    function NodeDataService(base, options) {
+        return _super.call(this, base, options) || this;
     }
     NodeDataService.prototype.execute = function (options) {
         var _this = this;

@@ -101,14 +101,14 @@ function MostWatchDirective():IDirective {
             //get event name
             const name = element.attr('name') || attrs['event'], args = attrs['eventArgs'];
             if (name) {
-                if (typeof scope.broadcast === 'function') {
+                if (typeof scope.$broadcast === 'function') {
                     scope.$watch(args, function (value) {
-                        scope.broadcast(name, value);
+                        scope.$broadcast(name, value);
                     });
                 }
                 else {
                     scope.$watch(args, function (value) {
-                        scope.emit(name, value);
+                        scope.$emit(name, value);
                     });
                 }
             }
@@ -121,7 +121,7 @@ function MostItemDirective($window):IDirective {
     return {
         restrict: 'A',
         scope: false,
-        link: function(scope, element, attrs) {
+        link: function(scope: MostDataItemScope, element, attrs) {
             scope.route = $window.route;
             const item = scope.$eval(attrs['mostItem']);
             item.then(function(result) {
@@ -161,7 +161,7 @@ function MostVariableDirective($timeout):IDirective {
 function MostParamDirective($window):IDirective {
     return {
         restrict: 'AE',
-        link: function(scope, element, attrs) {
+        link: function(scope:MostDataRouteScope, element, attrs) {
             scope.route = $window.route;
             if (attrs['mostParam']) {
                 const values = attrs['mostParam'].split(';');
@@ -191,7 +191,17 @@ function MostParamDirective($window):IDirective {
     };
 }
 
-interface MostDataInstanceScope extends IScope {
+interface MostDataRouteScope extends IScope {
+    route:any;
+}
+
+interface MostDataItemScope extends IScope {
+    route:any;
+    item:any;
+}
+
+interface MostDataInstanceScope extends MostDataRouteScope {
+    filter:string;
     model:string;
     select:string;
     group:string;

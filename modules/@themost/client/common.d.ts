@@ -62,6 +62,9 @@ export interface DataServiceQueryParams {
     $first: boolean;
     $levels: number;
 }
+export interface ClientDataContextOptions {
+    useMediaTypeExtensions?: boolean;
+}
 export interface DataServiceExecuteOptions {
     method: string;
     url: string;
@@ -85,6 +88,7 @@ export interface ClientDataServiceBase {
      * @param {string} relative
      */
     resolve(relative: string): any;
+    getOptions(): ClientDataContextOptions;
 }
 export interface ClientDataContextBase {
     /**

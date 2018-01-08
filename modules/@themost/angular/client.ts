@@ -1,5 +1,5 @@
 import {Injectable, EventEmitter, Component, Inject} from '@angular/core';
-import {Args,DataServiceExecuteOptions,TextUtils} from '@themost/client/common';
+import {Args,DataServiceExecuteOptions,TextUtils,ClientDataContextOptions} from '@themost/client/common';
 import {HttpClient} from '@angular/common/http';
 import {ClientDataService,ClientDataContext} from "@themost/client";
 import 'rxjs/add/operator/toPromise';
@@ -7,19 +7,22 @@ import 'rxjs/add/operator/map';
 
 
 export interface ClientDataContextConfig {
-    base:string
+    base:string,
+    options: ClientDataContextOptions
 }
 
 export const DATA_CONTEXT_CONFIG:ClientDataContextConfig = {
-    base: '/'
+    base: '/',
+    options: {
+        useMediaTypeExtensions:true
+    }
 };
-
 
 @Injectable()
 export class AngularDataContext extends ClientDataContext {
 
     constructor(private http:HttpClient, @Inject(DATA_CONTEXT_CONFIG) config:ClientDataContextConfig) {
-        super(new AngularDataService(config.base, http));
+        super(new AngularDataService(config.base, http), config.options);
     }
 }
 
@@ -39,9 +42,10 @@ export class AngularDataService extends ClientDataService {
      * Initializes a new instance of ClientDataService class
      * @param {string} base - The base URI of the MOST Web Framework Application Server. The default value is '/' for accessing local services.
      * @param {Http}  http
+     * @param {ClientDataContextOptions} options
      */
-    constructor(base:string, http:HttpClient) {
-        super(base || "/");
+    constructor(base:string, http:HttpClient, options?:ClientDataContextOptions) {
+        super(base || "/", options);
         this.http_ = http;
     }
 

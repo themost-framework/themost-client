@@ -31,7 +31,12 @@ var ClientDataQueryable = /** @class */ (function () {
         this.model_ = model;
         common_1.Args.notNull(service, "Data Service");
         this.service_ = service;
-        this.url_ = common_1.TextUtils.format("%s/index.json", this.model_);
+        if (this.service_.getOptions().useMediaTypeExtensions) {
+            this.url_ = common_1.TextUtils.format("%s/index.json", this.model_);
+        }
+        else {
+            this.url_ = common_1.TextUtils.format("%s/", this.model_);
+        }
         //init params
         this.params_ = {};
         //init privates
@@ -132,6 +137,7 @@ var ClientDataQueryable = /** @class */ (function () {
         return new ClientDataQueryable(model, service);
     };
     ClientDataQueryable.prototype.append_ = function () {
+        var _this = this;
         common_1.Args.notNull(this.privates_.left, "Left operand");
         common_1.Args.notNull(this.privates_.op, "Comparison operator");
         var expr;
@@ -139,7 +145,7 @@ var ClientDataQueryable = /** @class */ (function () {
             common_1.Args.check((this.privates_.op === "eq") || (this.privates_.op === "ne"), "Wrong operator. Expected equal or not equal");
             common_1.Args.check(this.privates_.right.length > 0, "Array may not be empty");
             var arr = this.privates_.right.map(function (x) {
-                return this.privates_.left + " " + this.privates_.op + " " + this.escape_(x);
+                return _this.privates_.left + " " + _this.privates_.op + " " + _this.escape_(x);
             });
             if (this.privates_.op === "eq") {
                 expr = "(" + arr.join(" or ") + ")";
@@ -165,6 +171,7 @@ var ClientDataQueryable = /** @class */ (function () {
         return this;
     };
     ClientDataQueryable.prototype.escape_ = function (val) {
+        var _this = this;
         if ((val == null) || (val == undefined)) {
             return "null";
         }
@@ -175,7 +182,7 @@ var ClientDataQueryable = /** @class */ (function () {
             return val + "";
         }
         if (val instanceof Date) {
-            var dt = new Date(val);
+            var dt = val;
             var year = dt.getFullYear();
             var month = common_1.TextUtils.zeroPad(dt.getMonth() + 1, 2);
             var day = common_1.TextUtils.zeroPad(dt.getDate(), 2);
@@ -190,7 +197,7 @@ var ClientDataQueryable = /** @class */ (function () {
         if (val instanceof Array) {
             var values_1 = [];
             val.forEach(function (x) {
-                values_1.push(this.escape_(x));
+                values_1.push(_this.escape_(x));
             });
             return values_1.join(',');
         }
@@ -570,10 +577,18 @@ var ClientDataModel = /** @class */ (function () {
     ClientDataModel.prototype.take = function (num) {
         return this.asQueryable().take(num);
     };
+    ClientDataModel.prototype.getUrl = function () {
+        if (this.service_.getOptions().useMediaTypeExtensions) {
+            return common_1.TextUtils.format("%s/index.json", this.getName());
+        }
+        else {
+            return common_1.TextUtils.format("%s/", this.getName());
+        }
+    };
     ClientDataModel.prototype.save = function (obj) {
         return this.getService().execute({
             method: "POST",
-            url: common_1.TextUtils.format("%s/index.json", this.getName()),
+            url: this.getUrl(),
             data: obj,
             headers: {}
         });
@@ -587,7 +602,7 @@ var ClientDataModel = /** @class */ (function () {
     };
     ClientDataModel.prototype.remove = function (obj) {
         return this.getService().execute({ method: "DELETE",
-            url: common_1.TextUtils.format("%s/index.json", this.getName()),
+            url: this.getUrl(),
             data: obj,
             headers: {}
         });
@@ -600,7 +615,7 @@ var ClientDataModel = /** @class */ (function () {
 }());
 exports.ClientDataModel = ClientDataModel;
 var ClientDataContext = /** @class */ (function () {
-    function ClientDataContext(service) {
+    function ClientDataContext(service, options) {
         this.service_ = service;
     }
     ClientDataContext.prototype.setBasicAuthorization = function (username, password) {
@@ -640,14 +655,18 @@ var ClientDataContext = /** @class */ (function () {
      */
     ClientDataContext.prototype.model = function (name) {
         common_1.Args.notEmpty(name, "Model name");
-        return new ClientDataModel(name, this.getService());
+        var model = new ClientDataModel(name, this.getService());
+        return model;
     };
     return ClientDataContext;
 }());
 exports.ClientDataContext = ClientDataContext;
 var ClientDataService = /** @class */ (function () {
-    function ClientDataService(base) {
+    function ClientDataService(base, options) {
         this.headers_ = {};
+        this.options_ = options || {
+            useMediaTypeExtensions: true
+        };
         if (typeof base === 'undefined' || base == null) {
             this.base_ = "/";
         }
@@ -658,6 +677,9 @@ var ClientDataService = /** @class */ (function () {
             }
         }
     }
+    ClientDataService.prototype.getOptions = function () {
+        return this.options_;
+    };
     ClientDataService.prototype.setHeader = function (name, value) {
         this.headers_[name] = value;
     };

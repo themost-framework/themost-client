@@ -6,7 +6,7 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import { ClientDataServiceBase, ClientDataContextBase, DataServiceQueryParams, DataServiceExecuteOptions } from './common';
+import { ClientDataServiceBase, ClientDataContextBase, DataServiceQueryParams, DataServiceExecuteOptions, ClientDataContextOptions } from './common';
 export declare class ClientDataQueryable {
     private model_;
     private url_;
@@ -136,6 +136,7 @@ export declare class ClientDataModel {
     select(...attr: string[]): ClientDataQueryable;
     skip(num: number): ClientDataQueryable;
     take(num: number): ClientDataQueryable;
+    getUrl(): string;
     save(obj: any): Promise<any>;
     schema(): Promise<any>;
     remove(obj: any): Promise<any>;
@@ -144,7 +145,8 @@ export declare class ClientDataModel {
 export declare class ClientDataContext implements ClientDataContextBase {
     private service_;
     private base_;
-    constructor(service: ClientDataServiceBase);
+    private options;
+    constructor(service: ClientDataServiceBase, options?: ClientDataContextOptions);
     setBasicAuthorization(username: string, password: string): ClientDataContext;
     setBearerAuthorization(access_token: string): ClientDataContext;
     /**
@@ -170,8 +172,10 @@ export declare class ClientDataContext implements ClientDataContextBase {
 }
 export declare class ClientDataService implements ClientDataServiceBase {
     private base_;
+    private options_;
     private headers_;
-    constructor(base: string);
+    constructor(base: string, options?: ClientDataContextOptions);
+    getOptions(): ClientDataContextOptions;
     setHeader(name: string, value: string): void;
     getHeaders(): any;
     getBase(): string;

@@ -8,7 +8,8 @@
  */
 import unirest = require('unirest');
 import {Promise} from 'q';
-import {ClientDataContext, ClientDataService} from "@themost/client"
+import {ClientDataContextOptions} from "@themost/client/common";
+import {ClientDataContext, ClientDataService} from "@themost/client";
 import {Args,ResponseError} from "@themost/client/common";
 
 const REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
@@ -29,9 +30,10 @@ export class NodeDataService extends ClientDataService {
 
     /**
      * @param {string} base
+     * @param {ClientDataContextOptions} options
      */
-    constructor(base:string) {
-        super(base);
+    constructor(base:string,options?:ClientDataContextOptions) {
+        super(base,options);
     }
 
     execute(options):Promise<any> {

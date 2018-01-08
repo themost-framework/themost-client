@@ -261,6 +261,11 @@ export interface DataServiceQueryParams {
     $levels:number;
 }
 
+
+export interface ClientDataContextOptions {
+    useMediaTypeExtensions?:boolean;
+}
+
 export interface DataServiceExecuteOptions {
     method:string;
     url:string;
@@ -288,6 +293,9 @@ export interface ClientDataServiceBase {
      * @param {string} relative
      */
     resolve(relative: string)
+
+    getOptions(): ClientDataContextOptions
+
 }
 
 export interface ClientDataContextBase {

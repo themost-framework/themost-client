@@ -7,8 +7,9 @@
  * found in the LICENSE file at https://themost.io/license
  */
 
-import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions,Args} from './common';
-import parse = require("url-parse");
+import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions,Args,
+    ClientDataContextOptions} from './common';
+import * as parse from "url-parse";
 class ClientQueryExpression {
     public left:any;
     public op:string;
@@ -47,7 +48,12 @@ export class ClientDataQueryable {
         this.model_ = model;
         Args.notNull(service, "Data Service");
         this.service_ = service;
-        this.url_ = TextUtils.format("%s/index.json", this.model_);
+        if (this.service_.getOptions().useMediaTypeExtensions) {
+            this.url_ = TextUtils.format("%s/index.json", this.model_);
+        }
+        else {
+            this.url_ = TextUtils.format("%s/", this.model_);
+        }
         //init params
         this.params_ = { };
         //init privates
@@ -149,7 +155,7 @@ export class ClientDataQueryable {
         if (Array.isArray(this.privates_.right)) {
             Args.check((this.privates_.op==="eq") || (this.privates_.op==="ne"),"Wrong operator. Expected equal or not equal");
             Args.check(this.privates_.right.length>0,"Array may not be empty");
-            const arr = this.privates_.right.map(function(x) {
+            const arr = this.privates_.right.map((x) => {
                 return this.privates_.left + " " + this.privates_.op + " " + this.escape_(x);
             });
             if (this.privates_.op === "eq") {
@@ -187,7 +193,7 @@ export class ClientDataQueryable {
             return val+"";
         }
         if (val instanceof Date) {
-            const dt = new Date(val);
+            const dt = val;
             const year   = dt.getFullYear();
             const month  = TextUtils.zeroPad(dt.getMonth() + 1, 2);
             const day    = TextUtils.zeroPad(dt.getDate(), 2);
@@ -202,7 +208,7 @@ export class ClientDataQueryable {
         }
         if (val instanceof Array) {
             const values = [];
-            val.forEach(function(x) {
+            val.forEach((x) => {
                 values.push(this.escape_(x));
             });
             return values.join(',');
@@ -573,6 +579,7 @@ export class ClientDataModel {
     constructor(name:string, service:ClientDataServiceBase) {
         this.name_ = name;
         this.service_ = service;
+
     }
 
     /**
@@ -631,10 +638,19 @@ export class ClientDataModel {
         return this.asQueryable().take(num);
     }
 
+    getUrl() {
+        if (this.service_.getOptions().useMediaTypeExtensions) {
+            return TextUtils.format("%s/index.json", this.getName());
+        }
+        else {
+            return TextUtils.format("%s/", this.getName());
+        }
+    }
+
     save(obj:any):Promise<any> {
         return this.getService().execute({
             method:"POST",
-            url:TextUtils.format("%s/index.json", this.getName()),
+            url:this.getUrl(),
             data:obj,
             headers:{}
         });
@@ -650,7 +666,7 @@ export class ClientDataModel {
 
     remove(obj:any):Promise<any> {
         return this.getService().execute({ method:"DELETE",
-            url:TextUtils.format("%s/index.json", this.getName()),
+            url:this.getUrl(),
             data:obj,
             headers:{}
         });
@@ -663,13 +679,16 @@ export class ClientDataModel {
 
 }
 
+
 export class ClientDataContext implements ClientDataContextBase {
 
     private service_:ClientDataServiceBase;
     private base_:string;
+    private options:ClientDataContextOptions;
 
-    constructor(service : ClientDataServiceBase) {
+    constructor(service : ClientDataServiceBase, options?:ClientDataContextOptions) {
         this.service_ = service;
+
     }
 
     setBasicAuthorization (username:string, password:string):ClientDataContext {
@@ -714,7 +733,8 @@ export class ClientDataContext implements ClientDataContextBase {
      */
     model(name:string): ClientDataModel {
         Args.notEmpty(name,"Model name");
-        return new ClientDataModel(name, this.getService());
+        const model = new ClientDataModel(name, this.getService());
+        return model;
     }
 
 
@@ -724,10 +744,14 @@ export class ClientDataService implements ClientDataServiceBase {
 
 
     private base_:string;
+    private options_:ClientDataContextOptions;
     private headers_: any;
 
-    constructor(base:string) {
+    constructor(base:string, options?: ClientDataContextOptions) {
         this.headers_ = {};
+        this.options_ = options || {
+            useMediaTypeExtensions:true
+        };
         if (typeof base === 'undefined' || base == null) {
             this.base_ = "/";
         }
@@ -736,8 +760,11 @@ export class ClientDataService implements ClientDataServiceBase {
             if (!/\/$/.test(this.base_)) {
                 this.base_ += "/";
             }
-
         }
+    }
+
+    getOptions(): ClientDataContextOptions {
+        return this.options_;
     }
 
     setHeader(name:string, value:string) {

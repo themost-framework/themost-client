@@ -6,8 +6,8 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import {DataServiceExecuteOptions,Args} from "@themost/client/common";
-import {ClientDataService,ClientDataContext} from "@themost/client";
+import {DataServiceExecuteOptions,Args,ClientDataContextOptions} from "@themost/client/common";
+import {ClientDataService, ClientDataContext} from "@themost/client";
 
 const REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
 function dateParser(key, value) {
@@ -18,8 +18,8 @@ function dateParser(key, value) {
 }
 
 export class AngularDataContext extends ClientDataContext {
-    constructor(base:string, http:any, q:any) {
-        super(new AngularDataService(base || "/", http, q));
+    constructor(base:string, http:any, q:any, options?:ClientDataContextOptions) {
+        super(new AngularDataService(base || "/", http, q, options));
     }
 }
 
@@ -33,9 +33,10 @@ export class AngularDataService extends ClientDataService {
      * @param {string} base
      * @param {*} http
      * @param {*} q
+     * @param {ClientDataContextOptions} options
      */
-    constructor(base:string, http:any, q:any) {
-        super(base);
+    constructor(base:string, http:any, q:any, options?:ClientDataContextOptions) {
+        super(base, options);
         this.http = http;
         this.q = q;
     }

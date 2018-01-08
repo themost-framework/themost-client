@@ -29,12 +29,15 @@ var client_1 = require("@themost/client");
 require("rxjs/add/operator/toPromise");
 require("rxjs/add/operator/map");
 exports.DATA_CONTEXT_CONFIG = {
-    base: '/'
+    base: '/',
+    options: {
+        useMediaTypeExtensions: true
+    }
 };
 var AngularDataContext = /** @class */ (function (_super) {
     __extends(AngularDataContext, _super);
     function AngularDataContext(http, config) {
-        var _this = _super.call(this, new AngularDataService(config.base, http)) || this;
+        var _this = _super.call(this, new AngularDataService(config.base, http), config.options) || this;
         _this.http = http;
         return _this;
     }
@@ -52,9 +55,10 @@ var AngularDataService = /** @class */ (function (_super) {
      * Initializes a new instance of ClientDataService class
      * @param {string} base - The base URI of the MOST Web Framework Application Server. The default value is '/' for accessing local services.
      * @param {Http}  http
+     * @param {ClientDataContextOptions} options
      */
-    function AngularDataService(base, http) {
-        var _this = _super.call(this, base || "/") || this;
+    function AngularDataService(base, http, options) {
+        var _this = _super.call(this, base || "/", options) || this;
         _this.http_ = http;
         return _this;
     }

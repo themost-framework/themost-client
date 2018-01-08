@@ -6,10 +6,10 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import { DataServiceExecuteOptions } from "@themost/client/common";
+import { DataServiceExecuteOptions, ClientDataContextOptions } from "@themost/client/common";
 import { ClientDataService, ClientDataContext } from "@themost/client";
 export declare class AngularDataContext extends ClientDataContext {
-    constructor(base: string, http: any, q: any);
+    constructor(base: string, http: any, q: any, options?: ClientDataContextOptions);
 }
 export declare class AngularDataService extends ClientDataService {
     private http;
@@ -19,7 +19,8 @@ export declare class AngularDataService extends ClientDataService {
      * @param {string} base
      * @param {*} http
      * @param {*} q
+     * @param {ClientDataContextOptions} options
      */
-    constructor(base: string, http: any, q: any);
+    constructor(base: string, http: any, q: any, options?: ClientDataContextOptions);
     execute(options: DataServiceExecuteOptions): Promise<any>;
 }
