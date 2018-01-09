@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
-    "@angular/common": "^5.0.1",
-    "@angular/core": "^5.0.1",
-    "@angular/http": "^5.0.1",
-    "@angular/platform-browser": "^5.0.1",
+    "@angular/common": "4.4.4",
+    "@angular/core": "4.4.4",
+    "@angular/http": "4.4.4",
+    "@angular/platform-browser": "4.4.4",
     "@themost/client": "^2.0.6",
     "rxjs": "^5.5.1",
     "zone.js": "^0.8.18"
