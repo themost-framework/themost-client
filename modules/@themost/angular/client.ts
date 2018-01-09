@@ -1,6 +1,6 @@
 import {Injectable, EventEmitter, Component, Inject} from '@angular/core';
 import {Args,DataServiceExecuteOptions,TextUtils,ClientDataContextOptions} from '@themost/client/common';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ClientDataService,ClientDataContext} from "@themost/client";
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
@@ -65,7 +65,7 @@ export class AngularDataService extends ClientDataService {
         //set URL parameter
         const url_ = self.getBase() + options.url.replace(/^\//i,"");
         let requestOptions = {
-            headers:options.headers,
+            headers: new HttpHeaders(options.headers),
             search:null,
             body:null
         };
