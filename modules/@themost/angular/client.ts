@@ -21,8 +21,8 @@ export const DATA_CONTEXT_CONFIG:ClientDataContextConfig = {
 @Injectable()
 export class AngularDataContext extends ClientDataContext {
 
-    constructor(private http:HttpClient) {
-        super(new AngularDataService(DATA_CONTEXT_CONFIG.base, http), DATA_CONTEXT_CONFIG.options);
+    constructor(private http:HttpClient, @Inject(DATA_CONTEXT_CONFIG) config:ClientDataContextConfig) {
+        super(new AngularDataService(config.base, http), config.options);
     }
 }
 
