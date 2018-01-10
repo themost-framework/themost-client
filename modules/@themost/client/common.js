@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var CodedError = /** @class */ (function (_super) {
+var CodedError = (function (_super) {
     __extends(CodedError, _super);
     function CodedError(message, code) {
         var _newTarget = this.constructor;
@@ -23,7 +23,7 @@ var CodedError = /** @class */ (function (_super) {
     return CodedError;
 }(Error));
 exports.CodedError = CodedError;
-var ResponseError = /** @class */ (function (_super) {
+var ResponseError = (function (_super) {
     __extends(ResponseError, _super);
     function ResponseError(message, statusCode) {
         var _newTarget = this.constructor;
@@ -36,7 +36,7 @@ var ResponseError = /** @class */ (function (_super) {
     return ResponseError;
 }(Error));
 exports.ResponseError = ResponseError;
-var Base64 = /** @class */ (function () {
+var Base64 = (function () {
     function Base64() {
         this.PADCHAR = '=';
         this.ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -106,7 +106,7 @@ var Base64 = /** @class */ (function () {
     return Base64;
 }());
 exports.Base64 = Base64;
-var TextUtils = /** @class */ (function () {
+var TextUtils = (function () {
     function TextUtils() {
     }
     TextUtils.isNotEmptyString = function (s) {
@@ -217,7 +217,7 @@ var TextUtils = /** @class */ (function () {
     return TextUtils;
 }());
 exports.TextUtils = TextUtils;
-var Args = /** @class */ (function () {
+var Args = (function () {
     function Args() {
     }
     Args.check = function (expr, message, code) {

@@ -35,7 +35,7 @@ function dateParser(key, value) {
     }
     return value;
 }
-var AngularDataContext = /** @class */ (function (_super) {
+var AngularDataContext = (function (_super) {
     __extends(AngularDataContext, _super);
     function AngularDataContext(base, http, q, options) {
         return _super.call(this, new AngularDataService(base || "/", http, q, options)) || this;
@@ -43,7 +43,7 @@ var AngularDataContext = /** @class */ (function (_super) {
     return AngularDataContext;
 }(client_1.ClientDataContext));
 exports.AngularDataContext = AngularDataContext;
-var AngularDataService = /** @class */ (function (_super) {
+var AngularDataService = (function (_super) {
     __extends(AngularDataService, _super);
     /**
      *

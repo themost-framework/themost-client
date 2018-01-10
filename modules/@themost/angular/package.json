@@ -6,7 +6,14 @@
   "scripts": {
     "test": "karma start"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "@angular/common": "4.4.4",
+    "@angular/core": "4.4.4",
+    "@angular/http": "4.4.4",
+    "@angular/platform-browser": "4.4.4",
+    "rxjs": "^5.5.6",
+    "zone.js": "^0.8.4"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/themost-framework/themost-client.git"
@@ -18,16 +25,10 @@
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
-    "@angular/common": "4.4.4",
-    "@angular/core": "4.4.4",
-    "@angular/http": "4.4.4",
-    "@angular/platform-browser": "4.4.4",
-    "@themost/client": "^2.0.6",
-    "rxjs": "^5.0.1",
-    "zone.js": "^0.8.4"
+    "@themost/client": "^2.0.6"
   },
   "devDependencies": {
-    "@angular/compiler": "^5.0.1",
-    "@angular/platform-browser-dynamic": "^5.0.1"
+    "@angular/compiler": "4.4.4",
+    "@angular/platform-browser-dynamic": "4.4.4"
   }
 }

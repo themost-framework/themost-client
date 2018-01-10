@@ -9,7 +9,10 @@
         "noImplicitAny": false,
         "moduleResolution": "node",
         "module": "commonjs",
-        "target": "es5"
+        "target": "es5",
+        "typeRoots": [
+            "node_modules/@types"
+        ]
     },
     "exclude": [
         "node_modules",

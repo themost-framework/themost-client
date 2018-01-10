@@ -10,6 +10,7 @@
 import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions,Args,
     ClientDataContextOptions} from './common';
 import * as parse from "url-parse";
+
 class ClientQueryExpression {
     public left:any;
     public op:string;

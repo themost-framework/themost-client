@@ -34,10 +34,10 @@ exports.DATA_CONTEXT_CONFIG = {
         useMediaTypeExtensions: true
     }
 };
-var AngularDataContext = /** @class */ (function (_super) {
+var AngularDataContext = (function (_super) {
     __extends(AngularDataContext, _super);
     function AngularDataContext(http, config) {
-        var _this = _super.call(this, new AngularDataService(config.base, http), config.options) || this;
+        var _this = _super.call(this, new AngularDataService(config.base, http, config.options), config.options) || this;
         _this.http = http;
         return _this;
     }
@@ -49,7 +49,7 @@ var AngularDataContext = /** @class */ (function (_super) {
     return AngularDataContext;
 }(client_1.ClientDataContext));
 exports.AngularDataContext = AngularDataContext;
-var AngularDataService = /** @class */ (function (_super) {
+var AngularDataService = (function (_super) {
     __extends(AngularDataService, _super);
     /**
      * Initializes a new instance of ClientDataService class
@@ -82,9 +82,9 @@ var AngularDataService = /** @class */ (function (_super) {
         //validate request method
         common_1.Args.check(/^GET|POST|PUT|DELETE$/i.test(options.method), "Invalid request method. Expected GET, POST, PUT or DELETE.");
         //set URL parameter
-        var url_ = self.getBase() + options.url.replace(/^\//i, "");
+        var final = self.getBase() + options.url.replace(/^\//i, "");
         var requestOptions = {
-            headers: options.headers,
+            headers: new http_1.HttpHeaders(options.headers),
             search: null,
             body: null
         };
@@ -95,7 +95,7 @@ var AngularDataService = /** @class */ (function (_super) {
         else {
             requestOptions.body = options.data;
         }
-        return this.http_.request(options.method, url_, requestOptions).map(function (res) {
+        return this.http_.request(options.method, final, requestOptions).map(function (res) {
             if (res.status === 204) {
                 return;
             }

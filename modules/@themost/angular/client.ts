@@ -5,7 +5,6 @@ import {ClientDataService,ClientDataContext} from "@themost/client";
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/map';
 
-
 export interface ClientDataContextConfig {
     base:string,
     options: ClientDataContextOptions
@@ -22,7 +21,7 @@ export const DATA_CONTEXT_CONFIG:ClientDataContextConfig = {
 export class AngularDataContext extends ClientDataContext {
 
     constructor(private http:HttpClient, @Inject(DATA_CONTEXT_CONFIG) config:ClientDataContextConfig) {
-        super(new AngularDataService(config.base, http), config.options);
+        super(new AngularDataService(config.base, http, config.options), config.options);
     }
 }
 
@@ -63,7 +62,7 @@ export class AngularDataService extends ClientDataService {
         //validate request method
         Args.check(/^GET|POST|PUT|DELETE$/i.test(options.method),"Invalid request method. Expected GET, POST, PUT or DELETE.");
         //set URL parameter
-        const url_ = self.getBase() + options.url.replace(/^\//i,"");
+        const final = self.getBase() + options.url.replace(/^\//i,"");
         let requestOptions = {
             headers: new HttpHeaders(options.headers),
             search:null,
@@ -76,7 +75,7 @@ export class AngularDataService extends ClientDataService {
         else {
             requestOptions.body = options.data;
         }
-        return this.http_.request(options.method ,url_, requestOptions).map(
+        return this.http_.request(options.method ,final, requestOptions).map(
             (res:Response) => {
                 if (res.status===204) {
                     return;
