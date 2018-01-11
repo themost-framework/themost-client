@@ -13,13 +13,7 @@
         "lib": ["es2016", "dom"],
         "typeRoots": [
             "node_modules/@types"
-        ],
-        "baseUrl": ".",
-        "paths": {
-            "rxjs/*": [
-                "node_modules/rxjs/*"
-            ]
-        }
+        ]
     },
     "exclude": [
         "node_modules",
