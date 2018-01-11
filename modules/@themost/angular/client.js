@@ -23,11 +23,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var common_1 = require("@themost/client/common");
 var http_1 = require("@angular/common/http");
-var client_1 = require("@themost/client");
-require("rxjs/add/operator/toPromise");
+var index_1 = require("@themost/client/index");
+var common_1 = require("@themost/client/common");
 require("rxjs/add/operator/map");
+require("rxjs/add/operator/toPromise");
 exports.DATA_CONTEXT_CONFIG = {
     base: '/',
     options: {
@@ -41,13 +41,13 @@ var AngularDataContext = (function (_super) {
         _this.http = http;
         return _this;
     }
-    AngularDataContext = __decorate([
-        core_1.Injectable(),
-        __param(1, core_1.Inject(exports.DATA_CONTEXT_CONFIG)),
-        __metadata("design:paramtypes", [http_1.HttpClient, Object])
-    ], AngularDataContext);
     return AngularDataContext;
-}(client_1.ClientDataContext));
+}(index_1.ClientDataContext));
+AngularDataContext = __decorate([
+    core_1.Injectable(),
+    __param(1, core_1.Inject(exports.DATA_CONTEXT_CONFIG)),
+    __metadata("design:paramtypes", [http_1.HttpClient, Object])
+], AngularDataContext);
 exports.AngularDataContext = AngularDataContext;
 var AngularDataService = (function (_super) {
     __extends(AngularDataService, _super);
@@ -59,7 +59,7 @@ var AngularDataService = (function (_super) {
      */
     function AngularDataService(base, http, options) {
         var _this = _super.call(this, base || "/", options) || this;
-        _this.http_ = http;
+        _this.http = http;
         return _this;
     }
     AngularDataService.prototype.getHeaders = function () {
@@ -69,6 +69,7 @@ var AngularDataService = (function (_super) {
         throw new Error("Method not implemented.");
     };
     AngularDataService.prototype.execute = function (options) {
+        var _this = this;
         var self = this;
         //options defaults
         options.method = options.method || "GET";
@@ -80,38 +81,41 @@ var AngularDataService = (function (_super) {
         //validate URL format
         common_1.Args.check(!/^https?:\/\//i.test(options.url), "Request URL may not be an absolute URI");
         //validate request method
-        common_1.Args.check(/^GET|POST|PUT|DELETE$/i.test(options.method), "Invalid request method. Expected GET, POST, PUT or DELETE.");
+        common_1.Args.check(/^GET|POST|PUT|DELETE|PATCH$/i.test(options.method), "Invalid request method. Expected GET, POST, PUT or DELETE.");
         //set URL parameter
-        var final = self.getBase() + options.url.replace(/^\//i, "");
-        var requestOptions = {
-            headers: new http_1.HttpHeaders(options.headers),
-            search: null,
-            body: null
-        };
-        //if request is a GET HTTP Request
-        if (/^GET$/i.test(options.method)) {
-            requestOptions.search = options.data;
+        var finalURL = self.getBase() + options.url.replace(/^\//i, "");
+        var finalParams = new http_1.HttpParams();
+        if (options.data) {
+            Object.getOwnPropertyNames(options.data).forEach(function (key) {
+                finalParams = finalParams.append(key, options.data[key]);
+            });
         }
-        else {
-            requestOptions.body = options.data;
-        }
-        return this.http_.request(options.method, final, requestOptions).map(function (res) {
-            if (res.status === 204) {
-                return;
-            }
-            else {
-                return res.text().then(function (text) {
-                    return JSON.parse(text, function (key, value) {
+        return new Promise(function (resolve, reject) {
+            _this.http.request(options.method, finalURL, {
+                body: /^GET$/i.test(options.method) ? null : options.data,
+                headers: new http_1.HttpHeaders(options.headers),
+                observe: 'response',
+                params: finalParams,
+                reportProgress: false,
+                responseType: 'text',
+                withCredentials: true
+            }).subscribe(function (res) {
+                if (res.status === 204) {
+                    return resolve();
+                }
+                else {
+                    var finalRes = JSON.parse(res.body, function (key, value) {
                         if (common_1.TextUtils.isDate(value)) {
                             return new Date(value);
                         }
                         return value;
                     });
-                });
-            }
-        }).toPromise();
+                    return resolve(finalRes);
+                }
+            }, function (err) { return reject(err); });
+        });
     };
     return AngularDataService;
-}(client_1.ClientDataService));
+}(index_1.ClientDataService));
 exports.AngularDataService = AngularDataService;
 //# sourceMappingURL=client.js.map

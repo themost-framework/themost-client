@@ -42,6 +42,7 @@ export declare class TextUtils {
      */
     static fromBase64(s: string): string;
     static format(s: string, ...p: any[]): string;
+    static escape(val: any): string;
 }
 export declare class Args {
     static check(expr: boolean, message: string, code?: string): void;

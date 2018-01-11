@@ -1,15 +1,15 @@
 import {Injectable, EventEmitter, Component, Inject} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpResponse, HttpParams} from '@angular/common/http';
+import {ClientDataService,ClientDataContext} from "@themost/client/index";
 import {Args,DataServiceExecuteOptions,TextUtils,ClientDataContextOptions} from '@themost/client/common';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {ClientDataService,ClientDataContext} from "@themost/client";
-import 'rxjs/add/operator/toPromise';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
 export interface ClientDataContextConfig {
     base:string,
     options: ClientDataContextOptions
 }
-
 export const DATA_CONTEXT_CONFIG:ClientDataContextConfig = {
     base: '/',
     options: {
@@ -35,17 +35,14 @@ export class AngularDataService extends ClientDataService {
         throw new Error("Method not implemented.");
     }
 
-    private http_:HttpClient;
-
     /**
      * Initializes a new instance of ClientDataService class
      * @param {string} base - The base URI of the MOST Web Framework Application Server. The default value is '/' for accessing local services.
      * @param {Http}  http
      * @param {ClientDataContextOptions} options
      */
-    constructor(base:string, http:HttpClient, options?:ClientDataContextOptions) {
+    constructor(base:string, private http:HttpClient, options?:ClientDataContextOptions) {
         super(base || "/", options);
-        this.http_ = http;
     }
 
     execute(options:DataServiceExecuteOptions):Promise<any> {
@@ -60,39 +57,43 @@ export class AngularDataService extends ClientDataService {
         //validate URL format
         Args.check(!/^https?:\/\//i.test(options.url),"Request URL may not be an absolute URI");
         //validate request method
-        Args.check(/^GET|POST|PUT|DELETE$/i.test(options.method),"Invalid request method. Expected GET, POST, PUT or DELETE.");
+        Args.check(/^GET|POST|PUT|DELETE|PATCH$/i.test(options.method),"Invalid request method. Expected GET, POST, PUT or DELETE.");
         //set URL parameter
-        const final = self.getBase() + options.url.replace(/^\//i,"");
-        let requestOptions = {
-            headers: new HttpHeaders(options.headers),
-            search:null,
-            body:null
-        };
-        //if request is a GET HTTP Request
-        if (/^GET$/i.test(options.method)) {
-            requestOptions.search = options.data;
+        const finalURL = self.getBase() + options.url.replace(/^\//i,"");
+        let finalParams = new HttpParams();
+        let finalBody;
+        if (/^GET$/i.test(options.method) && options.data) {
+            Object.getOwnPropertyNames(options.data).forEach((key)=> {
+                finalParams = finalParams.append(key, options.data[key]);
+            });
         }
         else {
-            requestOptions.body = options.data;
+            finalBody = options.data;
         }
-        return this.http_.request(options.method ,final, requestOptions).map(
-            (res:Response) => {
-                if (res.status===204) {
-                    return;
+        return new Promise<any>((resolve,reject) => {
+            this.http.request(options.method, finalURL, {
+                body:finalBody,
+                headers: new HttpHeaders(options.headers),
+                observe: 'response',
+                params: finalParams,
+                reportProgress: false,
+                responseType: 'text',
+                withCredentials: true
+        }).subscribe((res)=> {
+                if (res.status ===204) {
+                    return resolve();
                 }
                 else {
-                    return res.text().then(function(text) {
-                        return JSON.parse(text, function(key,value) {
-                            if (TextUtils.isDate(value)) {
-                                return new Date(value);
-                            }
-                            return value;
-                        });
+                    const finalRes = JSON.parse(res.body, function(key,value) {
+                        if (TextUtils.isDate(value)) {
+                            return new Date(value);
+                        }
+                        return value;
                     });
-
+                    return resolve(finalRes);
                 }
-            }
-        ).toPromise();
+            }, (err)=> reject(err));
+        });
     }
 }
 

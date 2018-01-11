@@ -209,13 +209,63 @@ var TextUtils = (function () {
             }
         });
     };
-    TextUtils.REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
-    TextUtils.REG_GUID_STRING = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
-    TextUtils.REG_ABSOLUTE_URI = /^((https?|ftps?):\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-    TextUtils.REG_RELATIVE_URI = /^([\/\w .-]*)*\/?$/;
-    TextUtils.REG_NUMBER_STRING = /^\d+$/;
+    TextUtils.escape = function (val) {
+        if ((val == null) || (val == undefined)) {
+            return "null";
+        }
+        if (typeof val === 'boolean') {
+            return (val) ? "true" : "false";
+        }
+        if (typeof val === 'number') {
+            return val + "";
+        }
+        if (val instanceof Date) {
+            var dt = val;
+            var year = dt.getFullYear();
+            var month = TextUtils.zeroPad(dt.getMonth() + 1, 2);
+            var day = TextUtils.zeroPad(dt.getDate(), 2);
+            var hour = TextUtils.zeroPad(dt.getHours(), 2);
+            var minute = TextUtils.zeroPad(dt.getMinutes(), 2);
+            var second = TextUtils.zeroPad(dt.getSeconds(), 2);
+            var millisecond = TextUtils.zeroPad(dt.getMilliseconds(), 3);
+            //format timezone
+            var offset = (new Date()).getTimezoneOffset(), timezone = (offset >= 0 ? '+' : '') + TextUtils.zeroPad(Math.floor(offset / 60), 2) + ':' + TextUtils.zeroPad(offset % 60, 2);
+            return "'" + year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second + '.' + millisecond + timezone + "'";
+        }
+        if (val instanceof Array) {
+            var values_1 = [];
+            val.forEach(function (x) {
+                values_1.push(TextUtils.escape(x));
+            });
+            return values_1.join(',');
+        }
+        if (typeof val === "string") {
+            var res = val.replace(/[\0\n\r\b\t\\'"\x1a]/g, function (s) {
+                switch (s) {
+                    case "\0": return "\\0";
+                    case "\n": return "\\n";
+                    case "\r": return "\\r";
+                    case "\b": return "\\b";
+                    case "\t": return "\\t";
+                    case "\x1a": return "\\Z";
+                    default: return "\\" + s;
+                }
+            });
+            return "'" + res + "'";
+        }
+        //otherwise get valueOf
+        if (val.hasOwnProperty("$name"))
+            return val["$name"];
+        else
+            return TextUtils.escape(val.valueOf());
+    };
     return TextUtils;
 }());
+TextUtils.REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
+TextUtils.REG_GUID_STRING = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
+TextUtils.REG_ABSOLUTE_URI = /^((https?|ftps?):\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+TextUtils.REG_RELATIVE_URI = /^([\/\w .-]*)*\/?$/;
+TextUtils.REG_NUMBER_STRING = /^\d+$/;
 exports.TextUtils = TextUtils;
 var Args = (function () {
     function Args() {
