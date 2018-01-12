@@ -37,7 +37,7 @@ function dateParser(key, value) {
     }
     return value;
 }
-var NodeDataContext = (function (_super) {
+var NodeDataContext = /** @class */ (function (_super) {
     __extends(NodeDataContext, _super);
     function NodeDataContext(base) {
         return _super.call(this, new NodeDataService(base || "/")) || this;
@@ -45,7 +45,7 @@ var NodeDataContext = (function (_super) {
     return NodeDataContext;
 }(client_1.ClientDataContext));
 exports.NodeDataContext = NodeDataContext;
-var NodeDataService = (function (_super) {
+var NodeDataService = /** @class */ (function (_super) {
     __extends(NodeDataService, _super);
     /**
      * @param {string} base
