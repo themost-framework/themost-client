@@ -74,6 +74,19 @@ export class ClientDataQueryable {
         return uri;
     }
 
+    toExpand() {
+        let model = this.getModel();
+        const params = this.getParams();
+        let search = "";
+        for(const key in params) {
+            search = search.concat(key, '=', params[key], ";");
+        }
+        if (search.length) {
+            return model.concat("(",search.replace(/;$/,""), ")");
+        }
+        return model;
+    }
+
     takeNext(n:number) {
         const p = this.getParams();
         return this.take(n).skip((p.$skip ? p.$skip : 0) + n);

@@ -10,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var CodedError = /** @class */ (function (_super) {
+var CodedError = (function (_super) {
     __extends(CodedError, _super);
     function CodedError(message, code) {
         var _newTarget = this.constructor;
@@ -23,7 +23,7 @@ var CodedError = /** @class */ (function (_super) {
     return CodedError;
 }(Error));
 exports.CodedError = CodedError;
-var ResponseError = /** @class */ (function (_super) {
+var ResponseError = (function (_super) {
     __extends(ResponseError, _super);
     function ResponseError(message, statusCode) {
         var _newTarget = this.constructor;
@@ -36,7 +36,7 @@ var ResponseError = /** @class */ (function (_super) {
     return ResponseError;
 }(Error));
 exports.ResponseError = ResponseError;
-var Base64 = /** @class */ (function () {
+var Base64 = (function () {
     function Base64() {
         this.PADCHAR = '=';
         this.ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -106,7 +106,7 @@ var Base64 = /** @class */ (function () {
     return Base64;
 }());
 exports.Base64 = Base64;
-var TextUtils = /** @class */ (function () {
+var TextUtils = (function () {
     function TextUtils() {
     }
     TextUtils.isNotEmptyString = function (s) {
@@ -259,15 +259,15 @@ var TextUtils = /** @class */ (function () {
         else
             return TextUtils.escape(val.valueOf());
     };
-    TextUtils.REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
-    TextUtils.REG_GUID_STRING = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
-    TextUtils.REG_ABSOLUTE_URI = /^((https?|ftps?):\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-    TextUtils.REG_RELATIVE_URI = /^([\/\w .-]*)*\/?$/;
-    TextUtils.REG_NUMBER_STRING = /^\d+$/;
     return TextUtils;
 }());
+TextUtils.REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
+TextUtils.REG_GUID_STRING = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
+TextUtils.REG_ABSOLUTE_URI = /^((https?|ftps?):\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+TextUtils.REG_RELATIVE_URI = /^([\/\w .-]*)*\/?$/;
+TextUtils.REG_NUMBER_STRING = /^\d+$/;
 exports.TextUtils = TextUtils;
-var Args = /** @class */ (function () {
+var Args = (function () {
     function Args() {
     }
     Args.check = function (expr, message, code) {

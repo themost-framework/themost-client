@@ -14,8 +14,6 @@ export declare class AngularDataContext extends ClientDataContext {
 }
 export declare class AngularDataService extends ClientDataService {
     private http;
-    getHeaders(): void;
-    resolve(relative: string): string;
     /**
      * Initializes a new instance of ClientDataService class
      * @param {string} base - The base URI of the MOST Web Framework Application Server. The default value is '/' for accessing local services.

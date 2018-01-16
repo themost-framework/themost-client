@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var angular = require("angular");
 var client_1 = require("./client");
 var ngModule = angular.module('most.services', []);
-var ContextProvider = /** @class */ (function () {
+var ContextProvider = (function () {
     function ContextProvider() {
         this.defaults = {
             "base": "/"
