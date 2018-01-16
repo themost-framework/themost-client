@@ -27,7 +27,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * found in the LICENSE file at https://themost.io/license
  */
 var unirest = require("unirest");
-var q_1 = require("q");
 var client_1 = require("@themost/client");
 var common_1 = require("@themost/client/common");
 var REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
@@ -56,7 +55,7 @@ var NodeDataService = /** @class */ (function (_super) {
     }
     NodeDataService.prototype.execute = function (options) {
         var _this = this;
-        return q_1.Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             try {
                 //options defaults
                 options.method = options.method || "GET";

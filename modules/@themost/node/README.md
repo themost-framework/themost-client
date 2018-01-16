@@ -14,11 +14,11 @@
     import {NodeDataContext} from '@themost/node/client';
     const context = new NodeDataContext("http://data.example.com");
     context.model("Order")
-        .select("id","customer", "orderedDate", "orderNumber")
+        .select("id","customer", "orderDate", "orderNumber")
         .expand("customer")
         .where("orderStatus/alternateName")
         .equal("OrderPaymentDue")
-        .orderBy("orderedDate")
+        .orderBy("orderDate")
         .take(10)
         .getItems().then(function(result) {
             //enumerate items
@@ -203,7 +203,7 @@ Equal:
 
     context.model("Order")
             .where("id").equal(10)
-            .first()
+            .getItem()
             .then((result) => {
                 //
             }).catch((err) =>
@@ -214,8 +214,9 @@ Not equal:
 
     context.model("Order")
             .where("orderStatus/alternateName").notEqual("OrderProblem")
-            orderByDescending("orderDate")
+            .orderByDescending("orderDate")
             .take(10)
+            .getItems()
             .then((result) => {
                 //
             }).catch((err) =>

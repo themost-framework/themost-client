@@ -1,4 +1,4 @@
-# themost/node
+# themost/angularjs
 
 ![MOST Web Framework Logo](https://www.themost.io/assets/images/most_logo_sw_240.png)
 
@@ -24,7 +24,7 @@ and use $context angular service:
             $context.model("Order")
                 .where("orderStatus")
                 .equal(1)
-                .orderBy("orderedDate")
+                .orderBy("orderDate")
                 .take(10)
                 .getItems().then(function(result) {
                     //enumerate items
@@ -52,23 +52,23 @@ Note: If you are intended to use client for cross domain requests enable the fol
 
 Gets an instance of ClientDataModel class based on the given name.
 
-    context.model("Order").where("orderStatus").equal(1).getItems().then(function(result) {
+    $context.model("Order").where("orderStatus").equal(1).getItems().then(function(result) {
         //
-    }).catch((err) =>
+    }).catch(function(err) {
         console.log(err);
     });
 
 #### getService()
 
-Gets the instance of ClientDataService associated with this data context.
+Gets the instance of ClientDataService associated with this data $context.
 
-    console.log(context.getService().getBase());
+    console.log($context.getService().getBase());
 
 #### setService(service)
 
-Associates the given ClientDataService instance with this data context.
+Associates the given ClientDataService instance with this data $context.
 
-    context.setService(new MyDataService("http://data.example.com"));
+    $context.setService(new MyDataService("http://data.example.com"));
 
 ### ClientDataModel Class
 
@@ -76,16 +76,16 @@ Associates the given ClientDataService instance with this data context.
 
 Returns an instance of ClientDataQueryable class associated with this model.
 
-    context.model("Order")
+    $context.model("Order")
         .asQueryable()
         .select("id","customer/description as customerDescription", "orderDate", "orderedItem/name as orderedItemName")
         .where("paymentMethod/alternateName").equal("DirectDebit")
         .orderByDescending("orderDate")
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
             console.log(err);
     });
 
@@ -104,9 +104,9 @@ Removes the given item or array of items.
     var order = {
         id:1
     };
-    context.model("Order").remove(order).then(function(result) {
+    $context.model("Order").remove(order).then(function(result) {
         //
-    }).catch((err) =>
+    }).catch(function(err) {
         console.log(err);
     }
 
@@ -118,9 +118,9 @@ Creates or updates the given item or array of items.
         id:1,
         orderStatus:7
     };
-    context.model("Order").save(order).then(function(result) {
+    $context.model("Order").save(order).then(function(result) {
         //
-    }).catch((err) =>
+    }).catch(function(err) {
         console.log(err);
     }
 
@@ -128,14 +128,14 @@ Creates or updates the given item or array of items.
 
 Initializes and returns an instance of ClientDataQueryable class by selecting an attribute or a collection of attributes.
 
-    context.model("Order")
+    $context.model("Order")
         .select("id","customer","orderedItem","orderStatus")
         .orderBy("orderDate")
         .take(25)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
             console.log(err);
     });
 
@@ -143,13 +143,13 @@ Initializes and returns an instance of ClientDataQueryable class by selecting an
 
 Initializes and returns an instance of ClientDataQueryable class by specifying the number of records to be skipped.
 
-    context.model("Order")
+    $context.model("Order")
         .skip(10)
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
             console.log(err);
     });
 
@@ -157,12 +157,12 @@ Initializes and returns an instance of ClientDataQueryable class by specifying t
 
 Initializes and returns an instance of ClientDataQueryable class by specifying the number of records to be taken.
 
-    context.model("Order")
+    $context.model("Order")
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
             console.log(err);
     });
 
@@ -171,13 +171,13 @@ Initializes and returns an instance of ClientDataQueryable class by specifying t
 Initializes a comparison expression by using the given attribute as left operand
 and returns an instance of ClientDataQueryable class.
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderedItem/category").equal("Laptops")
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
             console.log(err);
     });
 
@@ -191,29 +191,29 @@ which is introduced by [MOST Web Framework ORM server-side module](https://githu
 
 Or:
 
-    context.model("Product")
+    $context.model("Product")
         .where("category").equal("Desktops")
         .or("category").equal("Laptops")
         .orderBy("price")
         .take(5)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 And:
 
-    context.model("Product")
+    $context.model("Product")
         .where("category").equal("Laptops")
         .and("price").between(200,750)
         .orderBy("price")
         .take(5)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -221,30 +221,31 @@ And:
 
 Equal:
 
-    context.model("Order")
+    $context.model("Order")
             .where("id").equal(10)
-            .first()
-            .then((result) => {
+            .getItem()
+            .then(function(result) {
                 //
-            }).catch((err) =>
+            }).catch(function(err) {
                 console.log(err);
         });
 
 Not equal:
 
-    context.model("Order")
+    $context.model("Order")
             .where("orderStatus/alternateName").notEqual("OrderProblem")
-            orderByDescending("orderDate")
+            .orderByDescending("orderDate")
             .take(10)
-            .then((result) => {
+            .getItems()
+            .then(function(result) {
                 //
-            }).catch((err) =>
+            }).catch(function(err) {
                 console.log(err);
         });
 
 Greater than:
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderedItem/price").greaterThan(968)
         .and("orderedItem/category").equal("Laptops")
         .and("orderStatus/alternateName").notEqual("OrderCancelled")
@@ -255,79 +256,79 @@ Greater than:
         .orderByDescending("orderDate")
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             return done();
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
         return done(err);
     });
 
 Greater or equal:
 
-    context.model("Product")
+    $context.model("Product")
         .where("price").greaterOrEqual(1395.9)
         .orderByDescending("price")
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
            //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Lower than:
 
-    context.model("Product")
+    $context.model("Product")
         .where("price").lowerThan(263.56)
         .orderBy("price")
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Lower or equal:
 
-    context.model("Product")
+    $context.model("Product")
         .where("price").lowerOrEqual(263.56)
         .and("price").greaterOrEqual(224.52)
         .orderBy("price")
         .take(5)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Contains:
 
-    context.model("Product")
+    $context.model("Product")
         .where("name").contains("Book")
         .and("category").equal("Laptops")
         .orderBy("price")
         .take(5)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Between:
 
-    context.model("Product")
+    $context.model("Product")
         .where("category").equal("Laptops")
         .or("category").equal("Desktops")
         .andAlso("price").between(200,750)
         .orderBy("price")
         .take(5)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -335,41 +336,41 @@ Between:
 
 Count:
 
-    context.model("Product")
+    $context.model("Product")
         .select("category", "count(id) as total")
         .groupBy("category")
         .orderByDescending("count(id)")
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Min:
 
-    context.model("Product")
+    $context.model("Product")
         .select("category", "min(price) as minimumPrice")
         .where("category").equal("Laptops")
         .or("category").equal("Desktops")
         .groupBy("category")
         .orderByDescending("min(price)")
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Max:
 
-    context.model("Product")
+    $context.model("Product")
         .select("category", "max(price) as maximumPrice")
         .where("category").equal("Laptops")
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -377,74 +378,74 @@ Max:
 
 Index Of:
 
-    context.model("Product")
+    $context.model("Product")
         .where("name").indexOf("Intel")
         .greaterOrEqual(0)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Substring:
 
-    context.model("Product")
+    $context.model("Product")
         .where("name").substr(6,4)
         .equal("Core")
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Starts with:
 
-    context.model("Product")
+    $context.model("Product")
         .where("name").startsWith("Intel Core")
         .equal(true)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Ends with:
 
-    context.model("Product")
+    $context.model("Product")
         .where("name").endsWith("Edition")
         .equal(true)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Lower case:
 
-    context.model("Product")
+    $context.model("Product")
         .where("category").toLowerCase()
         .equal("laptops")
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Upper case:
 
-    context.model("Product")
+    $context.model("Product")
         .where("category").toUpperCase()
         .equal("LAPTOPS")
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -452,90 +453,90 @@ Upper case:
 
 Date:
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderDate").getDate()
         .equal("2015-04-18")
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Month:
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderDate").getMonth()
         .equal(4)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Day:
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderDate").getMonth().equal(4)
         .and("orderDate").getDay().lowerThan(15)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
            //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Year:
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderDate").getMonth().equal(5)
         .and("orderDate").getDay().lowerOrEqual(10)
         .and("orderDate").getFullYear().equal(2015)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Hours:
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderDate").getMonth().equal(5)
         .and("orderDate").getDay().lowerOrEqual(10)
         .and("orderDate").getHours().between(10,18)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Minutes:
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderDate").getMonth().equal(5)
         .and("orderDate").getHours().between(9,17)
         .and("orderDate").getMinutes().between(1,30)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Seconds:
 
-    context.model("Order")
+    $context.model("Order")
         .where("orderDate").getMonth().equal(5)
         .and("orderDate").getHours().between(9,17)
         .and("orderDate").getMinutes().between(1,30)
         .and("orderDate").getSeconds().between(1,45)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -543,34 +544,34 @@ Seconds:
 
 Round:
 
-    context.model("Product")
+    $context.model("Product")
         .where("price").round().lowerOrEqual(177)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Floor:
 
-    context.model("Product")
+    $context.model("Product")
         .where("price").floor().lowerOrEqual(177)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
 Ceiling:
 
-    context.model("Product")
+    $context.model("Product")
         .where("price").ceil().greaterOrEqual(177)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -591,14 +592,14 @@ If an expression is already defined, it will be wrapped with the new AND express
 Parameters:
 - name: The name of field that is going to be used in this expression
 
-        context.model("Product")
+        $context.model("Product")
             .where("category").equal("Laptops")
             .or("category").equal("Desktops")
             .andAlso("price").floor().lowerOrEqual(177)
             .getItems()
-            .then((result) => {
+            .then(function(result) {
                 //
-            }).catch((err) =>
+            }).catch(function(err) {
             console.log(err);
         });
 
@@ -611,14 +612,14 @@ If attr is missing then all the previously defined expandable fields will be rem
 Defines an attribute or an array of attributes to be expanded in the final result. This operation should be used
 when a non-expandable attribute is required to be expanded in the final result.
 
-    context.model("Order")
+    $context.model("Order")
         .where("customer").equal(337)
         .orderByDescending("orderDate")
         .expand("customer")
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -626,12 +627,12 @@ when a non-expandable attribute is required to be expanded in the final result.
 
 Executes the specified query and returns the first item.
 
-    context.model("User")
+    $context.model("User")
         .where("name").equal("alexis.rees@example.com")
         .first()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -639,12 +640,12 @@ Executes the specified query and returns the first item.
 
 Executes the specified query and returns the first item.
 
-    context.model("User")
+    $context.model("User")
         .where("name").equal("alexis.rees@example.com")
         .item()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -652,13 +653,13 @@ Executes the specified query and returns the first item.
 
 Executes the specified query and returns an array of items.
 
-    context.model("Product")
+    $context.model("Product")
         .where("category").equal("Laptops")
         .take(10)
         .getItems()
-        .then((result) => {
+        .then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
         console.log(err);
     });
 
@@ -671,14 +672,14 @@ contains the following attributes:
 - skip (number): The number of skipped records
 - records (Array): An array of objects which represents the query results.
 
-        context.model("Product")
+        $context.model("Product")
             .where("category").equal("Laptops")
             .skip(10)
             .take(10)
             .getList()
-            .then((result) => {
+            .then(function(result) {
                 //
-            }).catch((err) =>
+            }).catch(function(err) {
             console.log(err);
         });
 
@@ -689,14 +690,14 @@ Prepares a paging operation by skipping the specified number of records
 Parameters:
 - val: The number of records to be skipped
 
-         context.model("Product")
+         $context.model("Product")
                  .where("category").equal("Laptops")
                  .skip(10)
                  .take(10)
                  .getList()
-                 .then((result) => {
+                 .then(function(result) {
                      //
-                 }).catch((err) =>
+                 }).catch(function(err) {
                  console.log(err);
              });
 
@@ -707,14 +708,14 @@ Prepares a data paging operation by taking the specified number of records
 Parameters:
 - val: The number of records to take
 
-         context.model("Product")
+         $context.model("Product")
                  .where("category").equal("Laptops")
                  .skip(10)
                  .take(10)
                  .getList()
-                 .then((result) => {
+                 .then(function(result) {
                      //
-                 }).catch((err) =>
+                 }).catch(function(err) {
                  console.log(err);
              });
 
@@ -722,14 +723,14 @@ Parameters:
 
 Prepares a group by expression
 
-    context.model("Order")
+    $context.model("Order")
      .select("orderedItem/model as productModel", "orderedItem/name as productName","count(id) as orderCount")
      .where("orderDate').getFullYear().equal(2015)
      .groupBy("orderedItem")
      .orderByDescending("count(id)")
      .take(5).getItems().then(function(result) {
             //
-        }).catch((err) =>
+        }).catch(function(err) {
            console.log(err);
         });
 
@@ -737,11 +738,11 @@ Prepares a group by expression
 
 Prepares an ascending sorting operation
 
-    context.model("Product")
+    $context.model("Product")
          .orderBy("category","name")
          .take(25).getItems().then(function(result) {
                 //
-            }).catch((err) =>
+            }).catch(function(err) {
                console.log(err);
             });
 
@@ -749,12 +750,12 @@ Prepares an ascending sorting operation
 
  Continues a descending sorting operation
 
-     context.model("Product")
+     $context.model("Product")
           .orderBy("category")
           .thenBy("name")
           .take(25).getItems().then(function(result) {
                  //
-             }).catch((err) =>
+             }).catch(function(err) {
                 console.log(err);
              });
 
@@ -762,11 +763,11 @@ Prepares an ascending sorting operation
 
  Prepares an descending sorting operation
 
-     context.model("Product")
+     $context.model("Product")
           .orderByDescending("price")
           .take(25).getItems().then(function(result) {
                  //
-             }).catch((err) =>
+             }).catch(function(err) {
                 console.log(err);
              });
 
@@ -774,11 +775,11 @@ Prepares an ascending sorting operation
 
  Continues a descending sorting operation
 
-     context.model("Product")
+     $context.model("Product")
           .orderBy("category")
           .thenByDescending("price")
           .take(25).getItems().then(function(result) {
                  //
-             }).catch((err) =>
+             }).catch(function(err) {
                 console.log(err);
              });

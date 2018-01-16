@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://themost.io/license
  */
 import unirest = require('unirest');
-import {Promise} from 'q';
+//import {Promise} from 'q';
 import {ClientDataContextOptions} from "@themost/client/common";
 import {ClientDataContext, ClientDataService} from "@themost/client";
 import {Args,ResponseError} from "@themost/client/common";
@@ -38,7 +38,7 @@ export class NodeDataService extends ClientDataService {
     }
 
     execute(options:DataServiceExecuteOptions):Promise<any> {
-        return Promise((resolve, reject) =>{
+        return new Promise((resolve, reject) =>{
             try {
                 //options defaults
                 options.method = options.method || "GET";

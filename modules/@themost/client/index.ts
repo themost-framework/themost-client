@@ -326,7 +326,7 @@ export class ClientDataQueryable {
     between(value1:any, value2:any):ClientDataQueryable {
         Args.notNull(this.privates_.left,"The left operand");
         //generate new filter
-        const s = ClientDataQueryable.create(this.getModel())
+        const s = ClientDataQueryable.create(this.getModel(), this.getService())
             .where(this.privates_.left).greaterOrEqual(value1)
             .and(this.privates_.left).lowerOrEqual(value2).toFilter();
         this.privates_.lop = this.privates_.lop || "and";

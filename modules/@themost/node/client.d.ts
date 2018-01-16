@@ -1,4 +1,3 @@
-import { Promise } from 'q';
 import { ClientDataContextOptions } from "@themost/client/common";
 import { ClientDataContext, ClientDataService } from "@themost/client";
 import { DataServiceExecuteOptions } from "../client/common";

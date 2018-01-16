@@ -300,7 +300,7 @@ var ClientDataQueryable = /** @class */ (function () {
     ClientDataQueryable.prototype.between = function (value1, value2) {
         common_1.Args.notNull(this.privates_.left, "The left operand");
         //generate new filter
-        var s = ClientDataQueryable.create(this.getModel())
+        var s = ClientDataQueryable.create(this.getModel(), this.getService())
             .where(this.privates_.left).greaterOrEqual(value1)
             .and(this.privates_.left).lowerOrEqual(value2).toFilter();
         this.privates_.lop = this.privates_.lop || "and";
