@@ -2,29 +2,49 @@
 
 ![MOST Web Framework Logo](https://www.themost.io/assets/images/most_logo_sw_240.png)
 
-[MOST Web Framework 2.0 **Codename Blueshift**](https://github.com/themost-framework/themost) - NodeJS client module
+[MOST Web Framework 2.0 **Codename Blueshift**](https://github.com/themost-framework/themost) - AngularJS 1.x client module
 
 ## Installation
 
-    npm install @themost/node
+    npm install @themost/angularjs
 
 
 ### Usage
 
-    import {NodeDataContext} from '@themost/node/client';
-    const context = new NodeDataContext("http://data.example.com");
-    context.model("Order")
-        .select("id","customer", "orderedDate", "orderNumber")
-        .expand("customer")
-        .where("orderStatus/alternateName")
-        .equal("OrderPaymentDue")
-        .orderBy("orderedDate")
-        .take(10)
-        .getItems().then(function(result) {
-            //enumerate items
-        }).catch((err) =>
-            console.log(err);
+Load the following scripts:
+
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.7/angular.min.js" />
+    <script type="text/javascript" src="/node_modules/@themost/angularjs/dist/themost-angularjs.umd.js" />
+
+
+and use $context angular service:
+
+    angular.module("app",["most.services"])
+        .controller("OrderController", function($context) {
+            $context.model("Order")
+                .where("orderStatus")
+                .equal(1)
+                .orderBy("orderedDate")
+                .take(10)
+                .getItems().then(function(result) {
+                    //enumerate items
+                }).catch(function(err) {
+                    console.log(err);
+                });
         });
+
+Note: If you are intended to use client for cross domain requests enable the following features:
+
+        var app = angular.module("app",["most.services"]);
+        app.config(['$httpProvider', function($httpProvider) {
+            $httpProvider.defaults.withCredentials = true;
+        }
+        ]);
+
+        app.config(['$contextProvider', function($contextProvider) {
+            $contextProvider.defaults.base = "http://data.example.com/";
+        }]);
+
 
 ### ClientDataContext Class
 

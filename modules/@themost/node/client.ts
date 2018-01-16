@@ -11,6 +11,7 @@ import {Promise} from 'q';
 import {ClientDataContextOptions} from "@themost/client/common";
 import {ClientDataContext, ClientDataService} from "@themost/client";
 import {Args,ResponseError} from "@themost/client/common";
+import {DataServiceExecuteOptions} from "../client/common";
 
 const REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
 function dateParser(key, value) {
@@ -36,7 +37,7 @@ export class NodeDataService extends ClientDataService {
         super(base,options);
     }
 
-    execute(options):Promise<any> {
+    execute(options:DataServiceExecuteOptions):Promise<any> {
         return Promise((resolve, reject) =>{
             try {
                 //options defaults

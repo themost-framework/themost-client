@@ -34,22 +34,22 @@ exports.DATA_CONTEXT_CONFIG = {
         useMediaTypeExtensions: true
     }
 };
-var AngularDataContext = (function (_super) {
+var AngularDataContext = /** @class */ (function (_super) {
     __extends(AngularDataContext, _super);
     function AngularDataContext(http, config) {
         var _this = _super.call(this, new AngularDataService(config.base, http, config.options), config.options) || this;
         _this.http = http;
         return _this;
     }
+    AngularDataContext = __decorate([
+        core_1.Injectable(),
+        __param(1, core_1.Inject(exports.DATA_CONTEXT_CONFIG)),
+        __metadata("design:paramtypes", [http_1.HttpClient, Object])
+    ], AngularDataContext);
     return AngularDataContext;
 }(index_1.ClientDataContext));
-AngularDataContext = __decorate([
-    core_1.Injectable(),
-    __param(1, core_1.Inject(exports.DATA_CONTEXT_CONFIG)),
-    __metadata("design:paramtypes", [http_1.HttpClient, Object])
-], AngularDataContext);
 exports.AngularDataContext = AngularDataContext;
-var AngularDataService = (function (_super) {
+var AngularDataService = /** @class */ (function (_super) {
     __extends(AngularDataService, _super);
     /**
      * Initializes a new instance of ClientDataService class

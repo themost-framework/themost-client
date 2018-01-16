@@ -16,6 +16,7 @@ export declare class ClientDataQueryable {
     static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable;
     constructor(model: string, service: ClientDataServiceBase);
     toString(): any;
+    toExpand(): string;
     takeNext(n: number): ClientDataQueryable;
     takePrevious(n: number): ClientDataQueryable;
     /**

@@ -20,12 +20,12 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = require("./common");
 var parse = require("url-parse");
-var ClientQueryExpression = (function () {
+var ClientQueryExpression = /** @class */ (function () {
     function ClientQueryExpression() {
     }
     return ClientQueryExpression;
 }());
-var ClientDataQueryable = (function () {
+var ClientDataQueryable = /** @class */ (function () {
     function ClientDataQueryable(model, service) {
         common_1.Args.notEmpty(model, "Model");
         this.model_ = model;
@@ -69,6 +69,18 @@ var ClientDataQueryable = (function () {
             return uri.concat("?", search.replace(/&$/, ""));
         }
         return uri;
+    };
+    ClientDataQueryable.prototype.toExpand = function () {
+        var model = this.getModel();
+        var params = this.getParams();
+        var search = "";
+        for (var key in params) {
+            search = search.concat(key, '=', params[key], ";");
+        }
+        if (search.length) {
+            return model.concat("(", search.replace(/;$/, ""), ")");
+        }
+        return model;
     };
     ClientDataQueryable.prototype.takeNext = function (n) {
         var p = this.getParams();
@@ -521,7 +533,7 @@ var ClientDataQueryable = (function () {
     return ClientDataQueryable;
 }());
 exports.ClientDataQueryable = ClientDataQueryable;
-var ClientDataModel = (function () {
+var ClientDataModel = /** @class */ (function () {
     function ClientDataModel(name, service) {
         this.name_ = name;
         this.service_ = service;
@@ -614,7 +626,7 @@ var ClientDataModel = (function () {
     return ClientDataModel;
 }());
 exports.ClientDataModel = ClientDataModel;
-var ClientDataContext = (function () {
+var ClientDataContext = /** @class */ (function () {
     function ClientDataContext(service, options) {
         this.service_ = service;
     }
@@ -661,7 +673,7 @@ var ClientDataContext = (function () {
     return ClientDataContext;
 }());
 exports.ClientDataContext = ClientDataContext;
-var ClientDataService = (function () {
+var ClientDataService = /** @class */ (function () {
     function ClientDataService(base, options) {
         this.headers_ = {};
         this.options_ = options || {
@@ -704,7 +716,7 @@ var ClientDataService = (function () {
     return ClientDataService;
 }());
 exports.ClientDataService = ClientDataService;
-var ParserDataService = (function (_super) {
+var ParserDataService = /** @class */ (function (_super) {
     __extends(ParserDataService, _super);
     function ParserDataService(base) {
         return _super.call(this, base) || this;
