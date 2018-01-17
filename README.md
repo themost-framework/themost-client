@@ -14,4 +14,4 @@
 
 #### Angular Client Module
 
-[@themost/angularjs](https://github.com/themost-framework/themost-client/tree/master/modules/%40themost/angular) is a client module for angular js 2.x-$.x web applications which are going to use @themost/web as backend api server.
+[@themost/angularjs](https://github.com/themost-framework/themost-client/tree/master/modules/%40themost/angular) is a client module for angular js 2.x-4.x web applications which are going to use @themost/web as backend api server.
