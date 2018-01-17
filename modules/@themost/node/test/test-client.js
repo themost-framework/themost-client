@@ -240,11 +240,12 @@ describe('test node client', function () {
     it('should use indexOf', function (done) {
         context.model("Product")
             .where("name").indexOf("Intel")
-            .greaterOrEqual(0)
+            .greaterThan(0)
             .getItems()
             .then(function (result) {
+            console.log(result);
             result.forEach(function (x) {
-                chai_1.assert.match(x.name, /^Intel/ig);
+                chai_1.assert.match(x.name, /Intel/ig);
             });
             return done();
         }).catch(function (err) {

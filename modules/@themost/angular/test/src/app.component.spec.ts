@@ -1,17 +1,38 @@
-import {NodeDataContext} from "../client";
-import mocha = require('mocha');
-import {assert} from 'chai';
-import Table = require('easy-table');
-describe('test node client', ()=> {
+import { TestBed, async } from '@angular/core/testing';
+import { AppComponent } from './app.component';
+import { assert } from 'chai';
+import { HttpClientModule } from '@angular/common/http';
+import {DATA_CONTEXT_CONFIG, AngularDataContext } from '../../client';
 
-    let context;
-    before((done)=> {
-        context = new NodeDataContext("http://localhost:3000/");
-        context.setBasicAuthorization("alexis.rees@example.com","user");
-        return done();
-    });
+describe('AppComponent', () => {
 
-    it('should use simple query', (done) => {
+    let context:AngularDataContext;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [
+        AppComponent
+      ],
+        providers: [
+            {
+                provide: DATA_CONTEXT_CONFIG, useValue: {
+                    base: 'http://localhost:3000/',
+                    options: {
+                        useMediaTypeExtensions: true
+                    }
+                }
+            },
+            AngularDataContext
+        ],
+        imports: [ HttpClientModule ]
+    }).compileComponents();
+      const fixture = TestBed.createComponent(AppComponent);
+      context = TestBed.get(AngularDataContext);
+      context.setBasicAuthorization('alexis.rees@example.com','user');
+  }));
+
+
+    it('should use simple query', (done:(err?:Error)=>void) => {
         context.model('Product').where('category').equal('Laptops').getItems().then(function (result) {
             console.log(result);
             return done();
@@ -20,7 +41,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use paging params', (done) => {
+    it('should use paging params', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderStatus")
             .equal(1)
@@ -35,7 +56,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use take', (done) => {
+    it('should use take', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderedItem/category").equal("Laptops")
             .take(10)
@@ -51,7 +72,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use or', (done) => {
+    it('should use or', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("category").equal("Desktops")
             .or("category").equal("Laptops")
@@ -68,7 +89,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use and', (done) => {
+    it('should use and', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("category").equal("Laptops")
             .and("price").between(200,750)
@@ -85,7 +106,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use equal', (done) => {
+    it('should use equal', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("id").equal(10)
             .getItem()
@@ -98,7 +119,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use not equal', (done) => {
+    it('should use not equal', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderStatus/alternateName").notEqual("OrderProblem")
             .orderByDescending("orderDate")
@@ -114,7 +135,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use greater than', (done) => {
+    it('should use greater than', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderedItem/price").greaterThan(968)
             .and("orderedItem/category").equal("Laptops")
@@ -136,7 +157,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use greater or equal', (done) => {
+    it('should use greater or equal', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("price").greaterOrEqual(1395.9)
             .orderByDescending("price")
@@ -152,7 +173,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use lower than', (done) => {
+    it('should use lower than', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("price").lowerThan(263.56)
             .orderBy("price")
@@ -168,7 +189,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use lower or equal', (done) => {
+    it('should use lower or equal', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("price").lowerOrEqual(263.56)
             .and("price").greaterOrEqual(224.52)
@@ -186,7 +207,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use between', (done) => {
+    it('should use between', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("category").equal("Laptops")
             .or("category").equal("Desktops")
@@ -205,7 +226,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use count', (done) => {
+    it('should use count', (done:(err?:Error)=>void) => {
         context.model("Product")
             .select("category", "count(id) as total")
             .groupBy("category")
@@ -222,7 +243,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use min', (done) => {
+    it('should use min', (done:(err?:Error)=>void) => {
         context.model("Product")
             .select("category", "min(price) as minimumPrice")
             .where("category").equal("Laptops")
@@ -241,7 +262,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use max', (done) => {
+    it('should use max', (done:(err?:Error)=>void) => {
         context.model("Product")
             .select("category", "max(price) as maximumPrice")
             .where("category").equal("Laptops")
@@ -257,7 +278,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use indexOf', (done) => {
+    it('should use indexOf', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("name").indexOf("Intel")
             .greaterThan(0)
@@ -273,7 +294,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use substr', (done) => {
+    it('should use substr', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("name").substr(6,4)
             .equal("Core")
@@ -288,7 +309,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use starts with', (done) => {
+    it('should use starts with', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("name").startsWith("Intel Core")
             .equal(true)
@@ -303,7 +324,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use ends with', (done) => {
+    it('should use ends with', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("name").endsWith("Edition")
             .equal(true)
@@ -318,7 +339,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use lower case', (done) => {
+    it('should use lower case', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("category").toLowerCase()
             .equal("laptops")
@@ -333,7 +354,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use upper case', (done) => {
+    it('should use upper case', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("category").toLowerCase()
             .equal("LAPTOPS")
@@ -348,7 +369,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use date func', (done) => {
+    it('should use date func', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderDate").getDate()
             .equal("2015-04-18")
@@ -366,7 +387,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use month func', (done) => {
+    it('should use month func', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderDate").getMonth()
             .equal(4)
@@ -381,7 +402,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use day func', (done) => {
+    it('should use day func', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderDate").getMonth().equal(4)
             .and("orderDate").getDay().lowerThan(15)
@@ -396,7 +417,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use year func', (done) => {
+    it('should use year func', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderDate").getMonth().equal(5)
             .and("orderDate").getDay().lowerOrEqual(10)
@@ -412,7 +433,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use hours func', (done) => {
+    it('should use hours func', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderDate").getMonth().equal(5)
             .and("orderDate").getDay().lowerOrEqual(10)
@@ -430,7 +451,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use minutes func', (done) => {
+    it('should use minutes func', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderDate").getMonth().equal(5)
             .and("orderDate").getHours().between(9,17)
@@ -447,7 +468,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use seconds func', (done) => {
+    it('should use seconds func', (done:(err?:Error)=>void) => {
         context.model("Order")
             .where("orderDate").getMonth().equal(5)
             .and("orderDate").getHours().between(9,17)
@@ -465,7 +486,7 @@ describe('test node client', ()=> {
         });
     });
 
-    it('should use round func', (done) => {
+    it('should use round func', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("price").round().lowerOrEqual(177)
             .getItems()
@@ -478,5 +499,6 @@ describe('test node client', ()=> {
             return done(err);
         });
     });
+
 
 });
