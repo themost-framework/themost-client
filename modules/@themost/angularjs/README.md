@@ -1,4 +1,4 @@
-# themost/angularjs
+# @themost/angularjs
 
 ![MOST Web Framework Logo](https://www.themost.io/assets/images/most_logo_sw_240.png)
 
