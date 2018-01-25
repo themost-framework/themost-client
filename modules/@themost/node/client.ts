@@ -67,15 +67,19 @@ export class NodeDataService extends ClientDataService {
                 //complete request
                 request.end(function (response) {
                     if (response.status === 200) {
-                        if ((typeof response.raw_body === 'string') && response.raw_body.length>0) {
-                            resolve(JSON.parse(response.raw_body, dateParser));
+                        if (typeof response.raw_body === 'object') {
+                            //stringify raw_body
+                            const raw_body_str = JSON.stringify(response.raw_body);
+                            //and parse final raw_body string (with date reviver)
+                            return resolve(JSON.parse(raw_body_str, dateParser));
                         }
-                        else {
-                            resolve();
+                        else if ((typeof response.raw_body === 'string') && response.raw_body.length>0) {
+                            return resolve(JSON.parse(response.raw_body, dateParser));
                         }
+                        return resolve();
                     }
                     else {
-                        var res = response.toJSON();
+                        const res = response.toJSON();
                         if (typeof res.body === 'object') {
                             const err = (<any>Object).assign(new ResponseError(res.body.message || response.statusMessage, response.status),res.body);
                             if (err.hasOwnProperty("status")) {

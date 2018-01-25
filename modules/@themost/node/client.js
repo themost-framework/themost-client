@@ -36,7 +36,7 @@ function dateParser(key, value) {
     }
     return value;
 }
-var NodeDataContext = /** @class */ (function (_super) {
+var NodeDataContext = (function (_super) {
     __extends(NodeDataContext, _super);
     function NodeDataContext(base) {
         return _super.call(this, new NodeDataService(base || "/")) || this;
@@ -44,7 +44,7 @@ var NodeDataContext = /** @class */ (function (_super) {
     return NodeDataContext;
 }(client_1.ClientDataContext));
 exports.NodeDataContext = NodeDataContext;
-var NodeDataService = /** @class */ (function (_super) {
+var NodeDataService = (function (_super) {
     __extends(NodeDataService, _super);
     /**
      * @param {string} base
@@ -83,12 +83,16 @@ var NodeDataService = /** @class */ (function (_super) {
                 //complete request
                 request.end(function (response) {
                     if (response.status === 200) {
-                        if ((typeof response.raw_body === 'string') && response.raw_body.length > 0) {
-                            resolve(JSON.parse(response.raw_body, dateParser));
+                        if (typeof response.raw_body === 'object') {
+                            //stringify raw_body
+                            var raw_body_str = JSON.stringify(response.raw_body);
+                            //and parse final raw_body string (with date reviver)
+                            return resolve(JSON.parse(raw_body_str, dateParser));
                         }
-                        else {
-                            resolve();
+                        else if ((typeof response.raw_body === 'string') && response.raw_body.length > 0) {
+                            return resolve(JSON.parse(response.raw_body, dateParser));
                         }
+                        return resolve();
                     }
                     else {
                         var res = response.toJSON();
