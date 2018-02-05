@@ -32,6 +32,10 @@ export class DataComponent implements OnInit {
         if (typeof this.url === 'string' && this.url.length > 0) {
             q.setUrl(this.url);
         }
+        if (typeof this.filter === 'string' && this.filter.length > 0)
+        {
+            q.setParam('$filter', this.filter);
+        }
         if (typeof this.select === 'string' && this.select.length > 0)
         {
             q.setParam('$select', this.select);
