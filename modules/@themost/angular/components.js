@@ -57,7 +57,6 @@ var DataComponent = /** @class */ (function () {
             else {
                 _this.value = result;
             }
-            console.log(_this.value);
         }).catch(function (err) {
             //
         });

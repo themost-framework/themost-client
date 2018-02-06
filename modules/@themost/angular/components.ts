@@ -69,7 +69,6 @@ export class DataComponent implements OnInit {
             else {
                 this.value = result;
             }
-            console.log(this.value);
         }).catch((err)=> {
             //
         });
