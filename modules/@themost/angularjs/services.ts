@@ -18,11 +18,14 @@ class ContextProvider implements IServiceProvider {
 
     constructor() {
         this.defaults = {
-            "base":"/"
+            "base":"/",
+            "options":  {
+                "useMediaTypeExtensions": true
+            }
         };
     }
     $get($http, $q): AngularDataContext {
-        return new AngularDataContext(this.defaults.base, $http, $q);
+        return new AngularDataContext(this.defaults.base, $http, $q, this.defaults.options);
     };
 }
 ngModule.provider("$context",ContextProvider);

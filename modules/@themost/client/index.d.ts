@@ -12,6 +12,7 @@ export declare class ClientDataQueryable {
     private url_;
     private service_;
     private params_;
+    private $prepare;
     private privates_;
     static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable;
     constructor(model: string, service: ClientDataServiceBase);
@@ -110,6 +111,7 @@ export declare class ClientDataQueryable {
     getList(): Promise<any>;
     filter(s: string): ClientDataQueryable;
     levels(n: number): ClientDataQueryable;
+    prepare(or?: boolean): ClientDataQueryable;
 }
 export declare class ClientDataModel {
     private name_;

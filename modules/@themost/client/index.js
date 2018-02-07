@@ -106,7 +106,19 @@ var ClientDataQueryable = /** @class */ (function () {
      * @returns {DataServiceQueryParams}
      */
     ClientDataQueryable.prototype.getParams = function () {
-        return this.params_;
+        if (typeof this.$prepare === 'string' && this.$prepare.length) {
+            if (typeof this.params_.$filter === 'string' && this.params_.$filter) {
+                return Object.assign({}, this.params_, {
+                    $filter: "(" + this.$prepare + ") and (" + this.params_.$filter + ")"
+                });
+            }
+            else {
+                return Object.assign({}, this.params_, {
+                    $filter: this.$prepare
+                });
+            }
+        }
+        return Object.assign({}, this.params_);
     };
     /**
      * @returns {ClientDataQueryable}
@@ -318,7 +330,7 @@ var ClientDataQueryable = /** @class */ (function () {
         return this;
     };
     ClientDataQueryable.prototype.toFilter = function () {
-        return this.params_.$filter;
+        return this.getParams().$filter;
     };
     ClientDataQueryable.prototype.contains = function (value) {
         common_1.Args.notNull(this.privates_.left, "The left operand");
@@ -484,7 +496,7 @@ var ClientDataQueryable = /** @class */ (function () {
         return this.getService().execute({
             method: "GET",
             url: this.getUrl(),
-            data: this.params_,
+            data: this.getParams(),
             headers: []
         });
     };
@@ -494,7 +506,7 @@ var ClientDataQueryable = /** @class */ (function () {
         return this.getService().execute({
             method: "GET",
             url: this.getUrl(),
-            data: this.params_,
+            data: this.getParams(),
             headers: {}
         });
     };
@@ -510,7 +522,7 @@ var ClientDataQueryable = /** @class */ (function () {
         return this.getService().execute({
             method: "GET",
             url: this.getUrl(),
-            data: this.params_,
+            data: this.getParams(),
             headers: {}
         });
     };
@@ -528,6 +540,19 @@ var ClientDataQueryable = /** @class */ (function () {
     ClientDataQueryable.prototype.levels = function (n) {
         common_1.Args.Positive(n, 'Levels');
         this.params_.$levels = n;
+        return this;
+    };
+    ClientDataQueryable.prototype.prepare = function (or) {
+        var lop = or ? 'or' : 'and';
+        if (typeof this.params_.$filter === 'string' && this.params_.$filter.length) {
+            if (typeof this.$prepare === 'string' && this.$prepare.length) {
+                this.$prepare = this.$prepare + " " + lop + " " + this.params_.$filter;
+            }
+            else {
+                this.$prepare = this.params_.$filter;
+            }
+        }
+        delete this.params_.$filter;
         return this;
     };
     return ClientDataQueryable;

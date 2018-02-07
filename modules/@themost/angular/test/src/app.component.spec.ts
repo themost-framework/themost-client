@@ -207,6 +207,25 @@ describe('AppComponent', () => {
         });
     });
 
+    it('should use prepare', (done:(err?:Error)=>void) => {
+        context.model("Product")
+            .where("category").equal("Desktops")
+            .or("category").equal("Laptops")
+            .prepare()
+            .and('price').greaterThan(600)
+            .take(5)
+            .getItems()
+            .then((result) => {
+                result.forEach(function(x) {
+                    assert.isAtLeast(x.price, 600);
+                    assert.include(["Desktop", "Laptops"], x.category);
+                });
+                return done();
+            }).catch((err) => {
+            return done(err);
+        });
+    });
+
     it('should use between', (done:(err?:Error)=>void) => {
         context.model("Product")
             .where("category").equal("Laptops")

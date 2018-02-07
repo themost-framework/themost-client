@@ -190,6 +190,24 @@ describe('AppComponent', function () {
             return done(err);
         });
     });
+    it('should use prepare', function (done) {
+        context.model("Product")
+            .where("category").equal("Desktops")
+            .or("category").equal("Laptops")
+            .prepare()
+            .and('price').greaterThan(600)
+            .take(5)
+            .getItems()
+            .then(function (result) {
+            result.forEach(function (x) {
+                chai_1.assert.isAtLeast(x.price, 600);
+                chai_1.assert.include(["Desktop", "Laptops"], x.category);
+            });
+            return done();
+        }).catch(function (err) {
+            return done(err);
+        });
+    });
     it('should use between', function (done) {
         context.model("Product")
             .where("category").equal("Laptops")

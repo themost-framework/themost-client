@@ -31,6 +31,7 @@ function localized(text, localeSet) {
 function MostLocalizedDirective():IDirective {
     return {
         restrict: 'A',
+        scope: false,
         link: function(scope, element, attrs) {
             if (attrs.title)
                 element.attr('title', localized(attrs.title, attrs['mostLoc']));

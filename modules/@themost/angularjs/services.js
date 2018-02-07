@@ -6,11 +6,14 @@ var ngModule = angular.module('most.services', []);
 var ContextProvider = /** @class */ (function () {
     function ContextProvider() {
         this.defaults = {
-            "base": "/"
+            "base": "/",
+            "options": {
+                "useMediaTypeExtensions": true
+            }
         };
     }
     ContextProvider.prototype.$get = function ($http, $q) {
-        return new client_1.AngularDataContext(this.defaults.base, $http, $q);
+        return new client_1.AngularDataContext(this.defaults.base, $http, $q, this.defaults.options);
     };
     ;
     return ContextProvider;

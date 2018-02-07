@@ -25,6 +25,7 @@ export class ClientDataQueryable {
     private url_:string;
     private service_:ClientDataServiceBase;
     private params_:any;
+    private $prepare: string;
     private privates_:ClientQueryExpression;
 
     static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable {
@@ -114,7 +115,25 @@ export class ClientDataQueryable {
      * @returns {DataServiceQueryParams}
      */
     getParams(): DataServiceQueryParams {
-        return this.params_;
+        if (typeof this.$prepare === 'string' && this.$prepare.length) {
+            if (typeof this.params_.$filter === 'string' && this.params_.$filter) {
+                return Object.assign({
+                    },
+                    this.params_,
+                    {
+                    $filter: `(${this.$prepare}) and (${this.params_.$filter})`
+                });
+            }
+            else {
+                return Object.assign({
+
+                }, this.params_, {
+                    $filter:this.$prepare
+                });
+            }
+
+        }
+        return Object.assign({ }, this.params_);
     }
 
     /**
@@ -342,7 +361,7 @@ export class ClientDataQueryable {
     }
 
     toFilter():string {
-        return this.params_.$filter;
+        return this.getParams().$filter;
     }
 
     contains(value:any):ClientDataQueryable {
@@ -529,7 +548,7 @@ export class ClientDataQueryable {
         return this.getService().execute({
             method:"GET",
             url:this.getUrl(),
-            data:this.params_,
+            data:this.getParams(),
             headers:[]
         });
     }
@@ -540,7 +559,7 @@ export class ClientDataQueryable {
         return this.getService().execute({
             method:"GET",
             url:this.getUrl(),
-            data:this.params_,
+            data:this.getParams(),
             headers:{}
         });
     }
@@ -559,7 +578,7 @@ export class ClientDataQueryable {
         return this.getService().execute({
             method:"GET",
             url:this.getUrl(),
-            data:this.params_,
+            data:this.getParams(),
             headers:{}
         });
     }
@@ -581,6 +600,20 @@ export class ClientDataQueryable {
     levels(n:number):ClientDataQueryable {
         Args.Positive(n, 'Levels');
         this.params_.$levels = n;
+        return this;
+    }
+
+    prepare(or?: boolean): ClientDataQueryable {
+        const lop = or ? 'or' : 'and';
+        if (typeof this.params_.$filter === 'string' && this.params_.$filter.length) {
+            if (typeof this.$prepare === 'string' && this.$prepare.length) {
+                this.$prepare = `${this.$prepare} ${lop} ${this.params_.$filter}`;
+            }
+            else {
+                this.$prepare = this.params_.$filter;
+            }
+        }
+        delete this.params_.$filter;
         return this;
     }
 
@@ -690,6 +723,7 @@ export class ClientDataModel {
         Args.Positive(n, 'Levels');
         return this.asQueryable().levels(n);
     }
+
 
 }
 
