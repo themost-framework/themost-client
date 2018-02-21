@@ -56,11 +56,20 @@ export class DataComponent implements OnInit {
             q.setParam('$skip', this.skip);
         }
         if (this.top>0) {
-            q.setParam('$top', this.skip);
+            q.setParam('$top', this.top);
         }
         if (this.count) {
             q.setParam('$count', true);
         }
+
+        if (this.count) {
+            return q.getList().then((result)=> {
+                this.value = result;
+            }).catch((err)=> {
+                //
+            });
+        }
+
         //set queryable
         q.getItems().then((result)=> {
             if (this.top === 1) {

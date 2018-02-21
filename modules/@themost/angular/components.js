@@ -44,10 +44,17 @@ var DataComponent = /** @class */ (function () {
             q.setParam('$skip', this.skip);
         }
         if (this.top > 0) {
-            q.setParam('$top', this.skip);
+            q.setParam('$top', this.top);
         }
         if (this.count) {
             q.setParam('$count', true);
+        }
+        if (this.count) {
+            return q.getList().then(function (result) {
+                _this.value = result;
+            }).catch(function (err) {
+                //
+            });
         }
         //set queryable
         q.getItems().then(function (result) {

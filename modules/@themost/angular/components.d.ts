@@ -14,5 +14,5 @@ export declare class DataComponent implements OnInit {
     url: string;
     value: any;
     constructor(context: AngularDataContext);
-    ngOnInit(): void;
+    ngOnInit(): Promise<void>;
 }
