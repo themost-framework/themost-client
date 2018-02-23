@@ -73,7 +73,12 @@ export class DataComponent implements OnInit {
         //set queryable
         q.getItems().then((result)=> {
             if (this.top === 1) {
-                this.value = result[0];
+                if (result && result.value instanceof Array) {
+                    this.value = result.value[0];
+                }
+                else {
+                    this.value = result[0];
+                }
             }
             else {
                 this.value = result;

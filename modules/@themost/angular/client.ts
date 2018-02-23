@@ -84,7 +84,9 @@ export class AngularDataService extends ClientDataService {
                     });
                     return resolve(finalRes);
                 }
-            }, (err)=> reject(err));
+            }, (err)=> {
+                reject(err);
+            });
         });
     }
 }
