@@ -69,7 +69,6 @@ export class DataComponent implements OnInit {
                 //
             });
         }
-
         //set queryable
         q.getItems().then((result)=> {
             if (this.top === 1) {
