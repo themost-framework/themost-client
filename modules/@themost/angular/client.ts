@@ -41,7 +41,7 @@ export class AngularDataService extends ClientDataService {
         const self = this;
         //options defaults
         options.method = options.method || "GET";
-        options.headers = options.headers || { };
+        options.headers = { ...this.getHeaders(), ...options.headers };
         //set content type
         options.headers["Content-Type"] = "application/json";
         //validate options URL

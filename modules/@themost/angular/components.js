@@ -59,7 +59,12 @@ var DataComponent = /** @class */ (function () {
         //set queryable
         q.getItems().then(function (result) {
             if (_this.top === 1) {
-                _this.value = result[0];
+                if (result && result.value instanceof Array) {
+                    _this.value = result.value[0];
+                }
+                else {
+                    _this.value = result[0];
+                }
             }
             else {
                 _this.value = result;

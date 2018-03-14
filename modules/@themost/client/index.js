@@ -497,7 +497,7 @@ var ClientDataQueryable = /** @class */ (function () {
             method: "GET",
             url: this.getUrl(),
             data: this.getParams(),
-            headers: []
+            headers: {}
         });
     };
     ClientDataQueryable.prototype.list = function () {

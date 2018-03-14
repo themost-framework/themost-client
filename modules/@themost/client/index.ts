@@ -549,7 +549,7 @@ export class ClientDataQueryable {
             method:"GET",
             url:this.getUrl(),
             data:this.getParams(),
-            headers:[]
+            headers:{}
         });
     }
 
