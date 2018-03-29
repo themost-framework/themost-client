@@ -119,7 +119,16 @@ var AngularDataService = /** @class */ (function (_super) {
                     return resolve(finalRes);
                 }
             }, function (err) {
-                reject(err);
+                if (err.error && typeof err.error === 'string') {
+                    //try parse error
+                    try {
+                        err.error = JSON.parse(err.error);
+                    }
+                    catch (parserError) {
+                        //
+                    }
+                }
+                return reject(err);
             });
         });
     };
