@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var components_1 = require("./components");
+var client_1 = require("./client");
 var MostModule = /** @class */ (function () {
     function MostModule() {
     }
@@ -15,7 +16,15 @@ var MostModule = /** @class */ (function () {
         core_1.NgModule({
             imports: [],
             declarations: [components_1.DataComponent],
-            exports: [components_1.DataComponent]
+            exports: [components_1.DataComponent],
+            providers: [{
+                    provide: client_1.DATA_CONTEXT_CONFIG, useValue: {
+                        base: "/",
+                        options: {
+                            useMediaTypeExtensions: true
+                        }
+                    }
+                }]
         })
     ], MostModule);
     return MostModule;

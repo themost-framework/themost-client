@@ -1,3 +1,4 @@
+import { InjectionToken } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ClientDataService, ClientDataContext } from "@themost/client/index";
 import { DataServiceExecuteOptions, ClientDataContextOptions } from '@themost/client/common';
@@ -7,7 +8,7 @@ export interface ClientDataContextConfig {
     base: string;
     options: ClientDataContextOptions;
 }
-export declare const DATA_CONTEXT_CONFIG: ClientDataContextConfig;
+export declare const DATA_CONTEXT_CONFIG: InjectionToken<ClientDataContextConfig>;
 export declare class AngularDataContext extends ClientDataContext {
     private http;
     constructor(http: HttpClient, config: ClientDataContextConfig);

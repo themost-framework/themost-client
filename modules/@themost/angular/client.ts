@@ -1,8 +1,7 @@
-import {Injectable, EventEmitter, Component, Inject} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpResponse, HttpParams} from '@angular/common/http';
+import {Injectable, Inject, InjectionToken} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {ClientDataService,ClientDataContext} from "@themost/client/index";
 import {Args,DataServiceExecuteOptions,TextUtils,ClientDataContextOptions} from '@themost/client/common';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
@@ -10,12 +9,7 @@ export interface ClientDataContextConfig {
     base:string,
     options: ClientDataContextOptions
 }
-export const DATA_CONTEXT_CONFIG:ClientDataContextConfig = {
-    base: '/',
-    options: {
-        useMediaTypeExtensions:true
-    }
-};
+export const DATA_CONTEXT_CONFIG = new InjectionToken<ClientDataContextConfig>('data.config');
 
 @Injectable()
 export class AngularDataContext extends ClientDataContext {

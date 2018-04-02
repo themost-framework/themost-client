@@ -36,12 +36,7 @@ var index_1 = require("@themost/client/index");
 var common_1 = require("@themost/client/common");
 require("rxjs/add/operator/map");
 require("rxjs/add/operator/toPromise");
-exports.DATA_CONTEXT_CONFIG = {
-    base: '/',
-    options: {
-        useMediaTypeExtensions: true
-    }
-};
+exports.DATA_CONTEXT_CONFIG = new core_1.InjectionToken('data.config');
 var AngularDataContext = /** @class */ (function (_super) {
     __extends(AngularDataContext, _super);
     function AngularDataContext(http, config) {
