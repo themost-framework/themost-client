@@ -8,6 +8,13 @@
 
     npm install @themost/angular
 
+Choose the version corresponding to your Angular version:
+
+Angular | @themost/angular |
+--- | --- |
+6 | 6.x+
+5 | 2.x+
+2 to 4 | 2.x+
 
 ### Usage
 

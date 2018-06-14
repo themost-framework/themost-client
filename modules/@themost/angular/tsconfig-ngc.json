@@ -1,0 +1,8 @@
+{
+    "extends":"./tsconfig.json",
+    "angularCompilerOptions": {
+        "skipTemplateCodegen": true,
+        "flatModuleOutFile": "themost-angular.umd.js",
+        "flatModuleId": "@themost/angular"
+    }
+}
