@@ -6,7 +6,7 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import unirest = require('unirest');
+import unirest = require("unirest");
 //import {Promise} from 'q';
 import {ClientDataContextOptions} from "@themost/client/common";
 import {ClientDataContext, ClientDataService} from "@themost/client";
@@ -76,6 +76,9 @@ export class NodeDataService extends ClientDataService {
                         else if ((typeof response.raw_body === 'string') && response.raw_body.length>0) {
                             return resolve(JSON.parse(response.raw_body, dateParser));
                         }
+                        return resolve();
+                    }
+                    else if (response.status === 204) {
                         return resolve();
                     }
                     else {
