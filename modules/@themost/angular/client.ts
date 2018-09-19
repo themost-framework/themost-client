@@ -70,13 +70,16 @@ export class AngularDataService extends ClientDataService {
                     return resolve();
                 }
                 else {
-                    const finalRes = JSON.parse(res.body, function(key,value) {
-                        if (TextUtils.isDate(value)) {
-                            return new Date(value);
-                        }
-                        return value;
-                    });
-                    return resolve(finalRes);
+                    if (res.body) {
+                        const finalRes = JSON.parse(res.body, function(key,value) {
+                            if (TextUtils.isDate(value)) {
+                                return new Date(value);
+                            }
+                            return value;
+                        });
+                        return resolve(finalRes);
+                    }
+                    return resolve();
                 }
             }, (err)=> {
                 if (err.error && typeof err.error === 'string') {
