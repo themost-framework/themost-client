@@ -569,7 +569,20 @@ export class ClientDataQueryable {
     }
 
     getItem():Promise<any> {
-        return this.first();
+        // delete $first param
+        delete this.params_.$first;
+        // delete $count param
+        delete this.params_.$count;
+        // get first item only
+        return this.take(1).skip(0).getItems().then((result)=> {
+            // if result and result.value is array
+            if (result && Array.isArray(result.value)) {
+                // get first item only
+                return Promise.resolve(result.value[0]);
+            }
+            // otherwise return result
+            return Promise.resolve(result);
+        });
     }
 
     items():Promise<any> {

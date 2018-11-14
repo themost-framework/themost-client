@@ -514,7 +514,20 @@ var ClientDataQueryable = /** @class */ (function () {
         return this.first();
     };
     ClientDataQueryable.prototype.getItem = function () {
-        return this.first();
+        // delete $first param
+        delete this.params_.$first;
+        // delete $count param
+        delete this.params_.$count;
+        // get first item only
+        return this.take(1).skip(0).getItems().then(function (result) {
+            // if result and result.value is array
+            if (result && Array.isArray(result.value)) {
+                // get first item only
+                return Promise.resolve(result.value[0]);
+            }
+            // otherwise return result
+            return Promise.resolve(result);
+        });
     };
     ClientDataQueryable.prototype.items = function () {
         delete this.params_.$first;
