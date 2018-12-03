@@ -525,6 +525,9 @@ var ClientDataQueryable = /** @class */ (function () {
                 // get first item only
                 return Promise.resolve(result.value[0]);
             }
+            if (Array.isArray(result)) {
+                return Promise.resolve(result[0]);
+            }
             // otherwise return result
             return Promise.resolve(result);
         });
