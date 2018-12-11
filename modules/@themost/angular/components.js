@@ -1,13 +1,4 @@
 "use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var client_1 = require("./client");
@@ -73,57 +64,29 @@ var DataComponent = /** @class */ (function () {
             //
         });
     };
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", String)
-    ], DataComponent.prototype, "filter", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", String)
-    ], DataComponent.prototype, "model", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", String)
-    ], DataComponent.prototype, "select", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", String)
-    ], DataComponent.prototype, "group", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", String)
-    ], DataComponent.prototype, "order", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", Number)
-    ], DataComponent.prototype, "top", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", Boolean)
-    ], DataComponent.prototype, "count", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", Number)
-    ], DataComponent.prototype, "skip", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", String)
-    ], DataComponent.prototype, "expand", void 0);
-    __decorate([
-        core_1.Input(),
-        __metadata("design:type", String)
-    ], DataComponent.prototype, "url", void 0);
-    __decorate([
-        core_1.Output(),
-        __metadata("design:type", Object)
-    ], DataComponent.prototype, "value", void 0);
-    DataComponent = __decorate([
-        core_1.Component({
-            selector: 'most-data',
-            template: '<div></div>'
-        }),
-        __metadata("design:paramtypes", [client_1.AngularDataContext])
-    ], DataComponent);
+    DataComponent.decorators = [
+        { type: core_1.Component, args: [{
+                    selector: 'most-data',
+                    template: '<div></div>'
+                },] },
+    ];
+    /** @nocollapse */
+    DataComponent.ctorParameters = function () { return [
+        { type: client_1.AngularDataContext }
+    ]; };
+    DataComponent.propDecorators = {
+        filter: [{ type: core_1.Input }],
+        model: [{ type: core_1.Input }],
+        select: [{ type: core_1.Input }],
+        group: [{ type: core_1.Input }],
+        order: [{ type: core_1.Input }],
+        top: [{ type: core_1.Input }],
+        count: [{ type: core_1.Input }],
+        skip: [{ type: core_1.Input }],
+        expand: [{ type: core_1.Input }],
+        url: [{ type: core_1.Input }],
+        value: [{ type: core_1.Output }]
+    };
     return DataComponent;
 }());
 exports.DataComponent = DataComponent;
