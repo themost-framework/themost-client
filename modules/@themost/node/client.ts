@@ -22,8 +22,8 @@ function dateParser(key, value) {
 }
 
 export class NodeDataContext extends ClientDataContext {
-    constructor(base:string) {
-        super(new NodeDataService(base || "/"));
+    constructor(base:string, options?:ClientDataContextOptions) {
+        super(new NodeDataService(base || "/", options));
     }
 }
 
@@ -38,7 +38,7 @@ export class NodeDataService extends ClientDataService {
     }
 
     execute(options:DataServiceExecuteOptions):Promise<any> {
-        return new Promise((resolve, reject) =>{
+        return new Promise((resolve, reject) => {
             try {
                 //options defaults
                 options.method = options.method || "GET";
