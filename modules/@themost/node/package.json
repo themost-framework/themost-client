@@ -1,6 +1,6 @@
 {
   "name": "@themost/node",
-  "version": "2.0.17",
+  "version": "2.1.1",
   "description": "MOST Web Framework 2.0 - NodeJS Client",
   "module": "client.js",
   "peerDependencies": {},
