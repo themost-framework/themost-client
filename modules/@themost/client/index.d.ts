@@ -7,11 +7,16 @@
  * found in the LICENSE file at https://themost.io/license
  */
 import { ClientDataServiceBase, ClientDataContextBase, DataServiceQueryParams, DataServiceExecuteOptions, ClientDataContextOptions } from './common';
+export interface ListResponse<T> {
+    total?: number;
+    skip?: number;
+    value?: Array<T>;
+}
 export declare class ClientDataQueryable {
-    private model_;
+    private readonly model_;
     private url_;
-    private service_;
-    private params_;
+    private readonly service_;
+    private readonly params_;
     private $prepare;
     private privates_;
     static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable;
@@ -114,8 +119,8 @@ export declare class ClientDataQueryable {
     prepare(or?: boolean): ClientDataQueryable;
 }
 export declare class ClientDataModel {
-    private name_;
-    private service_;
+    private readonly name_;
+    private readonly service_;
     constructor(name: string, service: ClientDataServiceBase);
     /**
      * @returns {ClientDataServiceBase}
@@ -146,7 +151,7 @@ export declare class ClientDataModel {
     levels(n: number): ClientDataQueryable;
 }
 export declare class ClientDataContext implements ClientDataContextBase {
-    private service_;
+    private readonly service_;
     private base_;
     private options;
     constructor(service: ClientDataServiceBase, options?: ClientDataContextOptions);
@@ -174,9 +179,9 @@ export declare class ClientDataContext implements ClientDataContextBase {
     model(name: string): ClientDataModel;
 }
 export declare class ClientDataService implements ClientDataServiceBase {
-    private base_;
-    private options_;
-    private headers_;
+    private readonly base_;
+    private readonly options_;
+    private readonly headers_;
     constructor(base: string, options?: ClientDataContextOptions);
     getOptions(): ClientDataContextOptions;
     setHeader(name: string, value: string): void;

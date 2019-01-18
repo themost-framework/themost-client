@@ -65,6 +65,7 @@ export interface DataServiceQueryParams {
 }
 export interface ClientDataContextOptions {
     useMediaTypeExtensions?: boolean;
+    useResponseConversion?: boolean;
 }
 export interface DataServiceExecuteOptions {
     method: string;

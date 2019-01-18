@@ -18,13 +18,19 @@ class ClientQueryExpression {
     public right:any;
 }
 
+export interface ListResponse<T> {
+    total?: number;
+    skip?: number;
+    value?: Array<T>;
+}
+
 
 export class ClientDataQueryable {
 
-    private model_:string;
+    private readonly model_:string;
     private url_:string;
-    private service_:ClientDataServiceBase;
-    private params_:any;
+    private readonly service_:ClientDataServiceBase;
+    private readonly params_:any;
     private $prepare: string;
     private privates_:ClientQueryExpression;
 
@@ -216,7 +222,7 @@ export class ClientDataQueryable {
 
 
     private escape_(val:any) {
-        if ((val == null) || (val==undefined)) {
+        if ((val == null) || (typeof val === 'undefined')) {
             return "null";
         }
         if (typeof val === 'boolean') {
@@ -598,13 +604,39 @@ export class ClientDataQueryable {
             headers:{}
         });
     }
-
     getItems():Promise<any> {
-        return this.items();
+        return this.items().then( result => {
+            // if current service uses response conversion
+            if (this.getService().getOptions().useResponseConversion) {
+                // validate response
+                // if response has property value and this property is an array
+                if (result && Array.isArray(result.value)) {
+                    // this operation is equivalent with DataModel.getItems() and DataQueryable.getItems of @themost/data
+                    // return this array
+                    return Promise.resolve(result.value);
+                }
+            }
+            return Promise.resolve(result);
+        });
     }
 
     getList():Promise<any> {
-        return this.list();
+        return this.list().then( result => {
+            // if current service uses response conversion
+            if (this.getService().getOptions().useResponseConversion) {
+                // validate response
+                // if result has OData paging attributes
+                if (result.hasOwnProperty('@odata.count') && result.hasOwnProperty('@odata.skip')) {
+                    // convert result to EntitySetResponse
+                    return Promise.resolve(<ListResponse<any>> {
+                        total: result['@odata.count'],
+                        skip: result['@odata.skip'],
+                        value: result.value
+                    });
+                }
+            }
+            return Promise.resolve(result);
+        });
     }
 
     filter(s:string):ClientDataQueryable {
@@ -637,8 +669,8 @@ export class ClientDataQueryable {
 
 export class ClientDataModel {
 
-    private name_:string;
-    private service_:ClientDataServiceBase;
+    private readonly name_:string;
+    private readonly service_:ClientDataServiceBase;
     constructor(name:string, service:ClientDataServiceBase) {
         this.name_ = name;
         this.service_ = service;
@@ -746,7 +778,7 @@ export class ClientDataModel {
 
 export class ClientDataContext implements ClientDataContextBase {
 
-    private service_:ClientDataServiceBase;
+    private readonly service_:ClientDataServiceBase;
     private base_:string;
     private options:ClientDataContextOptions;
 
@@ -797,8 +829,7 @@ export class ClientDataContext implements ClientDataContextBase {
      */
     model(name:string): ClientDataModel {
         Args.notEmpty(name,"Model name");
-        const model = new ClientDataModel(name, this.getService());
-        return model;
+        return new ClientDataModel(name, this.getService());
     }
 
 
@@ -807,9 +838,9 @@ export class ClientDataContext implements ClientDataContextBase {
 export class ClientDataService implements ClientDataServiceBase {
 
 
-    private base_:string;
-    private options_:ClientDataContextOptions;
-    private headers_: any;
+    private readonly base_:string;
+    private readonly options_:ClientDataContextOptions;
+    private readonly headers_: any;
 
     constructor(base:string, options?: ClientDataContextOptions) {
         this.headers_ = {};

@@ -196,7 +196,7 @@ var ClientDataQueryable = /** @class */ (function () {
     };
     ClientDataQueryable.prototype.escape_ = function (val) {
         var _this = this;
-        if ((val == null) || (val == undefined)) {
+        if ((val == null) || (typeof val === 'undefined')) {
             return "null";
         }
         if (typeof val === 'boolean') {
@@ -543,10 +543,39 @@ var ClientDataQueryable = /** @class */ (function () {
         });
     };
     ClientDataQueryable.prototype.getItems = function () {
-        return this.items();
+        var _this = this;
+        return this.items().then(function (result) {
+            // if current service uses response conversion
+            if (_this.getService().getOptions().useResponseConversion) {
+                // validate response
+                // if response has property value and this property is an array
+                if (result && Array.isArray(result.value)) {
+                    // this operation is equivalent with DataModel.getItems() and DataQueryable.getItems of @themost/data
+                    // return this array
+                    return Promise.resolve(result.value);
+                }
+            }
+            return Promise.resolve(result);
+        });
     };
     ClientDataQueryable.prototype.getList = function () {
-        return this.list();
+        var _this = this;
+        return this.list().then(function (result) {
+            // if current service uses response conversion
+            if (_this.getService().getOptions().useResponseConversion) {
+                // validate response
+                // if result has OData paging attributes
+                if (result.hasOwnProperty('@odata.count') && result.hasOwnProperty('@odata.skip')) {
+                    // convert result to EntitySetResponse
+                    return Promise.resolve({
+                        total: result['@odata.count'],
+                        skip: result['@odata.skip'],
+                        value: result.value
+                    });
+                }
+            }
+            return Promise.resolve(result);
+        });
     };
     ClientDataQueryable.prototype.filter = function (s) {
         common_1.Args.notEmpty("s", "Filter expression");
@@ -708,8 +737,7 @@ var ClientDataContext = /** @class */ (function () {
      */
     ClientDataContext.prototype.model = function (name) {
         common_1.Args.notEmpty(name, "Model name");
-        var model = new ClientDataModel(name, this.getService());
-        return model;
+        return new ClientDataModel(name, this.getService());
     };
     return ClientDataContext;
 }());
