@@ -11,7 +11,7 @@
     "@angular/http": "^6.0.3",
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
-    "rxjs": "^6.0.0",
+    "rxjs": "~6.3.3",
     "core-js": "^2.5.7",
     "zone.js": "^0.8.26"
   },
@@ -47,7 +47,7 @@
     "core-js": "^2.5.7",
     "ng-packagr": "^4.5.0",
     "rimraf": "^2.6.2",
-    "rxjs": "^6.0.0",
+    "rxjs": "~6.3.3",
     "typescript": "^2.7.2",
     "zone.js": "^0.8.26"
   }
