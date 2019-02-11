@@ -32,9 +32,10 @@
     "url": "https://github.com/themost-framework/themost-client/issues"
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
-  "dependencies": {
-
-  },
+  "dependencies": {},
   "devDependencies": {
+    "tslib": "^1.9.0",
+    "tslint": "~5.9.1",
+    "typescript": "~2.7.2"
   }
 }

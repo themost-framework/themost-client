@@ -1,0 +1,13 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/client",
+  "lib": {
+    "entryFile": "./src/public_api.ts"
+  },
+  "whitelistedNonPeerDependencies": [
+    "@types/jasmine",
+    "@types/node",
+    "@themost/client",
+    "moment"
+  ]
+}

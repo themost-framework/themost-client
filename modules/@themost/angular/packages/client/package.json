@@ -1,0 +1,30 @@
+{
+  "name": "@themost/angular",
+  "version": "6.1.1",
+  "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client",
+  "main": "./bundles/themost-angular.umd.js",
+  "peerDependencies": {
+    "@angular/common": "^6.0.3",
+    "@angular/core": "^6.0.3",
+    "@angular/http": "^6.0.3",
+    "@angular/platform-browser": "^6.0.3",
+    "@angular/platform-browser-dynamic": "^6.0.3",
+    "rxjs": "^6.0.0",
+    "core-js": "^2.5.7",
+    "zone.js": "^0.8.26"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/themost-framework/themost-client.git"
+  },
+  "author": "Kyriakos Barbounakis <k.barbounakis@gmail.com>",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/themost-framework/themost-client/issues"
+  },
+  "homepage": "https://github.com/themost-framework/themost-client#readme",
+  "dependencies": {
+    "@themost/client": "^2.1.3",
+    "moment": "^2.22.2"
+  }
+}
