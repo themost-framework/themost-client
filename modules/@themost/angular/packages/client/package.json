@@ -4,12 +4,12 @@
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client",
   "main": "./bundles/themost-angular.umd.js",
   "peerDependencies": {
-    "@angular/common": "^6.0.3",
-    "@angular/core": "^6.0.3",
-    "@angular/http": "^6.0.3",
-    "@angular/platform-browser": "^6.0.3",
-    "@angular/platform-browser-dynamic": "^6.0.3",
-    "rxjs": "^6.0.0",
+    "@angular/common": ">=6.0.0",
+    "@angular/core": ">=6.0.0",
+    "@angular/http": ">=6.0.0",
+    "@angular/platform-browser": ">=6.0.0",
+    "@angular/platform-browser-dynamic": ">=6.0.0",
+    "rxjs": "~6.3.3",
     "core-js": "^2.5.7",
     "zone.js": "^0.8.26"
   },

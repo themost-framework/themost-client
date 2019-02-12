@@ -10,8 +10,6 @@ import {Injectable, Inject, InjectionToken, Injector} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {ClientDataService, ClientDataContext} from '@themost/client';
 import {Args, DataServiceExecuteOptions, TextUtils, ClientDataContextOptions} from '@themost/client/common';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
 
 export interface ClientDataContextConfig {
     base: string;
