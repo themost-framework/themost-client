@@ -6,6 +6,6 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-export { AngularDataContext, AngularDataService, ClientDataContextConfig, DATA_CONTEXT_CONFIG } from '@themost/angular/client';
+export { AngularDataContext, AngularDataService, ClientDataContextConfig, DATA_CONTEXT_CONFIG } from './client';
 export { DataComponent } from './components';
 export { MostModule } from './module';

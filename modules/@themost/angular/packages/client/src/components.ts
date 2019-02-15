@@ -7,7 +7,7 @@
  * found in the LICENSE file at https://themost.io/license
  */
 import {Component, Input, OnInit, Output} from '@angular/core';
-import {AngularDataContext} from '@themost/angular/client';
+import {AngularDataContext} from './client';
 
 @Component({
     selector: 'most-data',

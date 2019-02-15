@@ -2,7 +2,7 @@
 
 ![MOST Web Framework Logo](https://www.themost.io/assets/images/most_logo_sw_240.png)
 
-[MOST Web Framework 2.0 **Codename Blueshift**](https://github.com/themost-framework/themost) - Angular 2.x-4.x client module
+[MOST Web Framework 2.0 **Codename Blueshift**](https://github.com/themost-framework/themost) - Angular 2.x+ client module
 
 ## Installation
 
@@ -16,6 +16,33 @@ Angular | @themost/angular |
 5 | 2.x+
 2 to 4 | 2.x+
 
+## Changelog
+
+### 6.2.1 - 2019-02-15
+
+#### Changed
+- @themost/angular/client module has been deprecated. 
+Exported members of @themost/angular/client are now explicitly exported from @themost/angular.
+e.g. replace 
+
+
+    import { DATA_CONTEXT_CONFIG } from '@themost/angular/client'; 
+    
+with 
+
+    import { DATA_CONTEXT_CONFIG } from '@themost/angular';
+- @themost/angular/module module has been deprecated. 
+Exported members of @themost/angular/module are now explicitly exported from @themost/angular.
+e.g. replace 
+
+
+    import { MostModule } from '@themost/angular/module'; 
+with 
+
+
+    import { MostModule } from '@themost/angular';
+    
+
 ### Usage
 
 app.module.ts
@@ -24,7 +51,7 @@ app.module.ts
     import { HttpClientModule } from '@angular/common/http';
     import { BrowserModule } from '@angular/platform-browser';
     import { AppComponent } from './app.component';
-    import {DATA_CONTEXT_CONFIG, AngularDataContext } from '@themost/angular/client';
+    import {DATA_CONTEXT_CONFIG, AngularDataContext } from '@themost/angular';
     @NgModule({
         imports: [
             BrowserModule,
@@ -49,7 +76,7 @@ app.module.ts
 app.component.ts
 
     import { Component } from '@angular/core';
-    import {AngularDataContext} from "@themost/angular/client";
+    import {AngularDataContext} from "@themost/angular";
     @Component({
         selector: 'test-app',
         templateUrl: 'app.component.html'

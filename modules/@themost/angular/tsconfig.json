@@ -17,11 +17,6 @@
     "lib": [
       "es2017",
       "dom"
-    ],
-    "paths": {
-      "@themost/angular/client": [
-        "./packages/client/client/src/public_api"
-        ]
-    }
+    ]
   }
 }
