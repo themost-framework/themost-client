@@ -8,7 +8,7 @@
  */
 import {NgModule} from '@angular/core';
 import {DataComponent} from './components';
-import {DATA_CONTEXT_CONFIG} from './client';
+import {DATA_CONTEXT_CONFIG} from '@themost/angular/client';
 
 @NgModule({
     imports: [],

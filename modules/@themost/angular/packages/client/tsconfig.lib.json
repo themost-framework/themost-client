@@ -17,7 +17,12 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@themost/angular/client": [
+        "./client/src/public_api"
+        ]
+    }
   },
   "angularCompilerOptions": {
     "annotateForClosureCompiler": true,

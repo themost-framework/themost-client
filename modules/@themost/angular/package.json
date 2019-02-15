@@ -1,9 +1,10 @@
 {
   "name": "themost-angular-src",
-  "version": "6.1.3",
+  "version": "6.1.4",
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client Source",
   "scripts": {
-    "ng": "ng"
+    "ng": "ng",
+    "build": "ng-packagr -p packages/client/package.json"
   },
   "peerDependencies": {
     "@angular/common": "^6.0.3",

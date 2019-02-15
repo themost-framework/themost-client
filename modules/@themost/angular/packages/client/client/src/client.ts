@@ -6,7 +6,7 @@
  * Use of this source code is governed by an BSD-3-Clause license that can be
  * found in the LICENSE file at https://themost.io/license
  */
-import {Injectable, Inject, InjectionToken, Injector} from '@angular/core';
+import {Injectable, Inject, InjectionToken} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {ClientDataService, ClientDataContext} from '@themost/client';
 import {Args, DataServiceExecuteOptions, TextUtils, ClientDataContextOptions} from '@themost/client/common';
@@ -16,19 +16,12 @@ export interface ClientDataContextConfig {
     options: ClientDataContextOptions;
 }
 
-const defaultDataContextConfig = {
-    base: '/',
-    options: {
-        useMediaTypeExtensions: true
-    }
-};
-
 export const DATA_CONTEXT_CONFIG = new InjectionToken<ClientDataContextConfig>('data.config');
 
 @Injectable()
 export class AngularDataContext extends ClientDataContext {
 
-    constructor(private http: HttpClient, @Inject(DATA_CONTEXT_CONFIG) config: ClientDataContextConfig) {
+    constructor(http: HttpClient, @Inject(DATA_CONTEXT_CONFIG) config: ClientDataContextConfig) {
         super(new AngularDataService(config.base, http, config.options), config.options);
     }
 }

@@ -19,6 +19,9 @@
       "dom"
     ],
     "paths": {
+      "@themost/angular/client": [
+        "./packages/client/client/src/public_api"
+        ]
     }
   }
 }
