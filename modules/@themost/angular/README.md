@@ -25,22 +25,21 @@ Angular | @themost/angular |
 Exported members of @themost/angular/client are now explicitly exported from @themost/angular.
 e.g. replace 
 
-
-    import { DATA_CONTEXT_CONFIG } from '@themost/angular/client'; 
+import { DATA_CONTEXT_CONFIG } from '@themost/angular/client'; 
     
 with 
 
-    import { DATA_CONTEXT_CONFIG } from '@themost/angular';
+import { DATA_CONTEXT_CONFIG } from '@themost/angular';
+
 - @themost/angular/module module has been deprecated. 
 Exported members of @themost/angular/module are now explicitly exported from @themost/angular.
 e.g. replace 
 
+import { MostModule } from '@themost/angular/module'; 
 
-    import { MostModule } from '@themost/angular/module'; 
 with 
 
-
-    import { MostModule } from '@themost/angular';
+import { MostModule } from '@themost/angular';
     
 
 ### Usage
