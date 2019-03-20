@@ -79,6 +79,10 @@ export class AngularDataService extends ClientDataService {
                 if (res.status === 204) {
                     return resolve();
                 } else {
+                    // safely handle empty body
+                    if ((res.body == null) || (typeof res.body === 'string' && res.body.length === 0)) {
+                        return resolve();
+                    }
                     const finalRes = JSON.parse(res.body, function(key, value) {
                         if (TextUtils.isDate(value)) {
                             return new Date(value);
