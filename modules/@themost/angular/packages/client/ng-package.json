@@ -7,8 +7,6 @@
   },
   "whitelistedNonPeerDependencies": [
     "@types/jasmine",
-    "@types/node",
-    "@themost/client",
-    "moment"
+    "@types/node"
   ]
 }

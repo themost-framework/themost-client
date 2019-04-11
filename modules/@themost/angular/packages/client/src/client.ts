@@ -26,7 +26,17 @@ export class AngularDataContext extends ClientDataContext {
     }
 }
 
-
+/**
+ * The default JSON reviver which converts an ISO date string to Date object
+ * @param key
+ * @param value
+ */
+function jsonReviver(key, value) {
+    if (TextUtils.isDate(value)) {
+        return new Date(value);
+    }
+    return value;
+}
 
 export class AngularDataService extends ClientDataService {
 
@@ -66,6 +76,8 @@ export class AngularDataService extends ClientDataService {
         } else {
             finalBody = options.data;
         }
+        // get custom JSON reviver or default
+        const reviver = this.getOptions().useJsonReviver || jsonReviver;
         return new Promise<any>((resolve, reject) => {
             this.http.request(options.method, finalURL, {
                 body: finalBody,
@@ -83,12 +95,7 @@ export class AngularDataService extends ClientDataService {
                     if ((res.body == null) || (typeof res.body === 'string' && res.body.length === 0)) {
                         return resolve();
                     }
-                    const finalRes = JSON.parse(res.body, function(key, value) {
-                        if (TextUtils.isDate(value)) {
-                            return new Date(value);
-                        }
-                        return value;
-                    });
+                    const finalRes = JSON.parse(res.body, reviver);
                     return resolve(finalRes);
                 }
             }, (err) => {
