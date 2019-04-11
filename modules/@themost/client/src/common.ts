@@ -122,9 +122,18 @@ export class TextUtils {
 
     private static REG_DATETIME_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
 
+    private static REG_DATE_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/;
+
     static isDate(s:string):boolean {
         if (typeof s === "string") {
             return TextUtils.REG_DATETIME_ISO.test(s);
+        }
+        return false;
+    }
+
+    static isDateOnly(s:string):boolean {
+        if (typeof s === "string") {
+            return TextUtils.REG_DATE_ISO.test(s);
         }
         return false;
     }
@@ -318,6 +327,18 @@ export interface DataServiceQueryParams {
 export interface ClientDataContextOptions {
     useMediaTypeExtensions?: boolean;
     useResponseConversion?: boolean;
+    /**
+     * Sets reviver to use while parsing a JSON string
+     * @param key
+     * @param value
+     */
+    useJsonReviver?: (key: any, value: any) => any;
+    /**
+     * Sets replacer to use while stringify an object
+     * @param key
+     * @param value
+     */
+    useJsonReplacer?: (key: any, value: any) => any;
 }
 
 
