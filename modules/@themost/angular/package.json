@@ -1,12 +1,13 @@
 {
   "name": "themost-angular-src",
-  "version": "6.2.1",
+  "version": "6.2.2",
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client Source",
   "scripts": {
     "ng": "ng",
     "build": "ng-packagr -p packages/client/package.json"
   },
   "peerDependencies": {
+    "@themost/client": "^2.1.4",
     "@angular/common": "^6.0.3",
     "@angular/core": "^6.0.3",
     "@angular/http": "^6.0.3",
@@ -27,7 +28,6 @@
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
-    "@themost/client": "^2.1.3",
     "moment": "^2.22.2"
   },
   "devDependencies": {

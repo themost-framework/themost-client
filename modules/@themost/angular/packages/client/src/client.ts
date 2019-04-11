@@ -26,7 +26,12 @@ export class AngularDataContext extends ClientDataContext {
     }
 }
 
-
+function defaultJsonReviver(key, value) {
+    if (TextUtils.isDate(value)) {
+        return new Date(value);
+    }
+    return value;
+}
 
 export class AngularDataService extends ClientDataService {
 
@@ -83,12 +88,7 @@ export class AngularDataService extends ClientDataService {
                     if ((res.body == null) || (typeof res.body === 'string' && res.body.length === 0)) {
                         return resolve();
                     }
-                    const finalRes = JSON.parse(res.body, function(key, value) {
-                        if (TextUtils.isDate(value)) {
-                            return new Date(value);
-                        }
-                        return value;
-                    });
+                    const finalRes = JSON.parse(res.body, defaultJsonReviver);
                     return resolve(finalRes);
                 }
             }, (err) => {
