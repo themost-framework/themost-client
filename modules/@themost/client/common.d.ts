@@ -19,7 +19,9 @@ export declare class TextUtils {
     static isNullOrUndefined(s: string): boolean;
     static zeroPad(num: number, length: number): string;
     private static REG_DATETIME_ISO;
+    private static REG_DATE_ISO;
     static isDate(s: string): boolean;
+    static isDateOnly(s: string): boolean;
     private static REG_GUID_STRING;
     static isGuid(s: any): boolean;
     private static REG_ABSOLUTE_URI;
@@ -66,6 +68,18 @@ export interface DataServiceQueryParams {
 export interface ClientDataContextOptions {
     useMediaTypeExtensions?: boolean;
     useResponseConversion?: boolean;
+    /**
+     * Sets reviver to use while parsing a JSON string
+     * @param key
+     * @param value
+     */
+    useJsonReviver?: (key: any, value: any) => any;
+    /**
+     * Sets replacer to use while stringify an object
+     * @param key
+     * @param value
+     */
+    useJsonReplacer?: (key: any, value: any) => any;
 }
 export interface DataServiceExecuteOptions {
     method: string;

@@ -129,6 +129,12 @@ var TextUtils = /** @class */ (function () {
         }
         return false;
     };
+    TextUtils.isDateOnly = function (s) {
+        if (typeof s === "string") {
+            return TextUtils.REG_DATE_ISO.test(s);
+        }
+        return false;
+    };
     TextUtils.isGuid = function (s) {
         if (typeof s === "string") {
             return TextUtils.REG_GUID_STRING.test(s);
@@ -260,6 +266,7 @@ var TextUtils = /** @class */ (function () {
             return TextUtils.escape(val.valueOf());
     };
     TextUtils.REG_DATETIME_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
+    TextUtils.REG_DATE_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/;
     TextUtils.REG_GUID_STRING = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
     TextUtils.REG_ABSOLUTE_URI = /^((https?|ftps?):\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
     TextUtils.REG_RELATIVE_URI = /^([\/\w .-]*)*\/?$/;
