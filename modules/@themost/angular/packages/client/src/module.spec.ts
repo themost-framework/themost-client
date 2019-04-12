@@ -16,7 +16,7 @@ describe('MostModule', () => {
   it('should inject AngularDataContext', inject([AngularDataContext], (context: AngularDataContext) => {
     expect(context).toBeTruthy();
   }));
-  it('should inject AngularDataContext', inject([AngularDataContext], (context: AngularDataContext) => {
+  it('should get context base', inject([AngularDataContext], (context: AngularDataContext) => {
     expect(context.getBase()).toBe('/');
   }));
 });

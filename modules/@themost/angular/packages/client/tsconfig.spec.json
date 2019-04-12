@@ -2,13 +2,14 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
+    "sourceMap": true,
     "types": [
       "jasmine",
       "node"
     ],
     "paths": {
-      "@themost/client": [ "../client" ],
-      "@themost/client/*": [ "../client/*" ]
+      "@themost/client": [ "../client/src/index" ],
+      "@themost/client/*": [ "../client/src/*" ]
     }
   },
   "files": [

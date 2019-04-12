@@ -15,8 +15,8 @@
     },
     "quotemark": [true, "single"],
     "interface-name": false,
+    "trailing-comma": [ false ],
     "ordered-imports": false,
-    "trailing-comma": false,
     "max-classes-per-file": false,
     "variable-name": [ true, "ban-keywords", "check-format", "allow-snake-case", "allow-pascal-case", "allow-leading-underscore" ],
     "object-literal-sort-keys": false
