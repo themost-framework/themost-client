@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
+    "@themost/angular": "file:dist/client",
     "moment": "^2.22.2"
   },
   "devDependencies": {

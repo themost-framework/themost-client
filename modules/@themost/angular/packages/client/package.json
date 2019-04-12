@@ -1,6 +1,6 @@
 {
   "name": "@themost/angular",
-  "version": "6.2.2-dev.2",
+  "version": "6.2.2-dev.4",
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client",
   "main": "./bundles/themost-angular.umd.js",
   "peerDependencies": {
