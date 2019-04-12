@@ -18,7 +18,7 @@
     "ordered-imports": false,
     "trailing-comma": false,
     "max-classes-per-file": false,
-    "variable-name": [ true, "allow-pascal-case", "allow-snake-case" ],
+    "variable-name": [ true, "ban-keywords", "check-format", "allow-snake-case", "allow-pascal-case", "allow-leading-underscore" ],
     "object-literal-sort-keys": false
   },
   "jsRules": {

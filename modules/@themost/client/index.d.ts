@@ -54,14 +54,14 @@ export declare class ClientDataQueryable {
      */
     setUrl(value: string): this;
     static create(model: string, service?: ClientDataServiceBase): ClientDataQueryable;
-    private append_();
-    private escape_(val);
+    private append_;
+    private escape_;
     where(name: string): ClientDataQueryable;
     and(name: string): ClientDataQueryable;
     andAlso(name: string): ClientDataQueryable;
     or(name: string): ClientDataQueryable;
     orElse(name: string): ClientDataQueryable;
-    private compare_(op, value);
+    private compare_;
     equal(value: any): ClientDataQueryable;
     notEqual(value: any): ClientDataQueryable;
     greaterThan(value: any): ClientDataQueryable;
@@ -76,7 +76,7 @@ export declare class ClientDataQueryable {
     between(value1: any, value2: any): ClientDataQueryable;
     toFilter(): string;
     contains(value: any): ClientDataQueryable;
-    private aggregate_(fn);
+    private aggregate_;
     getDate(): ClientDataQueryable;
     getDay(): ClientDataQueryable;
     getMonth(): ClientDataQueryable;

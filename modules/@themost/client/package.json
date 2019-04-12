@@ -5,8 +5,8 @@
   "module": "index.js",
   "main": "index.js",
   "scripts": {
-      "tsc": "tsc",
-      "build": "tsc"
+    "tsc": "tsc",
+    "build": "tsc"
   },
   "peerDependencies": {},
   "repository": {

@@ -5,7 +5,11 @@
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "paths": {
+      "@themost/client": [ "../../../client/src/index" ],
+      "@themost/client/*": [ "../../../client/src/*" ]
+    }
   },
   "files": [
     "src/test.ts"

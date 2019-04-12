@@ -9,8 +9,8 @@ export declare class ResponseError extends Error {
 export declare class Base64 {
     private PADCHAR;
     private ALPHA;
-    private getByte(s, i);
-    private getByte64(s, i);
+    private getByte;
+    private getByte64;
     decode(s: string): string;
     encode(s: string): string;
 }

@@ -7,42 +7,34 @@
  * found in the LICENSE file at https://themost.io/license
  */
 
-import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions,Args,
+import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions, Args,
     ClientDataContextOptions} from './common';
-import * as parse from "url-parse";
+import * as parse from 'url-parse';
 
 class ClientQueryExpression {
-    public left:any;
-    public op:string;
-    public lop:string;
-    public right:any;
+    public left: any;
+    public op: string;
+    public lop: string;
+    public right: any;
 }
 
 export interface ListResponse<T> {
     total?: number;
     skip?: number;
-    value?: Array<T>;
+    value?: T[];
 }
 
 
 export class ClientDataQueryable {
 
-    private readonly model_:string;
-    private url_:string;
-    private readonly service_:ClientDataServiceBase;
-    private readonly params_:any;
-    private $prepare: string;
-    private privates_:ClientQueryExpression;
-
-    static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable {
+    public static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable {
         const uri = parse(u, true);
-        const result = new ClientDataQueryable("Model",service || new ParserDataService(uri.protocol ? uri.origin : "/"));
-        for(const key in uri.query) {
+        const result = new ClientDataQueryable('Model', service || new ParserDataService(uri.protocol ? uri.origin : '/'));
+        for (const key in uri.query) {
             if (/^\$/.test(key)) {
                 if (/[+-]?\d+/.test(uri.query[key])) {
-                    result.setParam(key, parseInt(uri.query[key]));
-                }
-                else {
+                    result.setParam(key, parseInt(uri.query[key], 10));
+                } else {
                     result.setParam(key, uri.query[key]);
                 }
             }
@@ -51,59 +43,70 @@ export class ClientDataQueryable {
         return result;
     }
 
-    constructor(model:string, service: ClientDataServiceBase) {
-        Args.notEmpty(model, "Model");
-        this.model_ = model;
-        Args.notNull(service, "Data Service");
-        this.service_ = service;
-        if (this.service_.getOptions().useMediaTypeExtensions) {
-            this.url_ = TextUtils.format("%s/index.json", this.model_);
-        }
-        else {
-            this.url_ = TextUtils.format("%s/", this.model_);
-        }
-        //init params
-        this.params_ = { };
-        //init privates
-        this.privates_ = new ClientQueryExpression();
+    public static create(model: string, service?: ClientDataServiceBase): ClientDataQueryable {
+        return new ClientDataQueryable(model, service);
     }
 
-    toString() {
-        let uri = this.getService().resolve(this.url_);
+    private readonly _model: string;
+    private _url: string;
+    private readonly _service: ClientDataServiceBase;
+    private readonly _params: any;
+    private $prepare: string;
+    private _privates: ClientQueryExpression;
+
+    constructor(model: string, service: ClientDataServiceBase) {
+        Args.notEmpty(model, 'Model');
+        this._model = model;
+        Args.notNull(service, 'Data Service');
+        this._service = service;
+        if (this._service.getOptions().useMediaTypeExtensions) {
+            this._url = TextUtils.format('%s/index.json', this._model);
+        } else {
+            this._url = TextUtils.format('%s/', this._model);
+        }
+        // init params
+        this._params = { };
+        // init privates
+        this._privates = new ClientQueryExpression();
+    }
+
+
+    public toString() {
+        const uri = this.getService().resolve(this._url);
         const params = this.getParams();
-        let search = "";
-        for(const key in params) {
-            search = search.concat(key, '=', params[key], "&");
+        let search = '';
+        for (const key in params) {
+            search = search.concat(key, '=', params[key], '&');
         }
         if (search.length) {
-            return uri.concat("?",search.replace(/&$/,""));
+            return uri.concat('?', search.replace(/&$/, ''));
         }
         return uri;
     }
 
-    toExpand() {
-        let model = this.getModel();
+    public toExpand() {
+        const model = this.getModel();
         const params = this.getParams();
-        let search = "";
-        for(const key in params) {
-            search = search.concat(key, '=', params[key], ";");
+        let search = '';
+        for (const key in params) {
+            search = search.concat(key, '=', params[key], ';');
         }
         if (search.length) {
-            return model.concat("(",search.replace(/;$/,""), ")");
+            return model.concat('(', search.replace(/;$/, ''), ')');
         }
         return model;
     }
 
-    takeNext(n:number) {
+    public takeNext(n: number) {
         const p = this.getParams();
         return this.take(n).skip((p.$skip ? p.$skip : 0) + n);
     }
 
-    takePrevious(n:number) {
+    public takePrevious(n: number) {
         const p = this.getParams();
-        if (p.$skip>0) {
-            if (n<=p.$skip) {
-                this.skip(p.$skip-n);
+        if (p.$skip > 0) {
+            if (n <= p.$skip) {
+                this.skip(p.$skip - n);
                 return this.take(n);
             }
         }
@@ -113,44 +116,42 @@ export class ClientDataQueryable {
     /**
      * @returns {ClientDataServiceBase}
      */
-    getService(): ClientDataServiceBase {
-        return this.service_;
+    public getService(): ClientDataServiceBase {
+        return this._service;
     }
 
     /**
      * @returns {DataServiceQueryParams}
      */
-    getParams(): DataServiceQueryParams {
+    public getParams(): DataServiceQueryParams {
         if (typeof this.$prepare === 'string' && this.$prepare.length) {
-            if (typeof this.params_.$filter === 'string' && this.params_.$filter) {
+            if (typeof this._params.$filter === 'string' && this._params.$filter) {
                 return Object.assign({
                     },
-                    this.params_,
+                    this._params,
                     {
-                    $filter: `(${this.$prepare}) and (${this.params_.$filter})`
+                    $filter: `(${this.$prepare}) and (${this._params.$filter})`
                 });
-            }
-            else {
+            } else {
                 return Object.assign({
 
-                }, this.params_, {
-                    $filter:this.$prepare
+                }, this._params, {
+                    $filter: this.$prepare
                 });
             }
 
         }
-        return Object.assign({ }, this.params_);
+        return Object.assign({ }, this._params);
     }
 
     /**
      * @returns {ClientDataQueryable}
      */
-    setParam(name:string, value:any): ClientDataQueryable {
+    public setParam(name: string, value: any): ClientDataQueryable {
         if (/^\$/.test(name)) {
-            this.params_[name] = value;
-        }
-        else {
-            this.params_["$" + name] = value;
+            this._params[name] = value;
+        } else {
+            this._params['$' + name] = value;
         }
         return this;
     }
@@ -159,16 +160,16 @@ export class ClientDataQueryable {
      * Gets a string which represents the name of the data model associated with this object.
      * @returns {string}
      */
-    getModel(): string {
-        return this.model_;
+    public getModel(): string {
+        return this._model;
     }
 
     /**
      * Gets a string which represents the relative URL associated with this object.
      * @returns {string}
      */
-    getUrl():string {
-        return this.url_;
+    public getUrl(): string {
+        return this._url;
     }
 
     /**
@@ -176,171 +177,77 @@ export class ClientDataQueryable {
      * @param value - A string which represents a relative URI.
      * @returns ClientDataQueryable
      */
-    setUrl(value:string) {
-        Args.notEmpty(value,"URL");
-        Args.check(!TextUtils.isAbsoluteURI(value), "URL must be a relative URI");
-        this.url_ = value;
+    public setUrl(value: string) {
+        Args.notEmpty(value, 'URL');
+        Args.check(!TextUtils.isAbsoluteURI(value), 'URL must be a relative URI');
+        this._url = value;
         return this;
     }
 
-    static create(model:string, service?: ClientDataServiceBase):ClientDataQueryable {
-        return new ClientDataQueryable(model, service);
-    }
-
-    private append_() {
-        Args.notNull(this.privates_.left,"Left operand");
-        Args.notNull(this.privates_.op,"Comparison operator");
-        let expr;
-        if (Array.isArray(this.privates_.right)) {
-            Args.check((this.privates_.op==="eq") || (this.privates_.op==="ne"),"Wrong operator. Expected equal or not equal");
-            Args.check(this.privates_.right.length>0,"Array may not be empty");
-            const arr = this.privates_.right.map((x) => {
-                return this.privates_.left + " " + this.privates_.op + " " + this.escape_(x);
-            });
-            if (this.privates_.op === "eq") {
-                expr = "(" + arr.join(" or ") + ")";
-            }
-            else {
-                expr = "(" + arr.join(" or ") + ")";
-            }
-        }
-        else {
-            expr = this.privates_.left + " " + this.privates_.op + " " + this.escape_(this.privates_.right);
-        }
-        this.privates_.lop = this.privates_.lop || "and";
-        if (TextUtils.isNotEmptyString(this.params_.$filter)) {
-            this.params_.$filter = this.params_.$filter + " " + this.privates_.lop + " " + expr;
-        }
-        else {
-            this.params_.$filter = expr;
-        }
-        //clear object
-        this.privates_.left = null; this.privates_.op = null; this.privates_.right = null;
+    public where(name: string): ClientDataQueryable {
+        Args.notEmpty(name, 'Left operand');
+        this._privates.left = name;
         return this;
     }
 
-
-
-    private escape_(val:any) {
-        if ((val == null) || (typeof val === 'undefined')) {
-            return "null";
-        }
-        if (typeof val === 'boolean') {
-            return (val) ? "true" : "false";
-        }
-        if (typeof val === 'number') {
-            return val+"";
-        }
-        if (val instanceof Date) {
-            const dt = val;
-            const year   = dt.getFullYear();
-            const month  = TextUtils.zeroPad(dt.getMonth() + 1, 2);
-            const day    = TextUtils.zeroPad(dt.getDate(), 2);
-            const hour   = TextUtils.zeroPad(dt.getHours(), 2);
-            const minute = TextUtils.zeroPad(dt.getMinutes(), 2);
-            const second = TextUtils.zeroPad(dt.getSeconds(), 2);
-            const millisecond = TextUtils.zeroPad(dt.getMilliseconds(), 3);
-            //format timezone
-            const offset = (new Date()).getTimezoneOffset(),
-                timezone = (offset>=0 ? '+' : '') + TextUtils.zeroPad(Math.floor(offset/60),2) + ':' + TextUtils.zeroPad(offset%60,2);
-            return "'" + year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second + '.' + millisecond + timezone + "'";
-        }
-        if (val instanceof Array) {
-            const values = [];
-            val.forEach((x) => {
-                values.push(this.escape_(x));
-            });
-            return values.join(',');
-        }
-        if (typeof val === "string") {
-            const res = val.replace(/[\0\n\r\b\t\\'"\x1a]/g, function(s) {
-                switch(s) {
-                    case "\0": return "\\0";
-                    case "\n": return "\\n";
-                    case "\r": return "\\r";
-                    case "\b": return "\\b";
-                    case "\t": return "\\t";
-                    case "\x1a": return "\\Z";
-                    default: return "\\"+s;
-                }
-            });
-            return "'" + res + "'";
-        }
-        //otherwise get valueOf
-        if (val.hasOwnProperty("$name"))
-            return val["$name"];
-        else
-            return this.escape_(val.valueOf());
-    }
-
-    where(name:string):ClientDataQueryable {
-        Args.notEmpty(name,"Left operand");
-        this.privates_.left = name;
+    public and(name: string): ClientDataQueryable {
+        Args.notEmpty(name, 'Left operand');
+        this._privates.left = name;
+        this._privates.lop = 'and';
         return this;
     }
 
-    and(name:string):ClientDataQueryable {
-        Args.notEmpty(name,"Left operand");
-        this.privates_.left = name;
-        this.privates_.lop = "and";
-        return this;
-    }
-
-    andAlso(name:string):ClientDataQueryable {
-        Args.notEmpty(name,"Left operand");
-        this.privates_.left = name;
-        this.privates_.lop = "and";
-        if (!TextUtils.isNullOrUndefined(this.params_.$filter)) {
-            this.params_.$filter = "(" + this.params_.$filter + ")";
+    public andAlso(name: string): ClientDataQueryable {
+        Args.notEmpty(name, 'Left operand');
+        this._privates.left = name;
+        this._privates.lop = 'and';
+        if (!TextUtils.isNullOrUndefined(this._params.$filter)) {
+            this._params.$filter = '(' + this._params.$filter + ')';
         }
         return this;
     }
 
-    or(name:string):ClientDataQueryable {
-        Args.notEmpty(name,"Left operand");
-        this.privates_.left = name;
-        this.privates_.lop = "or";
+    public or(name: string): ClientDataQueryable {
+        Args.notEmpty(name, 'Left operand');
+        this._privates.left = name;
+        this._privates.lop = 'or';
         return this;
     }
 
-    orElse(name:string):ClientDataQueryable {
-        Args.notEmpty(name,"Left operand");
-        this.privates_.left = name;
-        this.privates_.lop = "or";
-        if (!TextUtils.isNullOrUndefined(this.params_.$filter)) {
-            this.params_.$filter = "(" + this.params_.$filter + ")";
+    public orElse(name: string): ClientDataQueryable {
+        Args.notEmpty(name, 'Left operand');
+        this._privates.left = name;
+        this._privates.lop = 'or';
+        if (!TextUtils.isNullOrUndefined(this._params.$filter)) {
+            this._params.$filter = '(' + this._params.$filter + ')';
         }
         return this;
     }
 
-    private compare_(op, value):ClientDataQueryable {
-        Args.notNull(this.privates_.left,"The left operand");
-        this.privates_.op = op;
-        this.privates_.right = value; return this.append_();
+
+
+    public equal(value: any): ClientDataQueryable {
+        return this.compare_('eq', value);
     }
 
-    equal(value:any):ClientDataQueryable {
-        return this.compare_("eq", value);
+    public notEqual(value: any): ClientDataQueryable {
+        return this.compare_('ne', value);
     }
 
-    notEqual(value:any):ClientDataQueryable {
-        return this.compare_("ne", value);
+    public greaterThan(value: any): ClientDataQueryable {
+        return this.compare_('gt', value);
     }
 
-    greaterThan(value:any):ClientDataQueryable {
-        return this.compare_("gt", value);
+    public greaterOrEqual(value: any): ClientDataQueryable {
+        return this.compare_('ge', value);
     }
 
-    greaterOrEqual(value:any):ClientDataQueryable {
-        return this.compare_("ge", value);
+    public lowerThan(value: any): ClientDataQueryable {
+        return this.compare_('lt', value);
     }
 
-    lowerThan(value:any):ClientDataQueryable {
-        return this.compare_("lt", value);
-    }
-
-    lowerOrEqual(value:any):ClientDataQueryable {
-        return this.compare_("le", value);
+    public lowerOrEqual(value: any): ClientDataQueryable {
+        return this.compare_('le', value);
     }
 
     /**
@@ -348,239 +255,234 @@ export class ClientDataQueryable {
      * @param {*} value2
      * @returns {ClientDataQueryable}
      */
-    between(value1:any, value2:any):ClientDataQueryable {
-        Args.notNull(this.privates_.left,"The left operand");
-        //generate new filter
+    public between(value1: any, value2: any): ClientDataQueryable {
+        Args.notNull(this._privates.left, 'The left operand');
+        // generate new filter
         const s = ClientDataQueryable.create(this.getModel(), this.getService())
-            .where(this.privates_.left).greaterOrEqual(value1)
-            .and(this.privates_.left).lowerOrEqual(value2).toFilter();
-        this.privates_.lop = this.privates_.lop || "and";
-        if (this.params_.$filter) {
-            this.params_.$filter = "(" + this.params_.$filter + ") " + this.privates_.lop + " (" + s + ")";
+            .where(this._privates.left).greaterOrEqual(value1)
+            .and(this._privates.left).lowerOrEqual(value2).toFilter();
+        this._privates.lop = this._privates.lop || 'and';
+        if (this._params.$filter) {
+            this._params.$filter = '(' + this._params.$filter + ') ' + this._privates.lop + ' (' + s + ')';
+        } else {
+            this._params.$filter = '(' + s + ')';
         }
-        else {
-            this.params_.$filter = "(" + s + ")";
-        }
-        //clear object
-        this.privates_.left = null; this.privates_.op = null; this.privates_.right = null; this.privates_.lop = null;
+        // clear object
+        this._privates.left = null; this._privates.op = null; this._privates.right = null; this._privates.lop = null;
         return this;
     }
 
-    toFilter():string {
+    public toFilter(): string {
         return this.getParams().$filter;
     }
 
-    contains(value:any):ClientDataQueryable {
-        Args.notNull(this.privates_.left,"The left operand");
-        this.privates_.op = 'ge';
-        this.privates_.left = TextUtils.format('indexof(%s,%s)', this.privates_.left, this.escape_(value));
-        this.privates_.right = 0;
+    public contains(value: any): ClientDataQueryable {
+        Args.notNull(this._privates.left, 'The left operand');
+        this._privates.op = 'ge';
+        this._privates.left = TextUtils.format('indexof(%s,%s)', this._privates.left, this.escape_(value));
+        this._privates.right = 0;
         return this.append_();
     }
 
-    private aggregate_(fn:string): ClientDataQueryable {
-        Args.notNull(this.privates_.left,"The left operand");
-        this.privates_.left = TextUtils.format('%s(%s)', fn, this.privates_.left);
+
+
+    public getDate(): ClientDataQueryable {
+        return this.aggregate_('date');
+    }
+
+    public getDay(): ClientDataQueryable {
+        return this.aggregate_('day');
+    }
+
+    public getMonth(): ClientDataQueryable {
+        return this.aggregate_('month');
+    }
+
+    public getYear(): ClientDataQueryable {
+        return this.aggregate_('year');
+    }
+
+    public getFullYear(): ClientDataQueryable {
+        return this.aggregate_('year');
+    }
+
+    public getHours(): ClientDataQueryable {
+        return this.aggregate_('hour');
+    }
+
+    public getMinutes(): ClientDataQueryable {
+        return this.aggregate_('minute');
+    }
+
+    public getSeconds(): ClientDataQueryable {
+        return this.aggregate_('second');
+    }
+
+    public length(): ClientDataQueryable {
+        return this.aggregate_('length');
+    }
+
+    public trim(): ClientDataQueryable {
+        return this.aggregate_('trim');
+    }
+
+    public toLocaleLowerCase(): ClientDataQueryable {
+        return this.aggregate_('tolower');
+    }
+
+    public toLowerCase(): ClientDataQueryable {
+        return this.aggregate_('tolower');
+    }
+
+    public toLocaleUpperCase(): ClientDataQueryable {
+        return this.aggregate_('toupper');
+    }
+
+    public toUpperCase(): ClientDataQueryable {
+        return this.aggregate_('toupper');
+    }
+
+    public round(): ClientDataQueryable {
+        return this.aggregate_('round');
+    }
+
+    public floor(): ClientDataQueryable {
+        return this.aggregate_('floor');
+    }
+
+    public ceil(): ClientDataQueryable {
+        return this.aggregate_('ceiling');
+    }
+
+    public indexOf(s: string): ClientDataQueryable {
+        Args.notNull(this._privates.left, 'The left operand');
+        this._privates.left = TextUtils.format('indexof(%s,%s)', this._privates.left, this.escape_(s));
         return this;
     }
 
-    getDate():ClientDataQueryable {
-        return this.aggregate_("date");
-    }
-
-    getDay():ClientDataQueryable {
-        return this.aggregate_("day");
-    }
-
-    getMonth():ClientDataQueryable {
-        return this.aggregate_("month");
-    }
-
-    getYear():ClientDataQueryable {
-        return this.aggregate_("year");
-    }
-
-    getFullYear():ClientDataQueryable {
-        return this.aggregate_("year");
-    }
-
-    getHours():ClientDataQueryable {
-        return this.aggregate_("hour");
-    }
-
-    getMinutes():ClientDataQueryable {
-        return this.aggregate_("minute");
-    }
-
-    getSeconds():ClientDataQueryable {
-        return this.aggregate_("second");
-    }
-
-    length():ClientDataQueryable {
-        return this.aggregate_("length");
-    }
-
-    trim():ClientDataQueryable {
-        return this.aggregate_("trim");
-    }
-
-    toLocaleLowerCase():ClientDataQueryable {
-        return this.aggregate_("tolower");
-    }
-
-    toLowerCase():ClientDataQueryable {
-        return this.aggregate_("tolower");
-    }
-
-    toLocaleUpperCase():ClientDataQueryable {
-        return this.aggregate_("toupper");
-    }
-
-    toUpperCase():ClientDataQueryable {
-        return this.aggregate_("toupper");
-    }
-
-    round():ClientDataQueryable {
-        return this.aggregate_("round");
-    }
-
-    floor():ClientDataQueryable {
-        return this.aggregate_("floor");
-    }
-
-    ceil():ClientDataQueryable {
-        return this.aggregate_("ceiling");
-    }
-
-    indexOf(s:string):ClientDataQueryable {
-        Args.notNull(this.privates_.left,"The left operand");
-        this.privates_.left = TextUtils.format('indexof(%s,%s)', this.privates_.left, this.escape_(s));
+    public substr(pos: number, length: number): ClientDataQueryable {
+        Args.notNull(this._privates.left, 'The left operand');
+        this._privates.left = TextUtils.format('substring(%s,%s,%s)', this._privates.left, pos, length);
         return this;
     }
 
-    substr(pos:number,length:number):ClientDataQueryable {
-        Args.notNull(this.privates_.left,"The left operand");
-        this.privates_.left = TextUtils.format('substring(%s,%s,%s)',this.privates_.left, pos, length);
+    public startsWith(s: string): ClientDataQueryable {
+        Args.notNull(this._privates.left, 'The left operand');
+        this._privates.left = TextUtils.format('startswith(%s,%s)', this._privates.left, this.escape_(s));
         return this;
     }
 
-    startsWith(s:string):ClientDataQueryable {
-        Args.notNull(this.privates_.left,"The left operand");
-        this.privates_.left = TextUtils.format('startswith(%s,%s)',this.privates_.left, this.escape_(s));
+    public endsWith(s: string): ClientDataQueryable {
+        Args.notNull(this._privates.left, 'The left operand');
+        this._privates.left = TextUtils.format('endswith(%s,%s)', this._privates.left, this.escape_(s));
         return this;
     }
 
-    endsWith(s:string):ClientDataQueryable {
-        Args.notNull(this.privates_.left,"The left operand");
-        this.privates_.left = TextUtils.format('endswith(%s,%s)',this.privates_.left, this.escape_(s));
-        return this;
-    }
-
-    select(...attr:string[]):ClientDataQueryable {
-        Args.notNull(attr, "Attributes");
-        Args.check(attr.length>0,"Attributes may not be empty");
+    public select(...attr: string[]): ClientDataQueryable {
+        Args.notNull(attr, 'Attributes');
+        Args.check(attr.length > 0, 'Attributes may not be empty');
         const arr = [];
         for (let i = 0; i < attr.length; i++) {
-            Args.check(typeof attr[i] === "string", "Invalid attribute. Expected string.");
+            Args.check(typeof attr[i] === 'string', 'Invalid attribute. Expected string.');
             arr.push(attr[i]);
         }
-        this.params_.$select = arr.join(",");
+        this._params.$select = arr.join(',');
         return this;
     }
 
-    groupBy(...attr:string[]):ClientDataQueryable {
-        Args.notNull(attr, "Attributes");
-        Args.check(attr.length>0,"Attributes may not be empty");
+    public groupBy(...attr: string[]): ClientDataQueryable {
+        Args.notNull(attr, 'Attributes');
+        Args.check(attr.length > 0, 'Attributes may not be empty');
         const arr = [];
         for (let i = 0; i < attr.length; i++) {
-            Args.check(typeof attr[i] === "string", "Invalid attribute. Expected string.");
+            Args.check(typeof attr[i] === 'string', 'Invalid attribute. Expected string.');
             arr.push(attr[i]);
         }
-        this.params_.$groupby = arr.join(",");
+        this._params.$groupby = arr.join(',');
         return this;
     }
 
-    expand(...attr:string[]):ClientDataQueryable {
-        Args.notNull(attr, "Attributes");
-        Args.check(attr.length>0,"Attributes may not be empty");
+    public expand(...attr: string[]): ClientDataQueryable {
+        Args.notNull(attr, 'Attributes');
+        Args.check(attr.length > 0, 'Attributes may not be empty');
         const arr = [];
         for (let i = 0; i < attr.length; i++) {
-            Args.check(typeof attr[i] === "string", "Invalid attribute. Expected string.");
+            Args.check(typeof attr[i] === 'string', 'Invalid attribute. Expected string.');
             arr.push(attr[i]);
         }
-        this.params_.$expand = arr.join(",");
+        this._params.$expand = arr.join(',');
         return this;
     }
 
-    orderBy(attr:string):ClientDataQueryable {
-        Args.notEmpty(attr,"Order by attribute");
-        this.params_.$orderby = attr.toString();
+    public orderBy(attr: string): ClientDataQueryable {
+        Args.notEmpty(attr, 'Order by attribute');
+        this._params.$orderby = attr.toString();
         return this;
     }
 
-    thenBy(attr:string):ClientDataQueryable {
-        Args.notEmpty(attr,"Order by attribute");
-        this.params_.$orderby += (this.params_.$orderby ? ',' + attr.toString() : attr.toString());
+    public thenBy(attr: string): ClientDataQueryable {
+        Args.notEmpty(attr, 'Order by attribute');
+        this._params.$orderby += (this._params.$orderby ? ',' + attr.toString() : attr.toString());
         return this;
     }
 
-    orderByDescending(attr:string):ClientDataQueryable {
-        Args.notEmpty(attr,"Order by attribute");
-        this.params_.$orderby = attr.toString() + " desc";
+    public orderByDescending(attr: string): ClientDataQueryable {
+        Args.notEmpty(attr, 'Order by attribute');
+        this._params.$orderby = attr.toString() + ' desc';
         return this;
     }
 
-    thenByDescending(attr:string):ClientDataQueryable {
-        Args.notEmpty(attr,"Order by attribute");
-        this.params_.$orderby += (this.params_.$orderby ? ',' + attr.toString() : attr.toString()) + " desc";
+    public thenByDescending(attr: string): ClientDataQueryable {
+        Args.notEmpty(attr, 'Order by attribute');
+        this._params.$orderby += (this._params.$orderby ? ',' + attr.toString() : attr.toString()) + ' desc';
         return this;
     }
 
-    skip(num:number):ClientDataQueryable {
-        this.params_.$skip = num;
+    public skip(num: number): ClientDataQueryable {
+        this._params.$skip = num;
         return this;
     }
 
-    take(num:number):ClientDataQueryable {
-        this.params_.$top = num;
+    public take(num: number): ClientDataQueryable {
+        this._params.$top = num;
         return this;
     }
 
-    first():Promise<any> {
-        delete this.params_.$top;
-        delete this.params_.$skip;
-        delete this.params_.$count;
-        this.params_.$first = true;
+    public first(): Promise<any> {
+        delete this._params.$top;
+        delete this._params.$skip;
+        delete this._params.$count;
+        this._params.$first = true;
         return this.getService().execute({
-            method:"GET",
-            url:this.getUrl(),
-            data:this.getParams(),
-            headers:{}
+            method: 'GET',
+            url: this.getUrl(),
+            data: this.getParams(),
+            headers: {}
         });
     }
 
-    list():Promise<any> {
-        delete this.params_.$first;
-        this.params_.$count = true;
+    public list(): Promise<any> {
+        delete this._params.$first;
+        this._params.$count = true;
         return this.getService().execute({
-            method:"GET",
-            url:this.getUrl(),
-            data:this.getParams(),
-            headers:{}
+            method: 'GET',
+            url: this.getUrl(),
+            data: this.getParams(),
+            headers: {}
         });
     }
 
-    item():Promise<any> {
+    public item(): Promise<any> {
         return this.first();
     }
 
-    getItem():Promise<any> {
+    public getItem(): Promise<any> {
         // delete $first param
-        delete this.params_.$first;
+        delete this._params.$first;
         // delete $count param
-        delete this.params_.$count;
+        delete this._params.$count;
         // get first item only
-        return this.take(1).skip(0).getItems().then((result)=> {
+        return this.take(1).skip(0).getItems().then((result) => {
             // if result and result.value is array
             if (result && Array.isArray(result.value)) {
                 // get first item only
@@ -594,18 +496,18 @@ export class ClientDataQueryable {
         });
     }
 
-    items():Promise<any> {
-        delete this.params_.$first;
-        this.params_.$count = false;
+    public items(): Promise<any> {
+        delete this._params.$first;
+        this._params.$count = false;
         return this.getService().execute({
-            method:"GET",
-            url:this.getUrl(),
-            data:this.getParams(),
-            headers:{}
+            method: 'GET',
+            url: this.getUrl(),
+            data: this.getParams(),
+            headers: {}
         });
     }
-    getItems():Promise<any> {
-        return this.items().then( result => {
+    public getItems(): Promise<any> {
+        return this.items().then( (result) => {
             // if current service uses response conversion
             if (this.getService().getOptions().useResponseConversion) {
                 // validate response
@@ -620,82 +522,176 @@ export class ClientDataQueryable {
         });
     }
 
-    getList():Promise<any> {
-        return this.list().then( result => {
+    public getList(): Promise<any> {
+        return this.list().then( (result) => {
             // if current service uses response conversion
             if (this.getService().getOptions().useResponseConversion) {
                 // validate response
                 // if result has OData paging attributes
                 if (result.hasOwnProperty('@odata.count') && result.hasOwnProperty('@odata.skip')) {
                     // convert result to EntitySetResponse
-                    return Promise.resolve(<ListResponse<any>> {
+                    return Promise.resolve({
                         total: result['@odata.count'],
                         skip: result['@odata.skip'],
                         value: result.value
-                    });
+                    } as ListResponse<any>);
                 }
             }
             return Promise.resolve(result);
         });
     }
 
-    filter(s:string):ClientDataQueryable {
-        Args.notEmpty("s","Filter expression");
-        this.params_.$filter = s;
+    public filter(s: string): ClientDataQueryable {
+        Args.notEmpty('s', 'Filter expression');
+        this._params.$filter = s;
         return this;
     }
 
-    levels(n:number):ClientDataQueryable {
+    public levels(n: number): ClientDataQueryable {
         Args.Positive(n, 'Levels');
-        this.params_.$levels = n;
+        this._params.$levels = n;
         return this;
     }
 
-    prepare(or?: boolean): ClientDataQueryable {
+    public prepare(or?: boolean): ClientDataQueryable {
         const lop = or ? 'or' : 'and';
-        if (typeof this.params_.$filter === 'string' && this.params_.$filter.length) {
+        if (typeof this._params.$filter === 'string' && this._params.$filter.length) {
             if (typeof this.$prepare === 'string' && this.$prepare.length) {
-                this.$prepare = `${this.$prepare} ${lop} ${this.params_.$filter}`;
-            }
-            else {
-                this.$prepare = this.params_.$filter;
+                this.$prepare = `${this.$prepare} ${lop} ${this._params.$filter}`;
+            } else {
+                this.$prepare = this._params.$filter;
             }
         }
-        delete this.params_.$filter;
+        delete this._params.$filter;
         return this;
     }
 
+    private aggregate_(fn: string): ClientDataQueryable {
+        Args.notNull(this._privates.left, 'The left operand');
+        this._privates.left = TextUtils.format('%s(%s)', fn, this._privates.left);
+        return this;
+    }
+
+    private compare_(op, value): ClientDataQueryable {
+        Args.notNull(this._privates.left, 'The left operand');
+        this._privates.op = op;
+        this._privates.right = value; return this.append_();
+    }
+
+    private append_() {
+        Args.notNull(this._privates.left, 'Left operand');
+        Args.notNull(this._privates.op, 'Comparison operator');
+        let expr;
+        if (Array.isArray(this._privates.right)) {
+            Args.check((this._privates.op === 'eq') || (this._privates.op === 'ne'), 'Wrong operator. Expected equal or not equal');
+            Args.check(this._privates.right.length > 0, 'Array may not be empty');
+            const arr = this._privates.right.map((x) => {
+                return this._privates.left + ' ' + this._privates.op + ' ' + this.escape_(x);
+            });
+            if (this._privates.op === 'eq') {
+                expr = '(' + arr.join(' or ') + ')';
+            } else {
+                expr = '(' + arr.join(' or ') + ')';
+            }
+        } else {
+            expr = this._privates.left + ' ' + this._privates.op + ' ' + this.escape_(this._privates.right);
+        }
+        this._privates.lop = this._privates.lop || 'and';
+        if (TextUtils.isNotEmptyString(this._params.$filter)) {
+            this._params.$filter = this._params.$filter + ' ' + this._privates.lop + ' ' + expr;
+        } else {
+            this._params.$filter = expr;
+        }
+        // clear object
+        this._privates.left = null; this._privates.op = null; this._privates.right = null;
+        return this;
+    }
+
+    private escape_(val: any) {
+        if ((val == null) || (typeof val === 'undefined')) {
+            return 'null';
+        }
+        if (typeof val === 'boolean') {
+            return (val) ? 'true' : 'false';
+        }
+        if (typeof val === 'number') {
+            return val + '';
+        }
+        if (val instanceof Date) {
+            const dt = val;
+            const year   = dt.getFullYear();
+            const month  = TextUtils.zeroPad(dt.getMonth() + 1, 2);
+            const day    = TextUtils.zeroPad(dt.getDate(), 2);
+            const hour   = TextUtils.zeroPad(dt.getHours(), 2);
+            const minute = TextUtils.zeroPad(dt.getMinutes(), 2);
+            const second = TextUtils.zeroPad(dt.getSeconds(), 2);
+            const millisecond = TextUtils.zeroPad(dt.getMilliseconds(), 3);
+            // format timezone
+            const offset = (new Date()).getTimezoneOffset();
+            const timezone = (offset >= 0 ? '+' : '') + TextUtils.zeroPad(Math.floor(offset / 60), 2) +
+                ':' + TextUtils.zeroPad(offset % 60, 2);
+            return '\'' + year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second + '.' + millisecond + timezone + '\'';
+        }
+        if (val instanceof Array) {
+            const values = [];
+            val.forEach((x) => {
+                values.push(this.escape_(x));
+            });
+            return values.join(',');
+        }
+        if (typeof val === 'string') {
+            const res = val.replace(/[\0\n\r\b\t\\'"\x1a]/g, (s) => {
+                switch (s) {
+                    case '\0': return '\\0';
+                    case '\n': return '\\n';
+                    case '\r': return '\\r';
+                    case '\b': return '\\b';
+                    case '\t': return '\\t';
+                    case '\x1a': return '\\Z';
+                    default: return '\\' + s;
+                }
+            });
+            return '\'' + res + '\'';
+        }
+        // otherwise get valueOf
+        if (val.hasOwnProperty('$name')) {
+            return val.$name;
+        } else {
+            return this.escape_(val.valueOf());
+        }
+    }
 }
 
 export class ClientDataModel {
 
-    private readonly name_:string;
-    private readonly service_:ClientDataServiceBase;
-    constructor(name:string, service:ClientDataServiceBase) {
-        this.name_ = name;
-        this.service_ = service;
+    private readonly _name: string;
+    private readonly _service: ClientDataServiceBase;
+
+    constructor(name: string, service: ClientDataServiceBase) {
+        this._name = name;
+        this._service = service;
 
     }
 
     /**
      * @returns {ClientDataServiceBase}
      */
-    getService(): ClientDataServiceBase {
-        return this.service_;
+    public getService(): ClientDataServiceBase {
+        return this._service;
     }
 
-    getName(): string {
-        return this.name_;
+    public getName(): string {
+        return this._name;
     }
 
     /**
      * @param {DataServiceQueryParams} params
      * @returns {ClientDataQueryable}
      */
-    asQueryable(params?:DataServiceQueryParams):ClientDataQueryable {
-        const q =  ClientDataQueryable.create(this.getName(), this.service_);
+    public asQueryable(params?: DataServiceQueryParams): ClientDataQueryable {
+        const q =  ClientDataQueryable.create(this.getName(), this._service);
         if (params) {
-            for(let key in params) {
+            for (const key in params) {
                 q.setParam(key, params[key]);
             }
         }
@@ -705,69 +701,68 @@ export class ClientDataModel {
     /**
      * @returns {Promise}
      */
-    getItems():Promise<any> {
+    public getItems(): Promise<any> {
         return this.asQueryable().getItems();
     }
 
     /**
      * @returns {Promise}
      */
-    getList():Promise<any> {
+    public getList(): Promise<any> {
         return this.asQueryable().getList();
     }
 
-    where(attr:string):ClientDataQueryable {
+    public where(attr: string): ClientDataQueryable {
         return this.asQueryable().where(attr);
     }
 
-    select(...attr:string[]):ClientDataQueryable {
+    public select(...attr: string[]): ClientDataQueryable {
         const q = this.asQueryable();
-        return q.select.apply(q,attr);
+        return q.select.apply(q, attr);
     }
 
-    skip(num:number):ClientDataQueryable {
+    public skip(num: number): ClientDataQueryable {
         return this.asQueryable().skip(num);
     }
 
-    take(num:number):ClientDataQueryable {
+    public take(num: number): ClientDataQueryable {
         return this.asQueryable().take(num);
     }
 
-    getUrl() {
-        if (this.service_.getOptions().useMediaTypeExtensions) {
-            return TextUtils.format("%s/index.json", this.getName());
-        }
-        else {
-            return TextUtils.format("%s/", this.getName());
+    public getUrl() {
+        if (this._service.getOptions().useMediaTypeExtensions) {
+            return TextUtils.format('%s/index.json', this.getName());
+        } else {
+            return TextUtils.format('%s/', this.getName());
         }
     }
 
-    save(obj:any):Promise<any> {
+    public save(obj: any): Promise<any> {
         return this.getService().execute({
-            method:"POST",
-            url:this.getUrl(),
-            data:obj,
-            headers:{}
+            method: 'POST',
+            url: this.getUrl(),
+            data: obj,
+            headers: {}
         });
     }
 
-    schema():Promise<any> {
-        return this.getService().execute({ method:"GET",
-            url:TextUtils.format("%s/schema.json", this.getName()),
-            data:null,
-            headers:{}
+    public schema(): Promise<any> {
+        return this.getService().execute({ method: 'GET',
+            url: TextUtils.format('%s/schema.json', this.getName()),
+            data: null,
+            headers: {}
         });
     }
 
-    remove(obj:any):Promise<any> {
-        return this.getService().execute({ method:"DELETE",
-            url:this.getUrl(),
-            data:obj,
-            headers:{}
+    public remove(obj: any): Promise<any> {
+        return this.getService().execute({ method: 'DELETE',
+            url: this.getUrl(),
+            data: obj,
+            headers: {}
         });
     }
 
-    levels(n:number):ClientDataQueryable {
+    public levels(n: number): ClientDataQueryable {
         Args.Positive(n, 'Levels');
         return this.asQueryable().levels(n);
     }
@@ -778,22 +773,22 @@ export class ClientDataModel {
 
 export class ClientDataContext implements ClientDataContextBase {
 
-    private readonly service_:ClientDataServiceBase;
-    private base_:string;
-    private options:ClientDataContextOptions;
+    private readonly _service: ClientDataServiceBase;
+    private _base: string;
+    private options: ClientDataContextOptions;
 
-    constructor(service : ClientDataServiceBase, options?:ClientDataContextOptions) {
-        this.service_ = service;
+    constructor(service: ClientDataServiceBase, options?: ClientDataContextOptions) {
+        this._service = service;
 
     }
 
-    setBasicAuthorization (username:string, password:string):ClientDataContext {
-        this.getService().setHeader("Authorization", "Basic " + TextUtils.toBase64(username + ":" + password));
+    public setBasicAuthorization(username: string, password: string): ClientDataContext {
+        this.getService().setHeader('Authorization', 'Basic ' + TextUtils.toBase64(username + ':' + password));
         return this;
     }
 
-    setBearerAuthorization (access_token: string):ClientDataContext {
-        this.getService().setHeader("Authorization", "Bearer " + access_token);
+    public setBearerAuthorization(access_token: string): ClientDataContext {
+        this.getService().setHeader('Authorization', 'Bearer ' + access_token);
         return this;
     }
 
@@ -801,16 +796,16 @@ export class ClientDataContext implements ClientDataContextBase {
      * Gets a string which represents the base URL of the MOST Web Application Server.
      * @returns {string}
      */
-    getBase(): string {
-        return this.base_;
+    public getBase(): string {
+        return this._base;
     }
 
     /**
      * Sets a string which represents the base URL of the MOST Web Application Server.
      */
-    setBase(value:string):ClientDataContextBase {
-        Args.notEmpty(value,"Base URL");
-        this.base_ = value;
+    public setBase(value: string): ClientDataContextBase {
+        Args.notEmpty(value, 'Base URL');
+        this._base = value;
         return this;
     }
 
@@ -818,8 +813,8 @@ export class ClientDataContext implements ClientDataContextBase {
      * Gets the instance of ClientDataService class which is associated with this data context.
      * @returns {ClientDataServiceBase}
      */
-    getService(): ClientDataServiceBase {
-        return this.service_;
+    public getService(): ClientDataServiceBase {
+        return this._service;
     }
 
     /**
@@ -827,8 +822,8 @@ export class ClientDataContext implements ClientDataContextBase {
      * @param name - A string which represents the name of the data model.
      * @returns {ClientDataModel}
      */
-    model(name:string): ClientDataModel {
-        Args.notEmpty(name,"Model name");
+    public model(name: string): ClientDataModel {
+        Args.notEmpty(name, 'Model name');
         return new ClientDataModel(name, this.getService());
     }
 
@@ -838,55 +833,55 @@ export class ClientDataContext implements ClientDataContextBase {
 export class ClientDataService implements ClientDataServiceBase {
 
 
-    private readonly base_:string;
-    private readonly options_:ClientDataContextOptions;
-    private readonly headers_: any;
+    private readonly _base: string;
+    private readonly _options: ClientDataContextOptions;
+    private readonly _headers: any;
 
-    constructor(base:string, options?: ClientDataContextOptions) {
-        this.headers_ = {};
-        this.options_ = options || {
-            useMediaTypeExtensions:true
+    constructor(base: string, options?: ClientDataContextOptions) {
+        this._headers = {};
+        this._options = options || {
+            useMediaTypeExtensions: true
         };
         if (typeof base === 'undefined' || base == null) {
-            this.base_ = "/";
-        }
-        else {
-            this.base_ = base;
-            if (!/\/$/.test(this.base_)) {
-                this.base_ += "/";
+            this._base = '/';
+        } else {
+            this._base = base;
+            if (!/\/$/.test(this._base)) {
+                this._base += '/';
             }
         }
     }
 
-    getOptions(): ClientDataContextOptions {
-        return this.options_;
+    public getOptions(): ClientDataContextOptions {
+        return this._options;
     }
 
-    setHeader(name:string, value:string) {
-        this.headers_[name] = value;
+    public setHeader(name: string, value: string) {
+        this._headers[name] = value;
     }
 
-    getHeaders():any {
-        return this.headers_;
+    public getHeaders(): any {
+        return this._headers;
     }
 
-    getBase(): string {
-        return this.base_;
+    public getBase(): string {
+        return this._base;
     }
 
-    resolve(relative: string) {
-        if (typeof relative === 'string' && relative.length>0) {
-            if (/^\//.test(relative))
+    public resolve(relative: string) {
+        if (typeof relative === 'string' && relative.length > 0) {
+            if (/^\//.test(relative)) {
                 return this.getBase() + relative.substr(1);
-            else
+            } else {
                 return this.getBase() + relative;
+            }
         }
-        throw  new Error("Invalid argument. Expected a not empty string.");
+        throw  new Error('Invalid argument. Expected a not empty string.');
     }
 
 
-    execute(options: DataServiceExecuteOptions): Promise<any> {
-        throw new Error("Method not implemented.");
+    public execute(options: DataServiceExecuteOptions): Promise<any> {
+        throw new Error('Method not implemented.');
     }
 
 }
@@ -894,12 +889,12 @@ export class ClientDataService implements ClientDataServiceBase {
 
 class ParserDataService extends ClientDataService {
 
-    constructor(base:string) {
+    constructor(base: string) {
         super(base);
     }
 
-    execute(options: DataServiceExecuteOptions): Promise<any> {
-        throw new Error("Method not allowed.");
+    public execute(options: DataServiceExecuteOptions): Promise<any> {
+        throw new Error('Method not allowed.');
     }
 
 }
