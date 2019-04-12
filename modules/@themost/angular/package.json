@@ -1,6 +1,6 @@
 {
   "name": "themost-angular-src",
-  "version": "6.2.2-dev.2",
+  "version": "6.2.0",
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client Source",
   "scripts": {
     "ng": "ng",
@@ -47,6 +47,13 @@
     "@types/node": "^10.3.3",
     "codelyzer": "^4.5.0",
     "core-js": "^2.5.7",
+    "jasmine-core": "~2.99.1",
+    "jasmine-spec-reporter": "~4.2.1",
+    "karma": "~1.7.1",
+    "karma-chrome-launcher": "~2.2.0",
+    "karma-coverage-istanbul-reporter": "~2.0.0",
+    "karma-jasmine": "~1.1.1",
+    "karma-jasmine-html-reporter": "^0.2.2",
     "ng-packagr": "^4.5.0",
     "rimraf": "^2.6.2",
     "rxjs": "~6.3.3",
