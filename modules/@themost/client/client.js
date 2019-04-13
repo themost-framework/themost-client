@@ -702,7 +702,6 @@ var ClientDataModel = /** @class */ (function () {
 exports.ClientDataModel = ClientDataModel;
 var ClientDataContext = /** @class */ (function () {
     function ClientDataContext(service, options) {
-        this._base = service.getBase();
         this._service = service;
     }
     ClientDataContext.prototype.setBasicAuthorization = function (username, password) {
@@ -718,14 +717,13 @@ var ClientDataContext = /** @class */ (function () {
      * @returns {string}
      */
     ClientDataContext.prototype.getBase = function () {
-        return this._base;
+        return this._service.getBase();
     };
     /**
      * Sets a string which represents the base URL of the MOST Web Application Server.
      */
     ClientDataContext.prototype.setBase = function (value) {
-        common_1.Args.notEmpty(value, 'Base URL');
-        this._base = value;
+        this._service.setBase(value);
         return this;
     };
     /**
@@ -774,6 +772,17 @@ var ClientDataService = /** @class */ (function () {
     };
     ClientDataService.prototype.getBase = function () {
         return this._base;
+    };
+    /**
+     * Sets a string which represents the base URL of a client data service.
+     */
+    ClientDataService.prototype.setBase = function (value) {
+        // validate
+        common_1.Args.notEmpty(value, 'Base URL');
+        // set service base
+        this._base = /\/$/.test(value) ? value : value + '/';
+        // return this
+        return this;
     };
     ClientDataService.prototype.resolve = function (relative) {
         if (typeof relative === 'string' && relative.length > 0) {

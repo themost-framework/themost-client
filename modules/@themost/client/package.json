@@ -1,6 +1,6 @@
 {
   "name": "@themost/client",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "MOST Web Framework 2.0 - client common",
   "module": "index.js",
   "main": "index.js",
@@ -24,8 +24,8 @@
     "url-parse": "^1.2.0"
   },
   "devDependencies": {
+    "@types/jasmine": "^2.5.54",
     "@types/node": "^10.3.3",
-    "@types/url-parse": "^1.1.0",
-    "typescript": "^2.7.2"
+    "@types/url-parse": "^1.1.0"
   }
 }

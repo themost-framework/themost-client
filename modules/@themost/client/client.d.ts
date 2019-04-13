@@ -152,7 +152,6 @@ export declare class ClientDataModel {
 }
 export declare class ClientDataContext implements ClientDataContextBase {
     private readonly _service;
-    private _base;
     private options;
     constructor(service: ClientDataServiceBase, options?: ClientDataContextOptions);
     setBasicAuthorization(username: string, password: string): ClientDataContext;
@@ -179,7 +178,7 @@ export declare class ClientDataContext implements ClientDataContextBase {
     model(name: string): ClientDataModel;
 }
 export declare class ClientDataService implements ClientDataServiceBase {
-    private readonly _base;
+    private _base;
     private readonly _options;
     private readonly _headers;
     constructor(base: string, options?: ClientDataContextOptions);
@@ -187,6 +186,10 @@ export declare class ClientDataService implements ClientDataServiceBase {
     setHeader(name: string, value: string): void;
     getHeaders(): any;
     getBase(): string;
+    /**
+     * Sets a string which represents the base URL of a client data service.
+     */
+    setBase(value: string): ClientDataService;
     resolve(relative: string): string;
     execute(options: DataServiceExecuteOptions): Promise<any>;
 }

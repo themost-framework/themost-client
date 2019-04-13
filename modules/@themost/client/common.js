@@ -132,7 +132,13 @@ var TextUtils = /** @class */ (function () {
     };
     TextUtils.zeroPad = function (num, length) {
         num = num || 0;
+        if (typeof num !== 'number') {
+            throw new TypeError('Expected number.');
+        }
         var res = num.toString();
+        if (!/^\d+$/g.test(res)) {
+            throw new TypeError('Expected a positive integer.');
+        }
         while (res.length < length) {
             res = '0' + res;
         }
@@ -252,7 +258,7 @@ var TextUtils = /** @class */ (function () {
             var second = TextUtils.zeroPad(dt.getSeconds(), 2);
             var millisecond = TextUtils.zeroPad(dt.getMilliseconds(), 3);
             // format timezone
-            var offset = (new Date()).getTimezoneOffset();
+            var offset = -1 * dt.getTimezoneOffset();
             var timezone = (offset >= 0 ? '+' : '') + TextUtils.zeroPad(Math.floor(offset / 60), 2) +
                 ':' + TextUtils.zeroPad(offset % 60, 2);
             return '\'' + year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second + '.' + millisecond + timezone + '\'';
@@ -287,7 +293,7 @@ var TextUtils = /** @class */ (function () {
         }
     };
     // tslint:disable max-line-length
-    TextUtils.REG_DATETIME_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
+    TextUtils.REG_DATETIME_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
     TextUtils.REG_DATE_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/;
     TextUtils.REG_GUID_STRING = /^({?([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}}?)$/;
     TextUtils.REG_ABSOLUTE_URI = /^((https?|ftps?):\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;

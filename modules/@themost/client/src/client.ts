@@ -773,11 +773,9 @@ export class ClientDataModel {
 export class ClientDataContext implements ClientDataContextBase {
 
     private readonly _service: ClientDataServiceBase;
-    private _base: string;
     private options: ClientDataContextOptions;
 
     constructor(service: ClientDataServiceBase, options?: ClientDataContextOptions) {
-        this._base = service.getBase();
         this._service = service;
     }
 
@@ -796,15 +794,14 @@ export class ClientDataContext implements ClientDataContextBase {
      * @returns {string}
      */
     public getBase(): string {
-        return this._base;
+        return this._service.getBase();
     }
 
     /**
      * Sets a string which represents the base URL of the MOST Web Application Server.
      */
     public setBase(value: string): ClientDataContextBase {
-        Args.notEmpty(value, 'Base URL');
-        this._base = value;
+        this._service.setBase(value);
         return this;
     }
 
@@ -832,7 +829,7 @@ export class ClientDataContext implements ClientDataContextBase {
 export class ClientDataService implements ClientDataServiceBase {
 
 
-    private readonly _base: string;
+    private _base: string;
     private readonly _options: ClientDataContextOptions;
     private readonly _headers: any;
 
@@ -865,6 +862,18 @@ export class ClientDataService implements ClientDataServiceBase {
 
     public getBase(): string {
         return this._base;
+    }
+
+    /**
+     * Sets a string which represents the base URL of a client data service.
+     */
+    public setBase(value: string): ClientDataService {
+        // validate
+        Args.notEmpty(value, 'Base URL');
+        // set service base
+        this._base = /\/$/.test(value) ? value : value + '/';
+        // return this
+        return this;
     }
 
     public resolve(relative: string) {

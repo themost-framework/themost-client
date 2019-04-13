@@ -91,9 +91,15 @@ export interface ClientDataServiceBase {
     setHeader(name: string, value: string): any;
     getHeaders(): any;
     /**
-     * Gets a string which represents the base URL of the MOST Web application server
+     * Gets a string which represents the base URL of a client data service
      */
     getBase(): string;
+    /**
+     * Sets a string which represents the base URL of a client data service
+     * @param {string} value - The base URL
+     * @returns ClientDataContextBase
+     */
+    setBase(value: string): ClientDataServiceBase;
     /**
      * Executes an HTTP request against the defined MOST Web application server
      * @param {DataServiceExecuteOptions} options

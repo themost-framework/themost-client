@@ -126,7 +126,13 @@ export class TextUtils {
 
     public static zeroPad(num: number, length: number): string {
         num = num || 0;
+        if (typeof num !== 'number') {
+            throw new TypeError('Expected number.');
+        }
         let res = num.toString();
+        if (!/^\d+$/g.test(res)) {
+            throw new TypeError('Expected a positive integer.');
+        }
         while (res.length < length) {
             res = '0' + res;
         }
@@ -249,7 +255,7 @@ export class TextUtils {
             const second = TextUtils.zeroPad(dt.getSeconds(), 2);
             const millisecond = TextUtils.zeroPad(dt.getMilliseconds(), 3);
             // format timezone
-            const offset = (new Date()).getTimezoneOffset();
+            const offset = -1 * dt.getTimezoneOffset();
             const timezone = (offset >= 0 ? '+' : '') + TextUtils.zeroPad(Math.floor(offset / 60), 2) +
                 ':' + TextUtils.zeroPad(offset % 60, 2);
             return '\'' + year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second + '.' + millisecond + timezone + '\'';
@@ -284,7 +290,7 @@ export class TextUtils {
     }
 
     // tslint:disable max-line-length
-    private static REG_DATETIME_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
+    private static REG_DATETIME_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
     private static REG_DATE_ISO = /^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$/;
     private static REG_GUID_STRING = /^({?([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}}?)$/;
     private static REG_ABSOLUTE_URI = /^((https?|ftps?):\/\/)([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
@@ -369,9 +375,15 @@ export interface ClientDataServiceBase {
 
     getHeaders(): any;
     /**
-     * Gets a string which represents the base URL of the MOST Web application server
+     * Gets a string which represents the base URL of a client data service
      */
     getBase(): string;
+    /**
+     * Sets a string which represents the base URL of a client data service
+     * @param {string} value - The base URL
+     * @returns ClientDataContextBase
+     */
+    setBase(value: string): ClientDataServiceBase;
     /**
      * Executes an HTTP request against the defined MOST Web application server
      * @param {DataServiceExecuteOptions} options

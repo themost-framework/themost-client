@@ -11,6 +11,10 @@
     "experimentalDecorators": true,
     "target": "es2015",
     "module": "commonjs",
+    "types": [
+      "jasmine",
+      "node"
+    ],
     "typeRoots": [
       "node_modules/@types"
     ],
