@@ -40,13 +40,6 @@ function jsonReviver(key, value) {
 
 export class AngularDataService extends ClientDataService {
 
-    /**
-     * Initializes a new instance of ClientDataService class
-     * @param {string} base - The base URI of the MOST Web Framework Application Server.
-     * The default value is '/' for accessing local services.
-     * @param {Http}  http
-     * @param {ClientDataContextOptions} options
-     */
     constructor(base: string, private http: HttpClient, options?: ClientDataContextOptions) {
         super(base || '/', options);
     }

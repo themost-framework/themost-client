@@ -1,7 +1,7 @@
 {
   "name": "@themost/client",
-  "version": "2.1.5",
-  "description": "MOST Web Framework 2.0 - client common",
+  "version": "2.2.1",
+  "description": "MOST Web Framework 2.0 - Client Common Module",
   "module": "index.js",
   "main": "index.js",
   "scripts": {

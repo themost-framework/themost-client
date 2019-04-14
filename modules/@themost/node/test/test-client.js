@@ -2,11 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("../client");
 var chai_1 = require("chai");
+// tslint:disable no-console
 describe('test node client', function () {
     var context;
     before(function (done) {
-        context = new client_1.NodeDataContext("http://localhost:3000/");
-        context.setBasicAuthorization("alexis.rees@example.com", "user");
+        context = new client_1.NodeDataContext('http://localhost:3000/');
+        context.setBasicAuthorization('alexis.rees@example.com', 'user');
         return done();
     });
     it('should use simple query', function (done) {
@@ -18,13 +19,13 @@ describe('test node client', function () {
         });
     });
     it('should use paging params', function (done) {
-        context.model("Order")
-            .where("orderStatus")
+        context.model('Order')
+            .where('orderStatus')
             .equal(1)
-            .orderBy("orderDate")
+            .orderBy('orderDate')
             .take(10)
             .getItems().then(function (result) {
-            //enumerate items
+            // enumerate items
             console.log(result);
             return done();
         }).catch(function (err) {
@@ -32,14 +33,14 @@ describe('test node client', function () {
         });
     });
     it('should use take', function (done) {
-        context.model("Order")
-            .where("orderedItem/category").equal("Laptops")
+        context.model('Order')
+            .where('orderedItem/category').equal('Laptops')
             .take(10)
             .getItems()
             .then(function (result) {
             chai_1.assert.isAtMost(result.length, 10);
             result.forEach(function (x) {
-                chai_1.assert.equal(x.orderedItem.category, "Laptops");
+                chai_1.assert.equal(x.orderedItem.category, 'Laptops');
             });
             return done();
         }).catch(function (err) {
@@ -47,15 +48,15 @@ describe('test node client', function () {
         });
     });
     it('should use or', function (done) {
-        context.model("Product")
-            .where("category").equal("Desktops")
-            .or("category").equal("Laptops")
-            .orderBy("price")
+        context.model('Product')
+            .where('category').equal('Desktops')
+            .or('category').equal('Laptops')
+            .orderBy('price')
             .take(5)
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
-                chai_1.assert.oneOf(x.category, ["Laptops", "Desktops"]);
+                chai_1.assert.oneOf(x.category, ['Laptops', 'Desktops']);
             });
             return done();
         }).catch(function (err) {
@@ -63,10 +64,10 @@ describe('test node client', function () {
         });
     });
     it('should use and', function (done) {
-        context.model("Product")
-            .where("category").equal("Laptops")
-            .and("price").between(200, 750)
-            .orderBy("price")
+        context.model('Product')
+            .where('category').equal('Laptops')
+            .and('price').between(200, 750)
+            .orderBy('price')
             .take(5)
             .getItems()
             .then(function (result) {
@@ -79,8 +80,8 @@ describe('test node client', function () {
         });
     });
     it('should use equal', function (done) {
-        context.model("Order")
-            .where("id").equal(10)
+        context.model('Order')
+            .where('id').equal(10)
             .getItem()
             .then(function (result) {
             chai_1.assert.isObject(result);
@@ -91,14 +92,14 @@ describe('test node client', function () {
         });
     });
     it('should use not equal', function (done) {
-        context.model("Order")
-            .where("orderStatus/alternateName").notEqual("OrderProblem")
-            .orderByDescending("orderDate")
+        context.model('Order')
+            .where('orderStatus/alternateName').notEqual('OrderProblem')
+            .orderByDescending('orderDate')
             .take(10)
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
-                chai_1.assert.notEqual(x.orderStatus.alternateName, "OrderProblem");
+                chai_1.assert.notEqual(x.orderStatus.alternateName, 'OrderProblem');
             });
             return done();
         }).catch(function (err) {
@@ -106,12 +107,12 @@ describe('test node client', function () {
         });
     });
     it('should use greater than', function (done) {
-        context.model("Order")
-            .where("orderedItem/price").greaterThan(968)
-            .and("orderedItem/category").equal("Laptops")
-            .and("orderStatus/alternateName").notEqual("OrderCancelled")
-            .select("id", "orderStatus/name as orderStatusName", "customer/description as customerDescription", "orderedItem")
-            .orderByDescending("orderDate")
+        context.model('Order')
+            .where('orderedItem/price').greaterThan(968)
+            .and('orderedItem/category').equal('Laptops')
+            .and('orderStatus/alternateName').notEqual('OrderCancelled')
+            .select('id', 'orderStatus/name as orderStatusName', 'customer/description as customerDescription', 'orderedItem')
+            .orderByDescending('orderDate')
             .take(10)
             .getItems()
             .then(function (result) {
@@ -124,9 +125,9 @@ describe('test node client', function () {
         });
     });
     it('should use greater or equal', function (done) {
-        context.model("Product")
-            .where("price").greaterOrEqual(1395.9)
-            .orderByDescending("price")
+        context.model('Product')
+            .where('price').greaterOrEqual(1395.9)
+            .orderByDescending('price')
             .take(10)
             .getItems()
             .then(function (result) {
@@ -139,9 +140,9 @@ describe('test node client', function () {
         });
     });
     it('should use lower than', function (done) {
-        context.model("Product")
-            .where("price").lowerThan(263.56)
-            .orderBy("price")
+        context.model('Product')
+            .where('price').lowerThan(263.56)
+            .orderBy('price')
             .take(10)
             .getItems()
             .then(function (result) {
@@ -154,10 +155,10 @@ describe('test node client', function () {
         });
     });
     it('should use lower or equal', function (done) {
-        context.model("Product")
-            .where("price").lowerOrEqual(263.56)
-            .and("price").greaterOrEqual(224.52)
-            .orderBy("price")
+        context.model('Product')
+            .where('price').lowerOrEqual(263.56)
+            .and('price').greaterOrEqual(224.52)
+            .orderBy('price')
             .take(5)
             .getItems()
             .then(function (result) {
@@ -171,11 +172,11 @@ describe('test node client', function () {
         });
     });
     it('should use between', function (done) {
-        context.model("Product")
-            .where("category").equal("Laptops")
-            .or("category").equal("Desktops")
-            .andAlso("price").between(200, 750)
-            .orderBy("price")
+        context.model('Product')
+            .where('category').equal('Laptops')
+            .or('category').equal('Desktops')
+            .andAlso('price').between(200, 750)
+            .orderBy('price')
             .take(5)
             .getItems()
             .then(function (result) {
@@ -189,10 +190,10 @@ describe('test node client', function () {
         });
     });
     it('should use count', function (done) {
-        context.model("Product")
-            .select("category", "count(id) as total")
-            .groupBy("category")
-            .orderByDescending("count(id)")
+        context.model('Product')
+            .select('category', 'count(id) as total')
+            .groupBy('category')
+            .orderByDescending('count(id)')
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -205,12 +206,12 @@ describe('test node client', function () {
         });
     });
     it('should use min', function (done) {
-        context.model("Product")
-            .select("category", "min(price) as minimumPrice")
-            .where("category").equal("Laptops")
-            .or("category").equal("Desktops")
-            .groupBy("category")
-            .orderByDescending("min(price)")
+        context.model('Product')
+            .select('category', 'min(price) as minimumPrice')
+            .where('category').equal('Laptops')
+            .or('category').equal('Desktops')
+            .groupBy('category')
+            .orderByDescending('min(price)')
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -223,9 +224,9 @@ describe('test node client', function () {
         });
     });
     it('should use max', function (done) {
-        context.model("Product")
-            .select("category", "max(price) as maximumPrice")
-            .where("category").equal("Laptops")
+        context.model('Product')
+            .select('category', 'max(price) as maximumPrice')
+            .where('category').equal('Laptops')
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -238,8 +239,8 @@ describe('test node client', function () {
         });
     });
     it('should use indexOf', function (done) {
-        context.model("Product")
-            .where("name").indexOf("Intel")
+        context.model('Product')
+            .where('name').indexOf('Intel')
             .greaterThan(0)
             .getItems()
             .then(function (result) {
@@ -253,13 +254,13 @@ describe('test node client', function () {
         });
     });
     it('should use substr', function (done) {
-        context.model("Product")
-            .where("name").substr(6, 4)
-            .equal("Core")
+        context.model('Product')
+            .where('name').substr(6, 4)
+            .equal('Core')
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
-                chai_1.assert.isTrue(x.name.substr(6, 4) === "Core");
+                chai_1.assert.isTrue(x.name.substr(6, 4) === 'Core');
             });
             return done();
         }).catch(function (err) {
@@ -267,8 +268,8 @@ describe('test node client', function () {
         });
     });
     it('should use starts with', function (done) {
-        context.model("Product")
-            .where("name").startsWith("Intel Core")
+        context.model('Product')
+            .where('name').startsWith('Intel Core')
             .equal(true)
             .getItems()
             .then(function (result) {
@@ -281,8 +282,8 @@ describe('test node client', function () {
         });
     });
     it('should use ends with', function (done) {
-        context.model("Product")
-            .where("name").endsWith("Edition")
+        context.model('Product')
+            .where('name').endsWith('Edition')
             .equal(true)
             .getItems()
             .then(function (result) {
@@ -295,9 +296,9 @@ describe('test node client', function () {
         });
     });
     it('should use lower case', function (done) {
-        context.model("Product")
-            .where("category").toLowerCase()
-            .equal("laptops")
+        context.model('Product')
+            .where('category').toLowerCase()
+            .equal('laptops')
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -309,9 +310,9 @@ describe('test node client', function () {
         });
     });
     it('should use upper case', function (done) {
-        context.model("Product")
-            .where("category").toLowerCase()
-            .equal("LAPTOPS")
+        context.model('Product')
+            .where('category').toLowerCase()
+            .equal('LAPTOPS')
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -323,12 +324,12 @@ describe('test node client', function () {
         });
     });
     it('should use date func', function (done) {
-        context.model("Order")
-            .where("orderDate").getDate()
-            .equal("2015-04-18")
+        context.model('Order')
+            .where('orderDate').getDate()
+            .equal('2015-04-18')
             .getItems()
             .then(function (result) {
-            var val = new Date("2015-04-18");
+            var val = new Date('2015-04-18');
             result.forEach(function (x) {
                 chai_1.assert.equal(x.orderDate.getFullYear(), val.getFullYear());
                 chai_1.assert.equal(x.orderDate.getMonth(), val.getMonth());
@@ -340,8 +341,8 @@ describe('test node client', function () {
         });
     });
     it('should use month func', function (done) {
-        context.model("Order")
-            .where("orderDate").getMonth()
+        context.model('Order')
+            .where('orderDate').getMonth()
             .equal(4)
             .getItems()
             .then(function (result) {
@@ -354,9 +355,9 @@ describe('test node client', function () {
         });
     });
     it('should use day func', function (done) {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(4)
-            .and("orderDate").getDay().lowerThan(15)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(4)
+            .and('orderDate').getDay().lowerThan(15)
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -368,10 +369,10 @@ describe('test node client', function () {
         });
     });
     it('should use year func', function (done) {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(5)
-            .and("orderDate").getDay().lowerOrEqual(10)
-            .and("orderDate").getFullYear().equal(2015)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(5)
+            .and('orderDate').getDay().lowerOrEqual(10)
+            .and('orderDate').getFullYear().equal(2015)
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -383,10 +384,10 @@ describe('test node client', function () {
         });
     });
     it('should use hours func', function (done) {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(5)
-            .and("orderDate").getDay().lowerOrEqual(10)
-            .and("orderDate").getHours().between(10, 18)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(5)
+            .and('orderDate').getDay().lowerOrEqual(10)
+            .and('orderDate').getHours().between(10, 18)
             .getItems()
             .then(function (result) {
             console.log(result);
@@ -400,10 +401,10 @@ describe('test node client', function () {
         });
     });
     it('should use minutes func', function (done) {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(5)
-            .and("orderDate").getHours().between(9, 17)
-            .and("orderDate").getMinutes().between(1, 30)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(5)
+            .and('orderDate').getHours().between(9, 17)
+            .and('orderDate').getMinutes().between(1, 30)
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -416,11 +417,11 @@ describe('test node client', function () {
         });
     });
     it('should use seconds func', function (done) {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(5)
-            .and("orderDate").getHours().between(9, 17)
-            .and("orderDate").getMinutes().between(1, 30)
-            .and("orderDate").getSeconds().between(1, 45)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(5)
+            .and('orderDate').getHours().between(9, 17)
+            .and('orderDate').getMinutes().between(1, 30)
+            .and('orderDate').getSeconds().between(1, 45)
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -433,8 +434,8 @@ describe('test node client', function () {
         });
     });
     it('should use round func', function (done) {
-        context.model("Product")
-            .where("price").round().lowerOrEqual(177)
+        context.model('Product')
+            .where('price').round(0).lowerOrEqual(177)
             .getItems()
             .then(function (result) {
             result.forEach(function (x) {
@@ -446,4 +447,5 @@ describe('test node client', function () {
         });
     });
 });
+// tslint:enable no-console
 //# sourceMappingURL=test-client.js.map

@@ -1,6 +1,4 @@
-import { ClientDataContextOptions } from "@themost/client/common";
-import { ClientDataContext, ClientDataService } from "@themost/client";
-import { DataServiceExecuteOptions } from "../client/common";
+import { ClientDataContextOptions, ClientDataContext, ClientDataService } from '@themost/client';
 export declare class NodeDataContext extends ClientDataContext {
     constructor(base: string, options?: ClientDataContextOptions);
 }
@@ -10,5 +8,5 @@ export declare class NodeDataService extends ClientDataService {
      * @param {ClientDataContextOptions} options
      */
     constructor(base: string, options?: ClientDataContextOptions);
-    execute(options: DataServiceExecuteOptions): Promise<any>;
+    execute(options: any): Promise<any>;
 }
