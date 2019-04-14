@@ -9,26 +9,20 @@ export declare class ResponseError extends Error {
 export declare class Base64 {
     private PADCHAR;
     private ALPHA;
-    private getByte(s, i);
-    private getByte64(s, i);
     decode(s: string): string;
     encode(s: string): string;
+    private getByte;
+    private getByte64;
 }
 export declare class TextUtils {
     static isNotEmptyString(s: string): boolean;
     static isNullOrUndefined(s: string): boolean;
     static zeroPad(num: number, length: number): string;
-    private static REG_DATETIME_ISO;
-    private static REG_DATE_ISO;
     static isDate(s: string): boolean;
     static isDateOnly(s: string): boolean;
-    private static REG_GUID_STRING;
     static isGuid(s: any): boolean;
-    private static REG_ABSOLUTE_URI;
     static isAbsoluteURI(s: any): boolean;
-    private static REG_RELATIVE_URI;
     static isRelativeURI(s: any): boolean;
-    private static REG_NUMBER_STRING;
     static isNumber(s: any): boolean;
     static parseDate(s: string): Date;
     /**
@@ -45,6 +39,12 @@ export declare class TextUtils {
     static fromBase64(s: string): string;
     static format(s: string, ...p: any[]): string;
     static escape(val: any): string;
+    private static REG_DATETIME_ISO;
+    private static REG_DATE_ISO;
+    private static REG_GUID_STRING;
+    private static REG_ABSOLUTE_URI;
+    private static REG_RELATIVE_URI;
+    private static REG_NUMBER_STRING;
 }
 export declare class Args {
     static check(expr: boolean, message: string, code?: string): void;
@@ -91,9 +91,15 @@ export interface ClientDataServiceBase {
     setHeader(name: string, value: string): any;
     getHeaders(): any;
     /**
-     * Gets a string which represents the base URL of the MOST Web application server
+     * Gets a string which represents the base URL of a client data service
      */
     getBase(): string;
+    /**
+     * Sets a string which represents the base URL of a client data service
+     * @param {string} value - The base URL
+     * @returns ClientDataContextBase
+     */
+    setBase(value: string): ClientDataServiceBase;
     /**
      * Executes an HTTP request against the defined MOST Web application server
      * @param {DataServiceExecuteOptions} options

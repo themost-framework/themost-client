@@ -2,15 +2,21 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
+    "sourceMap": true,
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "paths": {
+      "@themost/client": [ "../client/src/index" ],
+      "@themost/client/*": [ "../client/src/*" ]
+    }
   },
   "files": [
     "src/test.ts"
   ],
   "include": [
+    "**/*.ts",
     "**/*.spec.ts",
     "**/*.d.ts"
   ]

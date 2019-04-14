@@ -1,6 +1,6 @@
 {
   "name": "themost-angular-src",
-  "version": "6.2.2-dev.2",
+  "version": "6.2.0",
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client Source",
   "scripts": {
     "ng": "ng",
@@ -28,7 +28,6 @@
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
-    "@themost/angular": "file:dist/client",
     "moment": "^2.22.2"
   },
   "devDependencies": {

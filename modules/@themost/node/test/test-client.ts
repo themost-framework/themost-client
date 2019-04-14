@@ -1,33 +1,32 @@
-import {NodeDataContext} from "../client";
-import mocha = require('mocha');
+import {NodeDataContext} from '../client';
 import {assert} from 'chai';
-import Table = require('easy-table');
-describe('test node client', ()=> {
+// tslint:disable no-console
+describe('test node client', () => {
 
     let context;
-    before((done)=> {
-        context = new NodeDataContext("http://localhost:3000/");
-        context.setBasicAuthorization("alexis.rees@example.com","user");
+    before((done) => {
+        context = new NodeDataContext('http://localhost:3000/');
+        context.setBasicAuthorization('alexis.rees@example.com', 'user');
         return done();
     });
 
     it('should use simple query', (done) => {
-        context.model('Product').where('category').equal('Laptops').getItems().then(function (result) {
+        context.model('Product').where('category').equal('Laptops').getItems().then((result) => {
             console.log(result);
             return done();
-        }).catch(function (err) {
+        }).catch( (err) => {
             return done(err);
         });
     });
 
     it('should use paging params', (done) => {
-        context.model("Order")
-            .where("orderStatus")
+        context.model('Order')
+            .where('orderStatus')
             .equal(1)
-            .orderBy("orderDate")
+            .orderBy('orderDate')
             .take(10)
             .getItems().then((result) => {
-            //enumerate items
+            // enumerate items
             console.log(result);
             return done();
         }).catch((err) => {
@@ -36,14 +35,14 @@ describe('test node client', ()=> {
     });
 
     it('should use take', (done) => {
-        context.model("Order")
-            .where("orderedItem/category").equal("Laptops")
+        context.model('Order')
+            .where('orderedItem/category').equal('Laptops')
             .take(10)
             .getItems()
             .then((result) => {
-                assert.isAtMost(result.length,10);
-                result.forEach(function(x) {
-                    assert.equal(x.orderedItem.category,"Laptops" );
+                assert.isAtMost(result.length, 10);
+                result.forEach((x) => {
+                    assert.equal(x.orderedItem.category, 'Laptops' );
                 });
                 return done();
             }).catch((err) => {
@@ -52,15 +51,15 @@ describe('test node client', ()=> {
     });
 
     it('should use or', (done) => {
-        context.model("Product")
-            .where("category").equal("Desktops")
-            .or("category").equal("Laptops")
-            .orderBy("price")
+        context.model('Product')
+            .where('category').equal('Desktops')
+            .or('category').equal('Laptops')
+            .orderBy('price')
             .take(5)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
-                    assert.oneOf(x.category,["Laptops","Desktops"]);
+                result.forEach((x) => {
+                    assert.oneOf(x.category, ['Laptops', 'Desktops']);
                 });
                 return done();
             }).catch((err) => {
@@ -69,15 +68,15 @@ describe('test node client', ()=> {
     });
 
     it('should use and', (done) => {
-        context.model("Product")
-            .where("category").equal("Laptops")
-            .and("price").between(200,750)
-            .orderBy("price")
+        context.model('Product')
+            .where('category').equal('Laptops')
+            .and('price').between(200, 750)
+            .orderBy('price')
             .take(5)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
-                    assert.isTrue(x.price>=200 && x.price<=750);
+                result.forEach((x) => {
+                    assert.isTrue(x.price >= 200 && x.price <= 750);
                 });
                 return done();
             }).catch((err) => {
@@ -86,12 +85,12 @@ describe('test node client', ()=> {
     });
 
     it('should use equal', (done) => {
-        context.model("Order")
-            .where("id").equal(10)
+        context.model('Order')
+            .where('id').equal(10)
             .getItem()
             .then((result) => {
                 assert.isObject(result);
-                assert.equal(result.id,10);
+                assert.equal(result.id, 10);
                 return done();
             }).catch((err) => {
             return done(err);
@@ -99,14 +98,14 @@ describe('test node client', ()=> {
     });
 
     it('should use not equal', (done) => {
-        context.model("Order")
-            .where("orderStatus/alternateName").notEqual("OrderProblem")
-            .orderByDescending("orderDate")
+        context.model('Order')
+            .where('orderStatus/alternateName').notEqual('OrderProblem')
+            .orderByDescending('orderDate')
             .take(10)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
-                    assert.notEqual(x.orderStatus.alternateName, "OrderProblem");
+                result.forEach((x) => {
+                    assert.notEqual(x.orderStatus.alternateName, 'OrderProblem');
                 });
                 return done();
             }).catch((err) => {
@@ -115,19 +114,19 @@ describe('test node client', ()=> {
     });
 
     it('should use greater than', (done) => {
-        context.model("Order")
-            .where("orderedItem/price").greaterThan(968)
-            .and("orderedItem/category").equal("Laptops")
-            .and("orderStatus/alternateName").notEqual("OrderCancelled")
-            .select("id",
-                "orderStatus/name as orderStatusName",
-                "customer/description as customerDescription",
-                "orderedItem")
-            .orderByDescending("orderDate")
+        context.model('Order')
+            .where('orderedItem/price').greaterThan(968)
+            .and('orderedItem/category').equal('Laptops')
+            .and('orderStatus/alternateName').notEqual('OrderCancelled')
+            .select('id',
+                'orderStatus/name as orderStatusName',
+                'customer/description as customerDescription',
+                'orderedItem')
+            .orderByDescending('orderDate')
             .take(10)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isAbove(x.orderedItem.price, 968);
                 });
                 return done();
@@ -137,13 +136,13 @@ describe('test node client', ()=> {
     });
 
     it('should use greater or equal', (done) => {
-        context.model("Product")
-            .where("price").greaterOrEqual(1395.9)
-            .orderByDescending("price")
+        context.model('Product')
+            .where('price').greaterOrEqual(1395.9)
+            .orderByDescending('price')
             .take(10)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isAtLeast(x.price, 1395.9);
                 });
                 return done();
@@ -153,13 +152,13 @@ describe('test node client', ()=> {
     });
 
     it('should use lower than', (done) => {
-        context.model("Product")
-            .where("price").lowerThan(263.56)
-            .orderBy("price")
+        context.model('Product')
+            .where('price').lowerThan(263.56)
+            .orderBy('price')
             .take(10)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isBelow(x.price, 263.56);
                 });
                 return done();
@@ -169,14 +168,14 @@ describe('test node client', ()=> {
     });
 
     it('should use lower or equal', (done) => {
-        context.model("Product")
-            .where("price").lowerOrEqual(263.56)
-            .and("price").greaterOrEqual(224.52)
-            .orderBy("price")
+        context.model('Product')
+            .where('price').lowerOrEqual(263.56)
+            .and('price').greaterOrEqual(224.52)
+            .orderBy('price')
             .take(5)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isAtLeast(x.price, 224.52);
                     assert.isAtMost(x.price, 263.56);
                 });
@@ -187,15 +186,15 @@ describe('test node client', ()=> {
     });
 
     it('should use between', (done) => {
-        context.model("Product")
-            .where("category").equal("Laptops")
-            .or("category").equal("Desktops")
-            .andAlso("price").between(200,750)
-            .orderBy("price")
+        context.model('Product')
+            .where('category').equal('Laptops')
+            .or('category').equal('Desktops')
+            .andAlso('price').between(200, 750)
+            .orderBy('price')
             .take(5)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isAtLeast(x.price, 200);
                     assert.isAtMost(x.price, 750);
                 });
@@ -206,13 +205,13 @@ describe('test node client', ()=> {
     });
 
     it('should use count', (done) => {
-        context.model("Product")
-            .select("category", "count(id) as total")
-            .groupBy("category")
-            .orderByDescending("count(id)")
+        context.model('Product')
+            .select('category', 'count(id) as total')
+            .groupBy('category')
+            .orderByDescending('count(id)')
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.property(x, 'total');
                     assert.isNumber(x.total);
                 });
@@ -223,15 +222,15 @@ describe('test node client', ()=> {
     });
 
     it('should use min', (done) => {
-        context.model("Product")
-            .select("category", "min(price) as minimumPrice")
-            .where("category").equal("Laptops")
-            .or("category").equal("Desktops")
-            .groupBy("category")
-            .orderByDescending("min(price)")
+        context.model('Product')
+            .select('category', 'min(price) as minimumPrice')
+            .where('category').equal('Laptops')
+            .or('category').equal('Desktops')
+            .groupBy('category')
+            .orderByDescending('min(price)')
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.property(x, 'minimumPrice');
                     assert.isNumber(x.minimumPrice);
                 });
@@ -242,12 +241,12 @@ describe('test node client', ()=> {
     });
 
     it('should use max', (done) => {
-        context.model("Product")
-            .select("category", "max(price) as maximumPrice")
-            .where("category").equal("Laptops")
+        context.model('Product')
+            .select('category', 'max(price) as maximumPrice')
+            .where('category').equal('Laptops')
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.property(x, 'maximumPrice');
                     assert.isNumber(x.maximumPrice);
                 });
@@ -258,14 +257,14 @@ describe('test node client', ()=> {
     });
 
     it('should use indexOf', (done) => {
-        context.model("Product")
-            .where("name").indexOf("Intel")
+        context.model('Product')
+            .where('name').indexOf('Intel')
             .greaterThan(0)
             .getItems()
             .then((result) => {
                 console.log(result);
-                result.forEach(function(x) {
-                    assert.match(x.name,/Intel/ig);
+                result.forEach((x) => {
+                    assert.match(x.name, /Intel/ig);
                 });
                 return done();
             }).catch((err) => {
@@ -274,13 +273,13 @@ describe('test node client', ()=> {
     });
 
     it('should use substr', (done) => {
-        context.model("Product")
-            .where("name").substr(6,4)
-            .equal("Core")
+        context.model('Product')
+            .where('name').substr(6, 4)
+            .equal('Core')
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
-                    assert.isTrue(x.name.substr(6,4)==="Core");
+                result.forEach((x) => {
+                    assert.isTrue(x.name.substr(6, 4) === 'Core');
                 });
                 return done();
             }).catch((err) => {
@@ -289,12 +288,12 @@ describe('test node client', ()=> {
     });
 
     it('should use starts with', (done) => {
-        context.model("Product")
-            .where("name").startsWith("Intel Core")
+        context.model('Product')
+            .where('name').startsWith('Intel Core')
             .equal(true)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.match(x.name, /^Intel\sCore/g);
                 });
                 return done();
@@ -304,12 +303,12 @@ describe('test node client', ()=> {
     });
 
     it('should use ends with', (done) => {
-        context.model("Product")
-            .where("name").endsWith("Edition")
+        context.model('Product')
+            .where('name').endsWith('Edition')
             .equal(true)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.match(x.name, /Edition$/g);
                 });
                 return done();
@@ -319,12 +318,12 @@ describe('test node client', ()=> {
     });
 
     it('should use lower case', (done) => {
-        context.model("Product")
-            .where("category").toLowerCase()
-            .equal("laptops")
+        context.model('Product')
+            .where('category').toLowerCase()
+            .equal('laptops')
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.match(x.category, /^laptops$/ig);
                 });
                 return done();
@@ -334,12 +333,12 @@ describe('test node client', ()=> {
     });
 
     it('should use upper case', (done) => {
-        context.model("Product")
-            .where("category").toLowerCase()
-            .equal("LAPTOPS")
+        context.model('Product')
+            .where('category').toLowerCase()
+            .equal('LAPTOPS')
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.match(x.category, /^LAPTOPS$/ig);
                 });
                 return done();
@@ -349,13 +348,13 @@ describe('test node client', ()=> {
     });
 
     it('should use date func', (done) => {
-        context.model("Order")
-            .where("orderDate").getDate()
-            .equal("2015-04-18")
+        context.model('Order')
+            .where('orderDate').getDate()
+            .equal('2015-04-18')
             .getItems()
             .then((result) => {
-                const val = new Date("2015-04-18");
-                result.forEach(function(x) {
+                const val = new Date('2015-04-18');
+                result.forEach((x) => {
                     assert.equal(x.orderDate.getFullYear(), val.getFullYear());
                     assert.equal(x.orderDate.getMonth(), val.getMonth());
                     assert.equal(x.orderDate.getDate(), val.getDate());
@@ -367,12 +366,12 @@ describe('test node client', ()=> {
     });
 
     it('should use month func', (done) => {
-        context.model("Order")
-            .where("orderDate").getMonth()
+        context.model('Order')
+            .where('orderDate').getMonth()
             .equal(4)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.equal(x.orderDate.getMonth(), 3);
                 });
                 return done();
@@ -382,12 +381,12 @@ describe('test node client', ()=> {
     });
 
     it('should use day func', (done) => {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(4)
-            .and("orderDate").getDay().lowerThan(15)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(4)
+            .and('orderDate').getDay().lowerThan(15)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isBelow(x.orderDate.getDate(), 15);
                 });
                 return done();
@@ -397,13 +396,13 @@ describe('test node client', ()=> {
     });
 
     it('should use year func', (done) => {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(5)
-            .and("orderDate").getDay().lowerOrEqual(10)
-            .and("orderDate").getFullYear().equal(2015)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(5)
+            .and('orderDate').getDay().lowerOrEqual(10)
+            .and('orderDate').getFullYear().equal(2015)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.equal(x.orderDate.getFullYear(), 2015);
                 });
                 return done();
@@ -413,14 +412,14 @@ describe('test node client', ()=> {
     });
 
     it('should use hours func', (done) => {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(5)
-            .and("orderDate").getDay().lowerOrEqual(10)
-            .and("orderDate").getHours().between(10,18)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(5)
+            .and('orderDate').getDay().lowerOrEqual(10)
+            .and('orderDate').getHours().between(10, 18)
             .getItems()
             .then((result) => {
                 console.log(result);
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isAtLeast(x.orderDate.getUTCHours(), 10);
                     assert.isAtMost(x.orderDate.getUTCHours(), 18);
                 });
@@ -431,13 +430,13 @@ describe('test node client', ()=> {
     });
 
     it('should use minutes func', (done) => {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(5)
-            .and("orderDate").getHours().between(9,17)
-            .and("orderDate").getMinutes().between(1,30)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(5)
+            .and('orderDate').getHours().between(9, 17)
+            .and('orderDate').getMinutes().between(1, 30)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isAtLeast(x.orderDate.getUTCMinutes(), 1);
                     assert.isAtMost(x.orderDate.getUTCMinutes(), 30);
                 });
@@ -448,14 +447,14 @@ describe('test node client', ()=> {
     });
 
     it('should use seconds func', (done) => {
-        context.model("Order")
-            .where("orderDate").getMonth().equal(5)
-            .and("orderDate").getHours().between(9,17)
-            .and("orderDate").getMinutes().between(1,30)
-            .and("orderDate").getSeconds().between(1,45)
+        context.model('Order')
+            .where('orderDate').getMonth().equal(5)
+            .and('orderDate').getHours().between(9, 17)
+            .and('orderDate').getMinutes().between(1, 30)
+            .and('orderDate').getSeconds().between(1, 45)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isAtLeast(x.orderDate.getUTCSeconds(), 1);
                     assert.isAtMost(x.orderDate.getUTCSeconds(), 45);
                 });
@@ -466,11 +465,11 @@ describe('test node client', ()=> {
     });
 
     it('should use round func', (done) => {
-        context.model("Product")
-            .where("price").round().lowerOrEqual(177)
+        context.model('Product')
+            .where('price').round(0).lowerOrEqual(177)
             .getItems()
             .then((result) => {
-                result.forEach(function(x) {
+                result.forEach((x) => {
                     assert.isAtMost(Math.round(x.price), 177);
                 });
                 return done();
@@ -480,3 +479,4 @@ describe('test node client', ()=> {
     });
 
 });
+// tslint:enable no-console

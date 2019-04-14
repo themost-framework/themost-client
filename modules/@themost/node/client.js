@@ -28,8 +28,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 var unirest = require("unirest");
 var client_1 = require("@themost/client");
-var common_1 = require("@themost/client/common");
+var client_2 = require("@themost/client");
+// tslint:disable max-line-length
 var REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;
+// tslint:enable max-line-length
 function dateParser(key, value) {
     if ((typeof value === 'string') && REG_DATETIME_ISO.test(value)) {
         return new Date(value);
@@ -39,7 +41,7 @@ function dateParser(key, value) {
 var NodeDataContext = /** @class */ (function (_super) {
     __extends(NodeDataContext, _super);
     function NodeDataContext(base, options) {
-        return _super.call(this, new NodeDataService(base || "/", options)) || this;
+        return _super.call(this, new NodeDataService(base || '/', options)) || this;
     }
     return NodeDataContext;
 }(client_1.ClientDataContext));
@@ -57,36 +59,36 @@ var NodeDataService = /** @class */ (function (_super) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             try {
-                //options defaults
-                options.method = options.method || "GET";
+                // options defaults
+                options.method = options.method || 'GET';
                 options.headers = __assign({}, _this.getHeaders(), options.headers);
-                //validate options URL
-                common_1.Args.notNull(options.url, "Request URL");
-                //validate URL format
-                common_1.Args.check(!/^https?:\/\//i.test(options.url), "Request URL may not be an absolute URI");
-                //validate request method
-                common_1.Args.check(/^GET|POST|PUT|DELETE$/i.test(options.method), "Invalid request method. Expected GET, POST, PUT or DELETE.");
-                //initialize unirest method e.g. unirest.get(URL), unirest.post(URL) etc.
+                // validate options URL
+                client_2.Args.notNull(options.url, 'Request URL');
+                // validate URL format
+                client_2.Args.check(!/^https?:\/\//i.test(options.url), 'Request URL may not be an absolute URI');
+                // validate request method
+                client_2.Args.check(/^GET|POST|PUT|DELETE$/i.test(options.method), 'Invalid request method. Expected GET, POST, PUT or DELETE.');
+                // initialize unirest method e.g. unirest.get(URL), unirest.post(URL) etc.
                 var requestURL = _this.resolve(options.url);
                 var request = unirest[options.method.toLowerCase()](requestURL);
-                //set request type
-                request.type("application/json");
-                //set headers
+                // set request type
+                request.type('application/json');
+                // set headers
                 request.headers(options.headers);
-                //set query params
+                // set query params
                 if (/^GET$/i.test(options.method) && options.data) {
                     request.query(options.data);
                 }
                 else if (options.data) {
                     request.send(options.data);
                 }
-                //complete request
+                // complete request
                 request.end(function (response) {
                     if (response.status === 200) {
                         if (typeof response.raw_body === 'object') {
-                            //stringify raw_body
+                            // stringify raw_body
                             var raw_body_str = JSON.stringify(response.raw_body);
-                            //and parse final raw_body string (with date reviver)
+                            // and parse final raw_body string (with date reviver)
                             return resolve(JSON.parse(raw_body_str, dateParser));
                         }
                         else if ((typeof response.raw_body === 'string') && response.raw_body.length > 0) {
@@ -100,14 +102,16 @@ var NodeDataService = /** @class */ (function (_super) {
                     else {
                         var res = response.toJSON();
                         if (typeof res.body === 'object') {
-                            var err = Object.assign(new common_1.ResponseError(res.body.message || response.statusMessage, response.status), res.body);
-                            if (err.hasOwnProperty("status")) {
-                                //delete status because of ResponseError.statusCode property
+                            // tslint:disable max-line-length
+                            var err = Object.assign(new client_2.ResponseError(res.body.message || response.statusMessage, response.status), res.body);
+                            // tslint:enable max-line-length
+                            if (err.hasOwnProperty('status')) {
+                                // delete status because of ResponseError.statusCode property
                                 delete err.status;
                             }
                             return reject(err);
                         }
-                        return reject(new common_1.ResponseError(response.statusMessage, response.status));
+                        return reject(new client_2.ResponseError(response.statusMessage, response.status));
                     }
                 });
             }
@@ -116,7 +120,6 @@ var NodeDataService = /** @class */ (function (_super) {
             }
         });
     };
-    ;
     return NodeDataService;
 }(client_1.ClientDataService));
 exports.NodeDataService = NodeDataService;
