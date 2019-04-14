@@ -7,4 +7,4 @@
  * found in the LICENSE file at https://themost.io/license
  */
 export { Args, Base64, ClientDataContextBase, ClientDataContextOptions, ClientDataServiceBase, CodedError, DataServiceExecuteOptions, DataServiceQueryParams, ResponseError, TextUtils } from './common';
-export { ClientDataContext, ClientDataModel, ClientDataQueryable, ClientDataService, ListResponse } from './client';
+export { ClientDataContext, ClientDataModel, ClientDataQueryable, ClientDataService, ListResponse, ParserDataService } from './client';

@@ -803,12 +803,13 @@ var ClientDataService = /** @class */ (function () {
 exports.ClientDataService = ClientDataService;
 var ParserDataService = /** @class */ (function (_super) {
     __extends(ParserDataService, _super);
-    function ParserDataService(base) {
-        return _super.call(this, base) || this;
+    function ParserDataService(base, options) {
+        return _super.call(this, base, options) || this;
     }
     ParserDataService.prototype.execute = function (options) {
         throw new Error('Method not allowed.');
     };
     return ParserDataService;
 }(ClientDataService));
+exports.ParserDataService = ParserDataService;
 //# sourceMappingURL=client.js.map

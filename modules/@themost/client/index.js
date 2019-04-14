@@ -19,4 +19,5 @@ exports.ClientDataContext = client_1.ClientDataContext;
 exports.ClientDataModel = client_1.ClientDataModel;
 exports.ClientDataQueryable = client_1.ClientDataQueryable;
 exports.ClientDataService = client_1.ClientDataService;
+exports.ParserDataService = client_1.ParserDataService;
 //# sourceMappingURL=index.js.map

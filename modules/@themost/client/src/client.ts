@@ -895,10 +895,10 @@ export class ClientDataService implements ClientDataServiceBase {
 }
 
 
-class ParserDataService extends ClientDataService {
+export class ParserDataService extends ClientDataService {
 
-    constructor(base: string) {
-        super(base);
+    constructor(base: string, options?: ClientDataContextOptions) {
+        super(base, options);
     }
 
     public execute(options: DataServiceExecuteOptions): Promise<any> {

@@ -10,4 +10,4 @@ export {Args, Base64, ClientDataContextBase, ClientDataContextOptions,
     ClientDataServiceBase, CodedError, DataServiceExecuteOptions,
     DataServiceQueryParams, ResponseError, TextUtils} from './common';
 export {ClientDataContext, ClientDataModel, ClientDataQueryable,
-    ClientDataService, ListResponse} from './client';
+    ClientDataService, ListResponse, ParserDataService} from './client';

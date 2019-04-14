@@ -193,3 +193,7 @@ export declare class ClientDataService implements ClientDataServiceBase {
     resolve(relative: string): string;
     execute(options: DataServiceExecuteOptions): Promise<any>;
 }
+export declare class ParserDataService extends ClientDataService {
+    constructor(base: string, options?: ClientDataContextOptions);
+    execute(options: DataServiceExecuteOptions): Promise<any>;
+}
