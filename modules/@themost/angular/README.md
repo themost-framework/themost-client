@@ -18,6 +18,12 @@ Angular | @themost/angular |
 
 ## Changelog
 
+### 6.2.2 - 2019-04-15
+
+#### Changed
+
+- Stict date formats (e.g. 2019-01-20) are always treated as strings and are being excluded while parsing JSON HTTP responses.
+
 ### 6.2.1 - 2019-02-15
 
 #### Changed
