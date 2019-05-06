@@ -20,17 +20,6 @@ import {HttpClientModule} from '@angular/common/http';
     ],
     exports: [
         DataComponent
-    ],
-    providers: [
-        {
-            provide: DATA_CONTEXT_CONFIG, useValue: {
-                base: '/',
-                options: {
-                    useMediaTypeExtensions: true
-                }
-            }
-        },
-        AngularDataContext
     ]
 })
 export class MostModule {
