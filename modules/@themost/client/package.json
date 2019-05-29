@@ -1,15 +1,15 @@
 {
   "name": "@themost/client",
-  "version": "2.2.3",
+  "version": "2.2.5",
   "description": "MOST Web Framework 2.0 - Client Common Module",
   "module": "index.js",
-  "main": "dist/umd/themost-client.umd.js",
+  "main": "dist/bundles/themost-client.umd.js",
   "scripts": {
     "tsc": "tsc",
     "build:es2015": "tsc --module es2015 --target es2015 --outDir dist/es2015",
     "build:esm": "tsc --module es2015 --target es5 --outDir dist/esm",
     "build:cjs": "tsc --module commonjs --target es5 --outDir dist/cjs",
-    "build:umd": "rollup dist/esm/index.js --format umd --name @themost/client --sourcemap --file dist/umd/themost-client.umd.js && cd dist/umd && uglifyjs themost-client.umd.js -c --source-map -o themost-client.umd.min.js",
+    "build:umd": "rollup dist/esm/index.js --format umd --name @themost/client --sourcemap --file dist/bundles/themost-client.umd.js && cd dist/bundles && uglifyjs themost-client.umd.js -c --source-map -o themost-client.umd.min.js",
     "build": "tsc",
     "watch": "tsc --watch"
   },

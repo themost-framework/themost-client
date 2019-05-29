@@ -4,7 +4,7 @@
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client Source",
   "scripts": {
     "ng": "ng",
-    "build": "ng-packagr -p packages/client/package.json"
+    "build": "ng build client"
   },
   "peerDependencies": {
     "@themost/client": "^2.1.4",
