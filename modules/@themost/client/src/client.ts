@@ -9,8 +9,9 @@
 
 import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQueryParams, DataServiceExecuteOptions, Args,
     ClientDataContextOptions} from './common';
-import * as parse from 'url-parse';
-
+// a workaround of calling parse namespace -exported by url-parse- in typescript
+import * as parse_ from 'url-parse';
+const parse = parse_;
 class ClientQueryExpression {
     public left: any;
     public op: string;
@@ -28,7 +29,7 @@ export interface ListResponse<T> {
 export class ClientDataQueryable {
 
     public static parse(u: string, service?: ClientDataServiceBase): ClientDataQueryable {
-        const uri = parse(u, true);
+        const uri = parse(u);
         const result = new ClientDataQueryable('Model', service || new ParserDataService(uri.protocol ? uri.origin : '/'));
         for (const key in uri.query) {
             if (/^\$/.test(key)) {

@@ -8,9 +8,12 @@
  * found in the LICENSE file at https://themost.io/license
  */
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -19,7 +22,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var common_1 = require("./common");
-var parse = require("url-parse");
+// a workaround of calling parse namespace -exported by url-parse- in typescript
+var parse_ = require("url-parse");
+var parse = parse_;
 var ClientQueryExpression = /** @class */ (function () {
     function ClientQueryExpression() {
     }
@@ -43,7 +48,7 @@ var ClientDataQueryable = /** @class */ (function () {
         this._privates = new ClientQueryExpression();
     }
     ClientDataQueryable.parse = function (u, service) {
-        var uri = parse(u, true);
+        var uri = parse(u);
         var result = new ClientDataQueryable('Model', service || new ParserDataService(uri.protocol ? uri.origin : '/'));
         for (var key in uri.query) {
             if (/^\$/.test(key)) {
