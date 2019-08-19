@@ -27,18 +27,17 @@ export class MostModule {
         //
     }
     static forRoot(configuration: ClientDataContextConfig): ModuleWithProviders {
-        // ensure configuration
-        const contextConfiguration = configuration || {
-                base: '/',
-                options: {
-                    useMediaTypeExtensions: true
-                }
-            };
         return {
             ngModule: MostModule,
             providers: [
                 {
-                    provide: DATA_CONTEXT_CONFIG, useValue: contextConfiguration
+                    provide: DATA_CONTEXT_CONFIG,
+                    useValue: configuration || {
+                        base: '/',
+                        options: {
+                            useMediaTypeExtensions: true
+                        }
+                    }
                 },
                 AngularDataContext
             ]
