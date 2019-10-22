@@ -8,7 +8,7 @@
     "test": "ng test client"
   },
   "peerDependencies": {
-    "@themost/client": "^2.1.4",
+    "@themost/client": "^2.2.6",
     "@angular/common": "^6.0.3",
     "@angular/core": "^6.0.3",
     "@angular/http": "^6.0.3",
