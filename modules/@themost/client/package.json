@@ -1,19 +1,20 @@
 {
   "name": "@themost/client",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "description": "MOST Web Framework 2.0 - Client Common Module",
-  "module": "index.js",
-  "main": "dist/bundles/themost-client.umd.js",
+  "module": "dist/themost-client.js",
+  "main": "dist/bundles/themost-client.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "tsc": "tsc",
-    "build:es2015": "tsc --module es2015 --target es2015 --outDir dist/es2015",
-    "build:esm": "tsc --module es2015 --target es5 --outDir dist/esm",
-    "build:cjs": "tsc --module commonjs --target es5 --outDir dist/cjs",
-    "build:umd": "rollup dist/esm/index.js --format umd --name @themost/client --sourcemap --file dist/bundles/themost-client.umd.js && cd dist/bundles && uglifyjs themost-client.umd.js -c --source-map -o themost-client.umd.min.js",
-    "build": "tsc",
-    "watch": "tsc --watch"
+    "build": "rimraf dist && rollup -c ./rollup.config.js -m",
+    "watch": "rimraf dist && rollup -c ./rollup.config.js -m -w",
+    "rollup": "rollup",
+    "test": "karma start",
+    "prepublishOnly": "npm run build"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/themost-framework/themost-client.git"
@@ -28,11 +29,14 @@
     "url-parse": "^1.2.0"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.5.54",
+    "@types/jasmine": "~2.5.54",
     "@types/node": "^10.3.3",
     "@types/url-parse": "^1.1.0",
+    "rimraf": "^3.0.0",
     "rollup": "^1.12.4",
-    "typescript": "^3.4.5",
-    "uglify-js": "^3.5.15"
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-dts": "^1.1.10",
+    "rollup-plugin-typescript2": "^0.24.3",
+    "typescript": "^2.9.2"
   }
 }

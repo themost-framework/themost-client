@@ -4,10 +4,11 @@
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client Source",
   "scripts": {
     "ng": "ng",
-    "build": "ng build client"
+    "build": "ng build client",
+    "test": "ng test client"
   },
   "peerDependencies": {
-    "@themost/client": "^2.1.4",
+    "@themost/client": "^2.2.6",
     "@angular/common": "^6.0.3",
     "@angular/core": "^6.0.3",
     "@angular/http": "^6.0.3",
@@ -49,7 +50,7 @@
     "ng-packagr": "^4.5.0",
     "rimraf": "^2.6.2",
     "rxjs": "~6.3.3",
-    "typescript": "^2.7.2",
+    "typescript": "^2.9.2",
     "zone.js": "^0.8.26"
   }
 }

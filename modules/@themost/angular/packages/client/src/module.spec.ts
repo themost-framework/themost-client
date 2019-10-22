@@ -1,6 +1,6 @@
 import {TestBed, async, inject} from '@angular/core/testing';
 import {MostModule, AngularDataContext, DATA_CONTEXT_CONFIG, DataComponent} from './public_api';
-import {APP_INITIALIZER, Injectable, Injector, NgModule} from '@angular/core';
+import {APP_INITIALIZER} from '@angular/core';
 import {TestConfigurationService, TestModule} from './test-module.spec';
 import {CommonModule} from '@angular/common';
 
@@ -43,7 +43,8 @@ describe('MostModule', () => {
                             useMediaTypeExtensions: true
                         }
                     }
-                }
+                },
+                AngularDataContext
             ]
         }).compileComponents();
     }));
@@ -82,7 +83,8 @@ describe('MostModule async configuration', () => {
                     },
                     deps: [ TestConfigurationService ],
                     multi: true
-                }
+                },
+                AngularDataContext
             ]
         }).compileComponents();
     }));
