@@ -11,6 +11,10 @@
         "declaration": true,
         "outDir": "./",
         "stripInternal": true,
+        "types": [
+            "jasmine",
+            "node"
+        ],
         "typeRoots": [
             "node_modules/@types"
         ],

@@ -1,10 +1,9 @@
 const typescript = require('rollup-plugin-typescript2');
 const commonjs = require('rollup-plugin-commonjs');
-
 const dist = './dist/';
 const name = 'themost-client';
 
-module.exports = {
+module.exports = [{
     input: './src/index.ts',
     output: [
         {
@@ -22,7 +21,9 @@ module.exports = {
         }
     ],
     plugins: [
-        typescript(),
+        typescript({
+            declaration: false
+        }),
         commonjs()
     ]
-};
+}];

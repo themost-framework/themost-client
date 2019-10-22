@@ -15,7 +15,7 @@ module.exports = function(config) {
       require("karma-typescript"),
       require("karma-chrome-launcher"),
       require("karma-jasmine-html-reporter"),
-      require("karma-coverage-istanbul-reporter")
+      require('karma-mocha-reporter')
     ],
     preprocessors: {
       "**/*.ts": "karma-typescript" // *.tsx for React Jsx
@@ -23,12 +23,21 @@ module.exports = function(config) {
     karmaTypescriptConfig: {
       tsconfig: "../tsconfig.spec.json"
     },
-    reporters: ["progress", "karma-typescript"],
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: [
+          '--no-sandbox',
+          '--remote-debugging-port=9222'
+        ]
+      }
+    },
+    reporters: [ 'kjhtml', 'mocha' ],
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: [ "Chrome" ],
-    singleRun: true
+    browsers: [ "ChromeHeadlessNoSandbox" ],
+    singleRun: false
   });
 };
 // tslint:enable trailing-comma

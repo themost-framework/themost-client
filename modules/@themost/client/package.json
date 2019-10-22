@@ -4,12 +4,16 @@
   "description": "MOST Web Framework 2.0 - Client Common Module",
   "module": "dist/themost-client.js",
   "main": "dist/bundles/themost-client.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c ./rollup.config.js -m",
-    "watch": "rollup -c ./rollup.config.js -m -w",
-    "rollup": "rollup"
+    "build": "rimraf dist && rollup -c ./rollup.config.js -m",
+    "watch": "rimraf dist && rollup -c ./rollup.config.js -m -w",
+    "rollup": "rollup",
+    "test": "karma start"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/themost-framework/themost-client.git"
@@ -24,12 +28,14 @@
     "url-parse": "^1.2.0"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.5.54",
+    "@types/jasmine": "~2.5.54",
     "@types/node": "^10.3.3",
     "@types/url-parse": "^1.1.0",
+    "rimraf": "^3.0.0",
     "rollup": "^1.12.4",
     "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-dts": "^1.1.10",
     "rollup-plugin-typescript2": "^0.24.3",
-    "typescript": "^3.6.4"
+    "typescript": "^2.9.2"
   }
 }
