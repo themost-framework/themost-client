@@ -1,9 +1,9 @@
 {
   "name": "@themost/client",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "MOST Web Framework 2.0 - Client Common Module",
   "module": "dist/themost-client.js",
-  "main": "dist/bundles/themost-client.js",
+  "main": "dist/themost-client.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf dist && rollup -c ./rollup.config.js -m",
