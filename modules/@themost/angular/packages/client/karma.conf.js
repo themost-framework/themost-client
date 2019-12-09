@@ -30,7 +30,7 @@ module.exports = function (config) {
         ]
       }
     },
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['kjhtml', 'mocha'],
     port: 8080,
     colors: true,
     logLevel: config.LOG_INFO,

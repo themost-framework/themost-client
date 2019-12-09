@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
         "skipLibCheck": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
@@ -8,9 +10,7 @@
         "removeComments": false,
         "noImplicitAny": false,
         "moduleResolution": "node",
-        "module": "commonjs",
-        "target": "es5",
-        "lib": ["es2016", "dom"],
+        "lib": ["es2017", "dom"],
         "typeRoots": [
             "node_modules/@types"
         ]

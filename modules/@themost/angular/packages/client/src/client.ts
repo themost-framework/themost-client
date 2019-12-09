@@ -47,9 +47,10 @@ export class AngularDataService extends ClientDataService {
         const self = this;
         // options defaults
         options.method = options.method || 'GET';
-        options.headers = { ...this.getHeaders(), ...options.headers };
-        // set content type
-        options.headers['Content-Type'] = 'application/json';
+        options.headers = { ...this.getHeaders(), ...{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }, ...options.headers };
         // validate options URL
         Args.notNull(options.url, 'Request URL');
         // validate URL format
@@ -86,6 +87,9 @@ export class AngularDataService extends ClientDataService {
                     // safely handle empty body
                     if ((res.body == null) || (typeof res.body === 'string' && res.body.length === 0)) {
                         return resolve();
+                    }
+                    if (options.headers.Accept && options.headers.Accept !== 'application/json') {
+                        return resolve(res.body);
                     }
                     const finalRes = JSON.parse(res.body, reviver);
                     return resolve(finalRes);
