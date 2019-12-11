@@ -1,6 +1,6 @@
 {
   "name": "@themost/node",
-  "version": "2.2.1-dev.1",
+  "version": "2.5.0",
   "description": "MOST Web Framework 2.0 - NodeJS Client",
   "module": "dist/themost_node.js",
   "main": "dist/themost_node.js",

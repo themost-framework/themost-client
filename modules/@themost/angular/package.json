@@ -1,6 +1,6 @@
 {
   "name": "themost-angular-src",
-  "version": "6.2.0",
+  "version": "6.5.0",
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client Source",
   "scripts": {
     "ng": "ng",
