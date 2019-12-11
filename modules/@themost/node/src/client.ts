@@ -6,9 +6,8 @@
  * found in the LICENSE file at https://themost.io/license
  */
 import fetch from 'node-fetch';
-import {ClientDataContextOptions, ClientDataContext, ClientDataService} from '@themost/client';
+import {ClientDataContextOptions, ClientDataContext, ClientDataService, EdmSchema} from '@themost/client';
 import {Args, ResponseError} from '@themost/client';
-import {EdmSchema} from '@themost/client';
 import {URL, URLSearchParams} from 'url';
 // tslint:disable max-line-length
 const REG_DATETIME_ISO = /^(\d{4})(?:-?W(\d+)(?:-?(\d+)D?)?|(?:-(\d+))?-(\d+))(?:[T ](\d+):(\d+)(?::(\d+)(?:\.(\d+))?)?)?(?:Z(-?\d*))?([+-](\d+):(\d+))?$/;

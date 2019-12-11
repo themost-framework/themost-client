@@ -8,8 +8,8 @@
  */
 import {Injectable, Inject, InjectionToken} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {ClientDataService, ClientDataContext, Args, DataServiceExecuteOptions, TextUtils, ClientDataContextOptions} from '@themost/client';
-import {EdmSchema} from '@themost/client/src';
+import {ClientDataService, ClientDataContext, Args, DataServiceExecuteOptions,
+    TextUtils, ClientDataContextOptions, EdmSchema} from '@themost/client';
 
 export interface ClientDataContextConfig {
     base: string;
