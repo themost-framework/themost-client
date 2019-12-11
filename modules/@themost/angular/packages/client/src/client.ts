@@ -9,6 +9,7 @@
 import {Injectable, Inject, InjectionToken} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {ClientDataService, ClientDataContext, Args, DataServiceExecuteOptions, TextUtils, ClientDataContextOptions} from '@themost/client';
+import {EdmSchema} from '@themost/client/src';
 
 export interface ClientDataContextConfig {
     base: string;
@@ -41,6 +42,42 @@ export class AngularDataService extends ClientDataService {
 
     constructor(base: string, private http: HttpClient, options?: ClientDataContextOptions) {
         super(base || '/', options);
+    }
+
+    getMetadata(): Promise<EdmSchema> {
+        const headers = { ...this.getHeaders(), ...{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }};
+        return new Promise<any>((resolve, reject) => {
+            this.http.request('GET', this.resolve('$metadata'), {
+                headers: new HttpHeaders(headers),
+                observe: 'response',
+                reportProgress: false,
+                responseType: 'text',
+                withCredentials: true
+            }).subscribe((res) => {
+                if (res.status === 204) {
+                    return resolve();
+                } else {
+                    // safely handle empty body
+                    if ((res.body == null) || (typeof res.body === 'string' && res.body.length === 0)) {
+                        return resolve();
+                    }
+                    return resolve(EdmSchema.loadXML(res.body));
+                }
+            }, (err) => {
+                if (err.error && typeof err.error === 'string') {
+                    // try parse error
+                    try {
+                        err.error = JSON.parse(err.error);
+                    } catch (parserError) {
+                        //
+                    }
+                }
+                return reject(err);
+            });
+        });
     }
 
     execute(options: DataServiceExecuteOptions): Promise<any> {
@@ -87,9 +124,6 @@ export class AngularDataService extends ClientDataService {
                     // safely handle empty body
                     if ((res.body == null) || (typeof res.body === 'string' && res.body.length === 0)) {
                         return resolve();
-                    }
-                    if (options.headers.Accept && options.headers.Accept !== 'application/json') {
-                        return resolve(res.body);
                     }
                     const finalRes = JSON.parse(res.body, reviver);
                     return resolve(finalRes);
