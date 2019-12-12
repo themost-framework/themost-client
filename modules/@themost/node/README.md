@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/@themost%2Fdata.svg)](https://www.npmjs.com/package/@themost%2Fnode)
+[![npm](https://img.shields.io/npm/v/@themost%2Fnode.svg)](https://www.npmjs.com/package/@themost%2Fnode)
 ![](https://img.shields.io/david/themost-framework/themost-client?path=modules%2F%40themost%2Fnode) ![](https://img.shields.io/david/peer/themost-framework/themost-client?path=modules%2F%40themost%2Fnode)
 ![](https://img.shields.io/david/dev/themost-framework/themost-client?path=modules%2F%40themost%2Fnode)
 ![GitHub top language](https://img.shields.io/github/languages/top/themost-framework/themost-client)
