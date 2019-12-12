@@ -26,6 +26,6 @@
   "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
     "url-parse": "^1.2.0",
-    "@themost/xml": "^2.3.1"
+    "@themost/xml": "^2.5.0"
   }
 }

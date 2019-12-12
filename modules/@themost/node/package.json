@@ -2,8 +2,8 @@
   "name": "@themost/node",
   "version": "2.5.0",
   "description": "MOST Web Framework 2.0 - NodeJS Client",
-  "module": "dist/themost_node.js",
-  "main": "dist/themost_node.js",
+  "module": "dist/themost_node.cjs.js",
+  "main": "dist/themost_node.cjs.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jasmine",
@@ -12,7 +12,10 @@
     "tslint": "tslint --project ."
   },
   "peerDependencies": {
-    "@themost/client": "^2.4.1-dev.2"
+    "@themost/client": "^2.5.0"
+  },
+  "engines": {
+    "node": ">=6.9.4"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,4 @@
 const typescript = require('rollup-plugin-typescript2');
-const commonjs = require('rollup-plugin-commonjs');
-const builtins = require('rollup-plugin-node-builtins');
 const dist = './dist/';
 const name = 'themost_node';
 
@@ -14,18 +12,14 @@ module.exports = [{
         {
             file: `${dist}${name}.esm.js`,
             format: 'esm'
-        },
-        {
-            name: '@themost/node',
-            file: `${dist}${name}.js`,
-            format: 'umd'
         }
     ],
+    external: [
+        'url',
+        'node-fetch',
+        '@themost/client'
+    ],
     plugins: [
-        builtins(),
-        typescript({
-            declaration: false
-        }),
-        commonjs()
+        typescript()
     ]
 }];
