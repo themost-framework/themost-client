@@ -12,8 +12,10 @@
     "jasmine": "jasmine",
     "build-client": "cd modules/@themost/client && npm ci && npm run build",
     "test-client": "cd modules/@themost/client && npm ci && npm test",
+    "publish-client": "cd modules/@themost/client && npm ci && npm publish",
     "build-node": "cd modules/@themost/node && npm ci && npm run build",
-    "test-node": "cd modules/@themost/node && npm ci && npm test"
+    "test-node": "cd modules/@themost/node && npm ci && npm test",
+    "publish-node": "cd modules/@themost/node && npm ci && npm publish"
   },
   "engines": {
     "node": ">= 5.4.1"

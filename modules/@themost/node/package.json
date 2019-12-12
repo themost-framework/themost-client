@@ -9,6 +9,7 @@
     "test": "jasmine",
     "build": "rimraf dist && rollup -c ./rollup.config.js -m",
     "watch": "rimraf dist && rollup -c ./rollup.config.js -m -w",
+    "prepublishOnly": "npm run build",
     "tslint": "tslint --project ."
   },
   "peerDependencies": {

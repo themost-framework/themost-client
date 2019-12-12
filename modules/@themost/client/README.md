@@ -2,11 +2,11 @@
 ![](https://img.shields.io/david/themost-framework/themost-client?path=modules%2F%40themost%2Fclient) ![](https://img.shields.io/david/peer/themost-framework/themost-client?path=modules%2F%40themost%2Fclient)
 ![](https://img.shields.io/david/dev/themost-framework/themost-client?path=modules%2F%40themost%2Fclient)
 ![GitHub top language](https://img.shields.io/github/languages/top/themost-framework/themost-client)
-[![License](https://img.shields.io/npm/l/@themost/query)](https://github.com/themost-framework/themost/blob/master/LICENSE)
+[![License](https://img.shields.io/npm/l/@themost/query)](https://github.com/themost-framework/themost-client/blob/master/LICENSE)
 ![GitHub last commit](https://img.shields.io/github/last-commit/themost-framework/themost-client)
 ![GitHub Release Date](https://img.shields.io/github/release-date/themost-framework/themost-client)
 [![npm](https://img.shields.io/npm/dw/@themost/client)](https://www.npmjs.com/package/@themost%2Fclient)
-![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/@themost/client)
+[![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/@themost/client)](https://snyk.io/vuln/npm:%40themost%2Fclient)
 
 # @themost/client
 

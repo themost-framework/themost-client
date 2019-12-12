@@ -8,8 +8,6 @@
   "scripts": {
     "build": "rimraf dist && rollup -c ./rollup.config.js -m",
     "watch": "rimraf dist && rollup -c ./rollup.config.js -m -w",
-    "rollup": "rollup",
-    "test": "karma start",
     "prepublishOnly": "npm run build",
     "tslint": "tslint --project ."
   },
