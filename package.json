@@ -9,7 +9,8 @@
     "babel": "babel",
     "tslint": "tslint",
     "jasmine": "jasmine",
-    "test-node": "cd modules/@themost/node && npm test"
+    "build:node": "cd modules/@themost/node && npm run build",
+    "test:node": "cd modules/@themost/node && npm test"
   },
   "engines": {
     "node": ">= 5.4.1"
