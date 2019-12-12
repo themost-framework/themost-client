@@ -1,3 +1,13 @@
+[![npm](https://img.shields.io/npm/v/@themost%2Fdata.svg)](https://www.npmjs.com/package/@themost%2Fnode)
+![](https://img.shields.io/david/themost-framework/themost-client?path=modules%2F%40themost%2Fnode) ![](https://img.shields.io/david/peer/themost-framework/themost-client?path=modules%2F%40themost%2Fnode)
+![](https://img.shields.io/david/dev/themost-framework/themost-client?path=modules%2F%40themost%2Fnode)
+![GitHub top language](https://img.shields.io/github/languages/top/themost-framework/themost-client)
+[![License](https://img.shields.io/npm/l/@themost/query)](https://github.com/themost-framework/themost/blob/master/LICENSE)
+![GitHub last commit](https://img.shields.io/github/last-commit/themost-framework/themost-client)
+![GitHub Release Date](https://img.shields.io/github/release-date/themost-framework/themost-client)
+[![npm](https://img.shields.io/npm/dw/@themost/data)](https://www.npmjs.com/package/@themost%2Fnode)
+![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/@themost/node)
+
 # @themost/node
 
 ![MOST Web Framework Logo](https://www.themost.io/assets/images/most_logo_sw_240.png)
