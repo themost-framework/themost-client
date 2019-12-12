@@ -6,12 +6,14 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
+    "karma": "karma",
     "babel": "babel",
     "tslint": "tslint",
     "jasmine": "jasmine",
-    "ci-sub-modules": "cd modules/@themost/node && npm ci",
-    "build-node": "cd modules/@themost/node && npm run build",
-    "test-node": "cd modules/@themost/node && npm test"
+    "build-client": "cd modules/@themost/client && npm ci && npm run build",
+    "test-client": "cd modules/@themost/client && npm ci && npm test",
+    "build-node": "cd modules/@themost/node && npm ci && npm run build",
+    "test-node": "cd modules/@themost/node && npm ci && npm test"
   },
   "engines": {
     "node": ">= 5.4.1"
@@ -54,6 +56,7 @@
     "@types/node": "^10.3.3",
     "@types/url-parse": "^1.1.0",
     "jasmine": "^3.5.0",
+    "jasmine-core": "^3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "^4.4.1",
     "karma-chrome-launcher": "~2.2.0",

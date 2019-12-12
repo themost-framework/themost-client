@@ -18,7 +18,11 @@ module.exports = [{
             name: '@themost/client',
             file: `${dist}${name}.js`,
             format: 'umd'
-        }
+        },
+    ],
+    external: [
+        'url-parse',
+        '@themost/xml'
     ],
     plugins: [
         typescript({
