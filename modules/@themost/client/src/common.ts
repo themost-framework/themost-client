@@ -1,3 +1,4 @@
+import {EdmSchema} from './metadata';
 
 export class CodedError extends Error {
     constructor(message: string, public code: string) {
@@ -101,15 +102,13 @@ export class Base64 {
         return x.join('');
     }
     // tslint:enable no-bitwise
-
+    // noinspection JSMethodCanBeStatic
     private getByte(s: string, i: number): number {
-        const x = s.charCodeAt(i);
-        return x;
+        return s.charCodeAt(i);
     }
 
     private getByte64(s: string, i: number): number {
-        const idx = this.ALPHA.indexOf(s.charAt(i));
-        return idx;
+        return this.ALPHA.indexOf(s.charAt(i));
     }
 
 }
@@ -385,10 +384,15 @@ export interface ClientDataServiceBase {
      */
     setBase(value: string): ClientDataServiceBase;
     /**
-     * Executes an HTTP request against the defined MOST Web application server
+     * Executes an HTTP request against the defined OData v4 application server
      * @param {DataServiceExecuteOptions} options
      */
     execute(options: DataServiceExecuteOptions): Promise<any>;
+
+    /**
+     * Returns the metadata document provided by an OData v4 application server
+     */
+    getMetadata(): Promise<EdmSchema>;
 
     /**
      * Converts a URL into one that is usable on the requesting client.
@@ -402,11 +406,11 @@ export interface ClientDataServiceBase {
 
 export interface ClientDataContextBase {
     /**
-     * Gets a string which represents the base URL of the MOST Web application server
+     * Gets a string which represents the base URL of the OData v4 application server
      */
     getBase(): string;
     /**
-     * Sets a string which represents the base URL of the MOST Web application server
+     * Sets a string which represents the base URL of the OData v4 application server
      * @param {string} value - The base URL
      * @returns ClientDataContextBase
      */

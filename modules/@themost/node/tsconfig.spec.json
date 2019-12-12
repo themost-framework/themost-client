@@ -2,7 +2,7 @@
     "compilerOptions": {
         "declarationDir": "dist",
         "target": "es2015",
-        "module": "esnext",
+        "module": "commonjs",
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "skipLibCheck": true,
@@ -24,7 +24,6 @@
     },
     "exclude": [
         "node_modules",
-        "dist",
-        "spec"
+        "dist"
     ]
 }

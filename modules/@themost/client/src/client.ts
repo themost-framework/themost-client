@@ -11,6 +11,7 @@ import {ClientDataServiceBase, ClientDataContextBase, TextUtils, DataServiceQuer
     ClientDataContextOptions} from './common';
 // a workaround of calling parse namespace -exported by url-parse- in typescript
 import * as parse_ from 'url-parse';
+import {EdmSchema} from './metadata';
 const parse = parse_;
 class ClientQueryExpression {
     public left: any;
@@ -77,7 +78,9 @@ export class ClientDataQueryable {
         const params = this.getParams();
         let search = '';
         for (const key in params) {
-            search = search.concat(key, '=', params[key], '&');
+            if (params.hasOwnProperty(key)) {
+                search = search.concat(key, '=', params[key], '&');
+            }
         }
         if (search.length) {
             return uri.concat('?', search.replace(/&$/, ''));
@@ -90,7 +93,9 @@ export class ClientDataQueryable {
         const params = this.getParams();
         let search = '';
         for (const key in params) {
-            search = search.concat(key, '=', params[key], ';');
+            if (params.hasOwnProperty(key)) {
+                search = search.concat(key, '=', params[key], ';');
+            }
         }
         if (search.length) {
             return model.concat('(', search.replace(/;$/, ''), ')');
@@ -383,6 +388,7 @@ export class ClientDataQueryable {
         Args.notNull(attr, 'Attributes');
         Args.check(attr.length > 0, 'Attributes may not be empty');
         const arr = [];
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < attr.length; i++) {
             Args.check(typeof attr[i] === 'string', 'Invalid attribute. Expected string.');
             arr.push(attr[i]);
@@ -395,6 +401,7 @@ export class ClientDataQueryable {
         Args.notNull(attr, 'Attributes');
         Args.check(attr.length > 0, 'Attributes may not be empty');
         const arr = [];
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < attr.length; i++) {
             Args.check(typeof attr[i] === 'string', 'Invalid attribute. Expected string.');
             arr.push(attr[i]);
@@ -407,6 +414,7 @@ export class ClientDataQueryable {
         Args.notNull(attr, 'Attributes');
         Args.check(attr.length > 0, 'Attributes may not be empty');
         const arr = [];
+        // tslint:disable-next-line:prefer-for-of
         for (let i = 0; i < attr.length; i++) {
             Args.check(typeof attr[i] === 'string', 'Invalid attribute. Expected string.');
             arr.push(attr[i]);
@@ -693,7 +701,9 @@ export class ClientDataModel {
         const q =  ClientDataQueryable.create(this.getName(), this._service);
         if (params) {
             for (const key in params) {
-                q.setParam(key, params[key]);
+                if (params.hasOwnProperty(key)) {
+                    q.setParam(key, params[key]);
+                }
             }
         }
         return q;
@@ -773,11 +783,13 @@ export class ClientDataModel {
 
 export class ClientDataContext implements ClientDataContextBase {
 
+    protected metadata: EdmSchema;
     private readonly _service: ClientDataServiceBase;
     private options: ClientDataContextOptions;
 
     constructor(service: ClientDataServiceBase, options?: ClientDataContextOptions) {
         this._service = service;
+        this.options = options;
     }
 
     public setBasicAuthorization(username: string, password: string): ClientDataContext {
@@ -824,6 +836,17 @@ export class ClientDataContext implements ClientDataContextBase {
         return new ClientDataModel(name, this.getService());
     }
 
+    public getMetadata(force = false) {
+        if (this.metadata) {
+            if (!force) {
+                return Promise.resolve(this.metadata);
+            }
+        }
+        return this.getService().getMetadata().then( (result) => {
+            this.metadata = result;
+            return Promise.resolve(this.metadata);
+        });
+    }
 
 }
 
@@ -889,8 +912,19 @@ export class ClientDataService implements ClientDataServiceBase {
     }
 
 
+    /**
+     * @abstract
+     * @param options
+     */
     public execute(options: DataServiceExecuteOptions): Promise<any> {
-        throw new Error('Method not implemented.');
+        throw new Error('Class does not implement inherited abstract method.');
+    }
+
+    /**
+     * @abstract
+     */
+    public getMetadata(): Promise<EdmSchema> {
+        throw new Error('Class does not implement inherited abstract method.');
     }
 
 }

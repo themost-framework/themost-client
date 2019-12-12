@@ -95,3 +95,30 @@ describe('MostModule async configuration', () => {
         expect(context.getBase()).toBe('/api/');
     }));
 });
+
+describe('AngularDataContext', () => {
+    beforeEach(async(() => {
+        return TestBed.configureTestingModule({
+            imports: [
+                MostModule
+            ],
+            providers: [
+                {
+                    provide: DATA_CONTEXT_CONFIG, useValue: {
+                        base: '/api/',
+                        options: {
+                            useMediaTypeExtensions: true
+                        }
+                    }
+                },
+                AngularDataContext
+            ]
+        }).compileComponents();
+    }));
+    it('should inject AngularDataContext', inject([AngularDataContext], (context: AngularDataContext) => {
+        expect(context).toBeTruthy();
+    }));
+    it('should get context base', inject([AngularDataContext], (context: AngularDataContext) => {
+        expect(context.getBase()).toBe('/api/');
+    }));
+});

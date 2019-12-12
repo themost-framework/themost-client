@@ -8,7 +8,8 @@
  */
 import {Injectable, Inject, InjectionToken} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {ClientDataService, ClientDataContext, Args, DataServiceExecuteOptions, TextUtils, ClientDataContextOptions} from '@themost/client';
+import {ClientDataService, ClientDataContext, Args, DataServiceExecuteOptions,
+    TextUtils, ClientDataContextOptions, EdmSchema} from '@themost/client';
 
 export interface ClientDataContextConfig {
     base: string;
@@ -43,13 +44,50 @@ export class AngularDataService extends ClientDataService {
         super(base || '/', options);
     }
 
+    getMetadata(): Promise<EdmSchema> {
+        const headers = { ...this.getHeaders(), ...{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }};
+        return new Promise<any>((resolve, reject) => {
+            this.http.request('GET', this.resolve('$metadata'), {
+                headers: new HttpHeaders(headers),
+                observe: 'response',
+                reportProgress: false,
+                responseType: 'text',
+                withCredentials: true
+            }).subscribe((res) => {
+                if (res.status === 204) {
+                    return resolve();
+                } else {
+                    // safely handle empty body
+                    if ((res.body == null) || (typeof res.body === 'string' && res.body.length === 0)) {
+                        return resolve();
+                    }
+                    return resolve(EdmSchema.loadXML(res.body));
+                }
+            }, (err) => {
+                if (err.error && typeof err.error === 'string') {
+                    // try parse error
+                    try {
+                        err.error = JSON.parse(err.error);
+                    } catch (parserError) {
+                        //
+                    }
+                }
+                return reject(err);
+            });
+        });
+    }
+
     execute(options: DataServiceExecuteOptions): Promise<any> {
         const self = this;
         // options defaults
         options.method = options.method || 'GET';
-        options.headers = { ...this.getHeaders(), ...options.headers };
-        // set content type
-        options.headers['Content-Type'] = 'application/json';
+        options.headers = { ...this.getHeaders(), ...{
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }, ...options.headers };
         // validate options URL
         Args.notNull(options.url, 'Request URL');
         // validate URL format

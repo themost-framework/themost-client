@@ -1,14 +1,15 @@
 {
   "name": "themost-angular-src",
-  "version": "6.2.0",
+  "version": "6.5.0",
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client Source",
   "scripts": {
     "ng": "ng",
     "build": "ng build client",
-    "test": "ng test client"
+    "test": "ng test client",
+    "tslint": "tslint"
   },
   "peerDependencies": {
-    "@themost/client": "^2.2.6",
+    "@themost/client": "^2.4.1",
     "@angular/common": "^6.0.3",
     "@angular/core": "^6.0.3",
     "@angular/http": "^6.0.3",

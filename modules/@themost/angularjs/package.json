@@ -1,10 +1,10 @@
 {
   "name": "@themost/angularjs",
-  "version": "2.1.5",
+  "version": "2.5.0",
   "description": "MOST Web Framework 2.0 - AngularJS 1.5 Client",
   "module": "client.js",
   "peerDependencies": {
-    "@themost/client": "^2.1.5",
+    "@themost/client": "^2.5.0",
     "angular": "^1.5.7"
   },
   "repository": {
@@ -17,8 +17,7 @@
     "url": "https://github.com/themost-framework/themost-client/issues"
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/angular": "^1.5.7"
   }
