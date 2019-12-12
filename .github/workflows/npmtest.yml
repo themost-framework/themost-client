@@ -20,10 +20,8 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm ci
-        cd modules/@themost/node
-        npm ci
-        cd ../../..
-        npm build:node --if-present
-        npm test:node
+        npm ci-sub-modules --if-present
+        npm build-node --if-present
+        npm test-node
       env:
         CI: true
