@@ -1,6 +1,6 @@
 import {NodeDataContext, NodeDataService} from '../src';
 import {EdmSchema} from '@themost/client';
-import {app, serve, getServerAddress, getToken} from '@themost/test';
+import {getApplication, serveApplication, getServerAddress, getToken} from '@themost/test';
 import {URL, URLSearchParams} from 'url';
 
 const TEST_USER = 'alexis.rees@example.com';
@@ -10,7 +10,8 @@ describe('NodeDataContext', () => {
     let liveServer;
     let server_uri;
     beforeAll(async () => {
-        liveServer = await serve(app);
+        const app = getApplication();
+        liveServer = await serveApplication(app);
         server_uri = getServerAddress(liveServer);
     });
     afterAll((done) => {
