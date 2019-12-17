@@ -9,7 +9,7 @@
     "tslint": "tslint"
   },
   "peerDependencies": {
-    "@themost/client": "^2.4.1",
+    "@themost/client": "^2.5.0",
     "@angular/common": "^6.0.3",
     "@angular/core": "^6.0.3",
     "@angular/http": "^6.0.3",
