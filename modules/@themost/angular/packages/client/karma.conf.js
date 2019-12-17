@@ -4,8 +4,9 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    frameworks: ['jasmine', '@angular-devkit/build-angular', 'api'],
     plugins: [
+      require('./karma-test-api-server'),
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
@@ -32,6 +33,8 @@ module.exports = function (config) {
     },
     reporters: ['kjhtml', 'mocha'],
     port: 8080,
+    proxies: {
+    },
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
