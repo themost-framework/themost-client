@@ -4,7 +4,7 @@
   "description": "MOST Web Framework 2.0 - Angular 2.x-6.x Client",
   "main": "./bundles/themost-angular.umd.js",
   "peerDependencies": {
-    "@themost/client":"^2.4.1",
+    "@themost/client":"^2.5.0",
     "@angular/common": ">=6.0.0",
     "@angular/core": ">=6.0.0",
     "@angular/http": ">=6.0.0",
