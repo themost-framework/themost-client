@@ -1,6 +1,6 @@
 {
   "name": "@themost/client",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "MOST Web Framework 2.0 - Client Common Module",
   "module": "dist/themost-client.js",
   "main": "dist/themost-client.js",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
-    "url-parse": "^1.2.0",
-    "@themost/xml": "^2.5.0"
+    "@themost/xml": "^2.5.1",
+    "url-parse": "^1.2.0"
   }
 }
