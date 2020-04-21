@@ -1,6 +1,6 @@
 {
   "name": "@themost/client",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "MOST Web Framework 2.0 - Client Common Module",
   "module": "dist/themost-client.js",
   "main": "dist/themost-client.js",
