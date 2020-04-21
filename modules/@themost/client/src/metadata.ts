@@ -129,6 +129,7 @@ export class EdmProperty {
     public Description: string;
     public LongDescription: string;
     public Computed = false;
+    public Annotations: EdmAnnotation[] = [];
     constructor() {
         //
     }
@@ -154,6 +155,9 @@ export class EdmProperty {
         if (longDescription) {
             this.LongDescription = longDescription.getAttribute('String');
         }
+        this.Annotations = node.selectNodes('Annotation').map( (annotationNode) => {
+            return XSerializer.deserialize(annotationNode, EdmAnnotation);
+        });
     }
 }
 
@@ -163,12 +167,36 @@ export class EdmProperty {
 export class EdmNavigationProperty {
     public Name: string;
     public Type: string;
+    public Immutable = false;
+    public Description: string;
+    public LongDescription: string;
+    public Computed = false;
+    public Annotations: EdmAnnotation[] = [];
     constructor() {
         //
     }
     public readXml(node: XNode) {
         this.Name = node.getAttribute('Name');
         this.Type = node.getAttribute('Type');
+        const immutable = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Immutable"]');
+        if (immutable) {
+            this.Immutable = (immutable.getAttribute('Tag') === 'true');
+        }
+        const computed = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Computed"]');
+        if (computed) {
+            this.Computed = (computed.getAttribute('Bool') === 'true');
+        }
+        const description = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Description"]');
+        if (description) {
+            this.Description = description.getAttribute('String');
+        }
+        const longDescription = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.LongDescription"]');
+        if (longDescription) {
+            this.LongDescription = longDescription.getAttribute('String');
+        }
+        this.Annotations = node.selectNodes('Annotation').map( (annotationNode) => {
+            return XSerializer.deserialize(annotationNode, EdmAnnotation);
+        });
     }
 }
 
@@ -204,6 +232,8 @@ export class EdmEntityType {
     public Key: EdmKey;
     public Property: EdmProperty[] = [];
     public NavigationProperty: EdmNavigationProperty[] = [];
+    public ImplementsType: string;
+    public Annotations: EdmAnnotation[] = [];
     constructor() {
         this.OpenType = true;
     }
@@ -220,6 +250,14 @@ export class EdmEntityType {
         });
         this.NavigationProperty = node.selectNodes('NavigationProperty').map( (x) => {
             return XSerializer.deserialize(x, EdmNavigationProperty);
+        });
+        // get implements annotation
+        const implementsAnnotation = node.selectSingleNode('Annotation[@Term="DataModel.OData.Core.V1.Implements"]');
+        if (implementsAnnotation) {
+            this.ImplementsType = implementsAnnotation.getAttribute('String');
+        }
+        this.Annotations = node.selectNodes('Annotation').map( (annotationNode) => {
+            return XSerializer.deserialize(annotationNode, EdmAnnotation);
         });
     }
 }
@@ -244,3 +282,22 @@ export class EdmEntitySet {
         }
     }
 }
+
+export class EdmAnnotation {
+    public Term: string;
+    public String: string;
+    public Tag: any;
+    constructor() {
+        //
+    }
+    public readXml(node: XNode) {
+        this.Term = node.getAttribute('Term');
+        if (node.hasAttribute('String')) {
+            this.String = node.getAttribute('String');
+        }
+        if (node.hasAttribute('Tag')) {
+            this.String = node.getAttribute('Tag');
+        }
+    }
+}
+
