@@ -141,11 +141,11 @@ export class EdmProperty {
         }
         const immutable = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Immutable"]');
         if (immutable) {
-            this.Immutable = (immutable.getAttribute('Tag') === 'true');
+            this.Immutable = (immutable.getAttribute('Tag') === 'true') || (immutable.getAttribute('Bool') === 'true');
         }
         const computed = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Computed"]');
         if (computed) {
-            this.Computed = (computed.getAttribute('Bool') === 'true');
+            this.Computed = (computed.getAttribute('Tag') === 'true') || (computed.getAttribute('Bool') === 'true');
         }
         const description = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Description"]');
         if (description) {
@@ -180,11 +180,11 @@ export class EdmNavigationProperty {
         this.Type = node.getAttribute('Type');
         const immutable = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Immutable"]');
         if (immutable) {
-            this.Immutable = (immutable.getAttribute('Tag') === 'true');
+            this.Immutable = (immutable.getAttribute('Tag') === 'true') || (immutable.getAttribute('Bool') === 'true');
         }
         const computed = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Computed"]');
         if (computed) {
-            this.Computed = (computed.getAttribute('Bool') === 'true');
+            this.Computed = (computed.getAttribute('Tag') === 'true') || (computed.getAttribute('Bool') === 'true');
         }
         const description = node.selectSingleNode('Annotation[@Term="Org.OData.Core.V1.Description"]');
         if (description) {
@@ -287,6 +287,7 @@ export class EdmAnnotation {
     public Term: string;
     public String: string;
     public Tag: any;
+    public Bool: any;
     constructor() {
         //
     }
@@ -296,7 +297,10 @@ export class EdmAnnotation {
             this.String = node.getAttribute('String');
         }
         if (node.hasAttribute('Tag')) {
-            this.String = node.getAttribute('Tag');
+            this.Tag = node.getAttribute('Tag');
+        }
+        if (node.hasAttribute('Bool')) {
+            this.Bool = (node.getAttribute('Bool') === 'true');
         }
     }
 }
