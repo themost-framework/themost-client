@@ -64,7 +64,7 @@ export class ClientDataQueryable {
         if (this._service.getOptions().useMediaTypeExtensions) {
             this._url = TextUtils.format('%s/index.json', this._model);
         } else {
-            this._url = TextUtils.format('%s/', this._model);
+            this._url = TextUtils.format('%s', this._model);
         }
         // init params
         this._params = { };
@@ -752,7 +752,7 @@ export class ClientDataModel {
         if (this._service.getOptions().useMediaTypeExtensions) {
             return TextUtils.format('%s/index.json', this.getName());
         } else {
-            return TextUtils.format('%s/', this.getName());
+            return TextUtils.format('%s', this.getName());
         }
     }
 
