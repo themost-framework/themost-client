@@ -163,6 +163,14 @@ export class ClientDataQueryable {
     }
 
     /**
+     * @returns {ClientDataQueryable}
+     */
+    public setQueryParams(queryParams: any): ClientDataQueryable {
+        Object.assign(this._params, queryParams);
+        return this;
+    }
+
+    /**
      * Gets a string which represents the name of the data model associated with this object.
      * @returns {string}
      */
