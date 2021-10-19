@@ -1,2 +1,15 @@
 .DS_Store
 node_modules
+
+# test
+src/test
+
+# karma
+karma.conf.js
+
+# build
+rollup.config.js
+
+# typescript
+tsconfig.json
+tsconfig.spec.json
