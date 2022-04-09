@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/themost-framework/themost-client#readme",
   "dependencies": {
-    "moment": "^2.22.2"
+    "moment": "^2.29.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.6.8",
