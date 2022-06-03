@@ -11,7 +11,7 @@
   "peerDependencies": {
     "@themost/client": "^2.5.1",
     "@angular/common": "^6.0.3",
-    "@angular/core": "^6.0.3",
+    "@angular/core": "^11.0.5",
     "@angular/http": "^6.0.3",
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
@@ -39,7 +39,7 @@
     "@angular/common": "^6.0.3",
     "@angular/compiler": "^6.0.3",
     "@angular/compiler-cli": "^6.0.3",
-    "@angular/core": "^6.0.3",
+    "@angular/core": "^11.0.5",
     "@angular/http": "^6.0.3",
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
