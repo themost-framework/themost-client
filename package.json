@@ -52,7 +52,7 @@
     "@themost/node": "file:modules/@themost/node",
     "@themost/query": "^2.5.0",
     "@themost/sqlite": "^2.2.4",
-    "@themost/test": "^1.0.5",
+    "@themost/test": "^1.1.0",
     "@themost/xml": "^2.5.0",
     "@types/jasmine": "^3.5.0",
     "@types/node": "^10.3.3",
